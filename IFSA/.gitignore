@@ -1,0 +1,7 @@
+node_modules
+uploads
+gallery-data.json
+document-data.json
+schedule-data.json
+announcement-data.json
+bookings.xlsx

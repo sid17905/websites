@@ -1,0 +1,52 @@
+[
+  {
+    "id": "1763961312034",
+    "name": "Ghansoli City",
+    "label": "head branch",
+    "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3769.713688176278!2d72.99511767520644!3d19.120212382093516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c0b5f2b2f115%3A0x61de8771901c2056!2sSmt.%20Indira%20Gandhi%20College%20Of%20Engineering!5e0!3m2!1sen!2sin!4v1763961245434!5m2!1sen!2sin\" width=\"400\" height=\"300\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade",
+    "pricing": {
+      "beginner": {
+        "price": "₹700",
+        "features": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      "advanced": {
+        "price": "₹1200",
+        "features": [
+          "3",
+          "4",
+          "5"
+        ]
+      }
+    }
+  },
+  {
+    "id": "1763970485926",
+    "name": "Ghansoli Gaon",
+    "label": "branch",
+    "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3769.624508773978!2d72.99530659999999!3d19.1241218!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c1fb29d7910d%3A0x56efb5b80e550099!2sJKNSKI%20karate%20classes!5e0!3m2!1sen!2sin!4v1763970417543!5m2!1sen!2sin\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade",
+    "pricing": {
+      "beginner": {
+        "price": "₹500",
+        "features": [
+          "1",
+          "2",
+          "3"
+        ]
+      },
+      "advanced": {
+        "price": "₹700",
+        "features": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ]
+      }
+    }
+  }
+]

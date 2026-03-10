@@ -1,0 +1,202 @@
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9); /* Start lower and slightly smaller */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1); /* End in center, normal size */
+    }
+}
+
+/* The class we will add to the logo */
+.animate-fade-up {
+    animation: fadeInUp 1.5s ease-out forwards; /* Runs once smoothly */
+}
+
+/* Optional: Add a gentle pulse after it arrives so it doesn't look frozen */
+.animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .7; }
+}
+/* --- THEME CONTROL PANEL --- */
+/* Change these values to instantly theme your entire website */
+:root {
+    /* BACKGROUND: Dark Navy / Midnight (RGB) */
+    /* Very modern, almost black */
+    --bg-primary-rgb: 15, 23, 42;   
+    
+    /* CARDS: Charcoal Blue */
+    --bg-secondary-rgb: 30, 41, 59;
+    
+    /* ACCENT: Rich Amber (Looks like deep gold) */
+    --accent-color: #fbbf24;       
+    
+    /* HOVER: Burnt Orange/Gold */
+    --accent-hover: #d97706;       
+
+    /* TEXT: Off-White */
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+}
+/* --- Gentle Float Animation --- */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Adds a delay so they don't all move at the exact same time */
+.animate-float-delay {
+    animation: float 4s ease-in-out infinite;
+    animation-delay: 2s;
+}
+/* Apply the Inter font family */
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Simple animation for hero text */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hero-text {
+    animation: fadeInDown 1s ease-out;
+}
+
+/* Custom gradient for hero */
+/* UPDATED: Now uses the variable --bg-primary-rgb */
+.hero-gradient {
+    background: linear-gradient(180deg, rgba(var(--bg-primary-rgb), 0.5) 0%, rgba(var(--bg-primary-rgb), 1) 100%);
+}
+
+/* --- 3D FLIP CARD ANIMATION --- */
+.flip-card-container {
+    perspective: 1000px; 
+    width: 100%;
+    position: relative; 
+    z-index: 10;
+}
+
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+}
+
+.flip-card-container:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+    position: absolute; /* This MUST be absolute */
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    top: 0;
+    left: 0;
+    border-radius: 0.5rem;
+}
+
+.flip-card-front {
+    z-index: 2;
+    transform: rotateY(0deg);
+}
+
+.flip-card-back {
+    transform: rotateY(180deg);
+    z-index: 1;
+}
+/* --- Preloader & Kick Animation --- */
+
+#preloader {
+    transition: opacity 0.5s ease-out;
+}
+
+@keyframes preloaderFadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.preloader-fade-out {
+    animation: preloaderFadeOut 0.5s ease-out forwards;
+}
+
+/* Text fade-in-out for "Loading..." */
+.preloader-text {
+    opacity: 0;
+    animation: fade-text 1.5s ease-in-out infinite;
+}
+
+@keyframes fade-text {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* Main content is hidden by default */
+.main-content-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease-in 0.3s; 
+}
+
+/* This is the "visible" state */
+#main-content {
+    opacity: 1;
+    visibility: visible;
+}
+/* --- INFINITE SCROLL ANIMATION --- */
+@keyframes smoothScroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%); /* Moves exactly half the width (the original set) */
+    }
+}
+
+.gallery-track {
+    display: flex;
+    gap: 1rem; /* Matches Tailwind 'gap-4' */
+    width: max-content; /* Forces the track to be as long as the images */
+    animation: smoothScroll 40s linear infinite; /* Adjust '40s' to control speed */
+}
+
+/* Pause animation when user hovers over the images */
+.gallery-track:hover {
+    animation-play-state: paused;
+}
+/* --- WHATSAPP BUTTON ANIMATION --- */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 3s ease-in-out infinite;
+}

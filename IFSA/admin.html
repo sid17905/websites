@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IFSA Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen font-sans">
+
+    <!-- LOGIN OVERLAY -->
+    <div id="login-section" class="fixed inset-0 bg-gray-900 flex items-center justify-center z-50">
+        <div class="bg-gray-800 p-8 rounded-lg w-96 border border-gray-700 shadow-2xl">
+            <h2 class="text-2xl font-bold mb-4 text-amber-500 text-center">Admin Login</h2>
+            <form onsubmit="event.preventDefault(); checkLogin();">
+                <input type="password" id="password-input" placeholder="Password" class="w-full p-3 mb-4 bg-gray-700 rounded text-white border border-gray-600 focus:border-amber-500 outline-none">
+                <button type="submit" class="w-full bg-amber-600 py-3 rounded font-bold hover:bg-amber-700 transition shadow-lg">Login</button>
+            </form>
+            <p id="login-error" class="text-red-500 text-center mt-4 hidden">Incorrect Password!</p>
+            <a href="index.html" class="block text-center text-gray-400 text-sm mt-6 hover:text-white transition">&larr; Back to Home Page</a>
+        </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="dashboard" class="container mx-auto p-6 hidden max-w-6xl">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-gray-700 pb-6 gap-4">
+            <div>
+                <h1 class="text-3xl font-bold text-white">Admin Dashboard</h1>
+                <p class="text-gray-400 mt-1">Content Manager (Auto-Compress Enabled ⚡)</p>
+            </div>
+            <div class="flex gap-3">
+                <a href="index.html" target="_blank" class="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 px-5 py-2 rounded text-white transition font-medium border border-gray-600">
+                    <span>View Website</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                </a>
+                <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-5 py-2 rounded text-white transition font-medium shadow-lg">Logout</button>
+            </div>
+        </div>
+
+        <!-- 1. SLIDESHOW SECTION -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-gray-700 shadow-lg">
+            <h2 class="text-xl font-bold mb-4 text-blue-400 flex items-center gap-2"><span class="bg-blue-400/20 p-2 rounded-lg">1</span> Home Page Slideshow</h2>
+            <div class="flex gap-4 mb-4">
+                <input type="file" id="slide-input" multiple accept="image/*" class="bg-gray-900 p-2 rounded text-gray-300 w-full border border-gray-600 cursor-pointer">
+                <button onclick="uploadSlideshow()" id="btn-slide" class="bg-blue-600 px-6 py-2 rounded font-bold hover:bg-blue-700 w-40 transition">Upload</button>
+            </div>
+            <div id="slide-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+        </div>
+
+        <!-- 2. GALLERY SECTION -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-gray-700 shadow-lg">
+            <h2 class="text-xl font-bold mb-4 text-green-400 flex items-center gap-2"><span class="bg-green-400/20 p-2 rounded-lg">2</span> Main Gallery</h2>
+            <div class="flex flex-col md:flex-row gap-4 mb-4 items-end bg-gray-900 p-4 rounded-lg border border-gray-700">
+                <div class="flex-1 w-full"><label class="block text-xs text-gray-400 mb-1">Select Files</label><input type="file" id="gallery-input" multiple accept="image/*,video/mp4,video/webm" class="bg-gray-800 p-2 rounded text-gray-300 w-full border border-gray-600 cursor-pointer"></div>
+                <div class="w-full md:w-40"><label class="block text-xs text-gray-400 mb-1">Month</label><select id="gal-month" class="w-full bg-gray-800 p-2.5 rounded text-white border border-gray-600 cursor-pointer"><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select></div>
+                <div class="w-full md:w-32"><label class="block text-xs text-gray-400 mb-1">Year</label><input type="number" id="gal-year" value="2025" class="w-full bg-gray-800 p-2 rounded text-white border border-gray-600"></div>
+                <button onclick="uploadGallery()" id="btn-gallery" class="bg-green-600 px-8 py-2.5 rounded font-bold hover:bg-green-700 w-full md:w-auto transition">Upload</button>
+            </div>
+            <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
+        </div>
+
+        <!-- 3. DOCUMENTS SECTION -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-gray-700 shadow-lg">
+            <h2 class="text-xl font-bold mb-4 text-red-400 flex items-center gap-2"><span class="bg-red-400/20 p-2 rounded-lg">3</span> Documents</h2>
+            <div class="flex flex-col md:flex-row gap-4 mb-4 items-end bg-gray-900 p-4 rounded-lg border border-gray-700">
+                <div class="flex-1 w-full"><label class="block text-xs text-gray-400 mb-1">Select PDF</label><input type="file" id="doc-input" accept="application/pdf" class="bg-gray-800 p-2 rounded text-gray-300 w-full border border-gray-600 cursor-pointer"></div>
+                <div class="w-full md:w-64"><label class="block text-xs text-gray-400 mb-1">Document Title</label><input type="text" id="doc-title" placeholder="e.g. Tournament Rules" class="w-full bg-gray-800 p-2 rounded text-white border border-gray-700"></div>
+                <button onclick="uploadDoc()" class="bg-red-600 px-8 py-2.5 rounded font-bold hover:bg-red-700 w-full md:w-auto transition">Upload</button>
+            </div>
+            <div id="doc-list" class="space-y-2"></div>
+        </div>
+
+        <!-- 4. SCHEDULE SECTION -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-gray-700 shadow-lg">
+            <h2 class="text-xl font-bold mb-4 text-purple-400 flex items-center gap-2"><span class="bg-purple-400/20 p-2 rounded-lg">4</span> Calendar Schedule</h2>
+            <div class="flex flex-col md:flex-row gap-4 mb-4 items-end bg-gray-900 p-4 rounded-lg border border-gray-700">
+                <div class="w-full md:w-40"><label class="block text-xs text-gray-400 mb-1">Date</label><input type="date" id="sched-date" class="bg-gray-800 p-2 rounded text-white w-full border border-gray-700 cursor-pointer"></div>
+                <div class="flex-1 w-full"><label class="block text-xs text-gray-400 mb-1">Event Title</label><input type="text" id="sched-title" placeholder="e.g. Black Belt Grading" class="bg-gray-800 p-2 rounded text-white w-full border border-gray-700"></div>
+                <div class="w-full md:w-40"><label class="block text-xs text-gray-400 mb-1">Type</label><select id="sched-type" class="bg-gray-800 p-2.5 rounded text-white w-full border border-gray-700 cursor-pointer"><option value="General">General</option><option value="Exam">Exam</option><option value="Tournament">Tournament</option><option value="Holiday">Holiday</option></select></div>
+                <button onclick="addEvent()" class="bg-purple-600 px-6 py-2.5 rounded font-bold hover:bg-purple-700 w-full md:w-auto transition">Add</button>
+            </div>
+            <div id="sched-list" class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar"></div>
+        </div>
+
+        <!-- 5. ANNOUNCEMENTS SECTION (FIXED) -->
+        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg border-l-4 border-amber-500">
+            <h2 class="text-xl font-bold mb-4 text-amber-400 flex items-center gap-2"><span class="bg-amber-500/20 p-2 rounded-lg">5</span> Notice Board</h2>
+            <div class="flex flex-col gap-4">
+                <div class="flex gap-4">
+                    <input type="text" id="announce-msg" placeholder="Type announcement here..." class="flex-1 bg-gray-900 text-white p-3 rounded border border-gray-600 focus:border-amber-500 outline-none">
+                    <button onclick="addAnnouncement()" class="bg-amber-600 px-6 py-2 rounded font-bold hover:bg-amber-700 text-white transition shadow-lg">Add</button>
+                </div>
+                
+                <!-- List Container -->
+                <div class="bg-gray-900 rounded border border-gray-700 p-2 max-h-60 overflow-y-auto custom-scrollbar">
+                    <div id="announce-list" class="space-y-2">
+                        <p class="text-gray-500 italic text-sm p-2">Loading notices...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br><br>
+    <div class="bg-gray-800 p-6 rounded-lg border border-gray-700 mb-8">
+        <h3 class="text-xl font-bold text-white mb-4 border-b border-gray-700 pb-2">Manage Locations & Pricing</h3>
+        
+        <form id="addLocationForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            
+            <div class="md:col-span-2">
+                <label class="text-gray-400 text-xs uppercase">Branch Name (e.g., Santacruz)</label>
+                <input type="text" id="locName" required class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600">
+            </div>
+            <div class="md:col-span-2">
+                <label class="text-gray-400 text-xs uppercase">Label/Subtitle (e.g., Main Dojo)</label>
+                <input type="text" id="locLabel" required class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600">
+            </div>
+            
+            <div class="md:col-span-2">
+                <label class="text-gray-400 text-xs uppercase">Google Map Embed Link (src only)</label>
+                <input type="text" id="locMap" required placeholder="https://www.google.com/maps/embed?pb=..." class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600">
+            </div>
+
+            <div class="border border-gray-700 p-3 rounded">
+                <h4 class="text-brand-accent text-sm font-bold mb-2">Beginner Plan</h4>
+                <input type="number" id="locBegPrice" placeholder="Price (e.g. 1500)" class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600 mb-2">
+                <textarea id="locBegFeat" placeholder="Features (comma separated)" class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600 h-20"></textarea>
+            </div>
+
+            <div class="border border-gray-700 p-3 rounded">
+                <h4 class="text-brand-accent text-sm font-bold mb-2">Advanced Plan</h4>
+                <input type="number" id="locAdvPrice" placeholder="Price (e.g. 2500)" class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600 mb-2">
+                <textarea id="locAdvFeat" placeholder="Features (comma separated)" class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600 h-20"></textarea>
+            </div>
+
+            <button type="submit" class="md:col-span-2 bg-green-600 text-white font-bold py-2 rounded hover:bg-green-500">
+                + Add New Location
+            </button>
+        </form>
+
+        <div id="locationsList" class="space-y-2">
+            </div>
+        
+    </div>
+    <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg mb-8 border-l-4 border-pink-500">
+    <h2 class="text-xl font-bold mb-4 text-pink-400 flex items-center gap-2">
+        <span class="bg-pink-500/20 p-2 rounded-lg">6</span> Manage Instructors
+    </h2>
+    
+    <form id="instructorForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 bg-gray-900 p-4 rounded border border-gray-700">
+        
+        <div>
+            <label class="text-xs text-gray-400 uppercase">Name (e.g., Sensei Saurabh)</label>
+            <input type="text" id="instName" required class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600">
+        </div>
+        <div>
+            <label class="text-xs text-gray-400 uppercase">Role (e.g., Head Instructor)</label>
+            <input type="text" id="instRole" required class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600">
+        </div>
+        <div>
+            <label class="text-xs text-gray-400 uppercase">Rank (e.g., 5th Dan Black Belt)</label>
+            <input type="text" id="instRank" required class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600">
+        </div>
+        
+        <div>
+            <label class="text-xs text-gray-400 uppercase">Front Photo (Portrait)</label>
+            <input type="file" id="instFront" required accept="image/*" class="w-full text-sm text-gray-300">
+        </div>
+        <div>
+            <label class="text-xs text-gray-400 uppercase">Back Photo (Action Shot)</label>
+            <input type="file" id="instBack" required accept="image/*" class="w-full text-sm text-gray-300">
+        </div>
+
+        <div class="md:col-span-2">
+            <label class="text-xs text-gray-400 uppercase">Description / Bio</label>
+            <textarea id="instDesc" required rows="2" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600"></textarea>
+        </div>
+
+        <button type="submit" class="md:col-span-2 bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 rounded transition">
+            + Add Instructor
+        </button>
+    </form>
+
+    <div id="instructorList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <p class="text-gray-500 animate-pulse">Loading instructors...</p>
+    </div>
+</div>
+    </div>
+</div>
+
+<script>
+    // --- GLOBAL CONFIGURATION ---
+    const API = 'http://localhost:3000/api';
+    const SERVER_URL = 'http://localhost:3000'; // Required for images
+
+    // --- LOGIN CHECK ---
+    if(localStorage.getItem('admin_ok')) showDash();
+
+    function checkLogin() {
+        const pass = document.getElementById('password-input').value;
+        if(pass === "admin123") {
+            localStorage.setItem('admin_ok', true);
+            showDash();
+        } else document.getElementById('login-error').classList.remove('hidden');
+    }
+    function showDash() {
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        // Load all sections
+        loadSlideshow(); 
+        loadGallery(); 
+        loadDocs(); 
+        loadSchedule(); 
+        loadAnnouncements();
+        loadAdminLocations();
+        loadInstructors(); // Load Instructors
+    }
+    function logout() { localStorage.removeItem('admin_ok'); location.reload(); }
+
+    // --- HELPER: IMAGE COMPRESSION ---
+    async function compressImage(file) {
+        if (!file.type.startsWith('image/')) return file;
+        return new Promise((resolve) => {
+            const reader = new FileReader(); reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image(); img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const scale = 1200 / Math.max(img.width, 1200);
+                    canvas.width = img.width * scale; canvas.height = img.height * scale;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    canvas.toBlob(blob => resolve(new File([blob], file.name, {type:'image/jpeg'})), 'image/jpeg', 0.7);
+                };
+            };
+        });
+    }
+
+    // --- 1. SLIDESHOW ---
+    async function uploadSlideshow() {
+        const files = document.getElementById('slide-input').files;
+        if(!files.length) return;
+        document.getElementById('btn-slide').innerText="Wait..."; document.getElementById('btn-slide').disabled=true;
+        const data = new FormData(); for(let f of files) data.append('images', await compressImage(f));
+        await fetch(`${API}/slideshow/upload`, {method:'POST', body:data});
+        document.getElementById('slide-input').value=''; document.getElementById('btn-slide').innerText="Upload"; document.getElementById('btn-slide').disabled=false; loadSlideshow();
+    }
+    async function loadSlideshow() {
+        const res = await fetch(`${API}/slideshow/images`); const urls = await res.json();
+        document.getElementById('slide-grid').innerHTML = urls.map(url => `<div class="relative h-24 bg-black rounded overflow-hidden group border border-gray-600"><img src="${url}" class="w-full h-full object-cover"><button onclick="delSlide('${url.split('/').pop()}')" class="absolute inset-0 bg-red-600/80 text-white opacity-0 group-hover:opacity-100 font-bold">DELETE</button></div>`).join('');
+    }
+    async function delSlide(n) { if(confirm("Delete?")) { await fetch(`${API}/slideshow/images/${n}`, {method:'DELETE'}); loadSlideshow(); }}
+
+    // --- 2. GALLERY ---
+    async function uploadGallery() {
+        const files = document.getElementById('gallery-input').files;
+        if(!files.length) return;
+        document.getElementById('btn-gallery').innerText="Wait..."; document.getElementById('btn-gallery').disabled=true;
+        const data = new FormData(); for(let f of files) data.append('images', await compressImage(f));
+        data.append('month', document.getElementById('gal-month').value); data.append('year', document.getElementById('gal-year').value);
+        await fetch(`${API}/gallery/upload`, {method:'POST', body:data});
+        document.getElementById('gallery-input').value=''; document.getElementById('btn-gallery').innerText="Upload"; document.getElementById('btn-gallery').disabled=false; loadGallery();
+    }
+    async function loadGallery() {
+        const res = await fetch(`${API}/gallery/images`); const items = await res.json();
+        document.getElementById('gallery-grid').innerHTML = items.map(i => `<div class="relative bg-black rounded overflow-hidden group border border-gray-600"><div class="h-24 w-full bg-gray-800 flex items-center justify-center">${i.url.match(/\.mp4|\.webm/i) ? '<span class="text-xs text-gray-400">VIDEO</span>' : `<img src="${i.url}" class="w-full h-full object-cover">`}</div><div class="text-[10px] text-center bg-gray-800 p-1 text-gray-400">${i.month} ${i.year}</div><button onclick="delGallery('${i.filename}')" class="absolute top-0 right-0 bg-red-600 text-white px-2 text-xs opacity-0 group-hover:opacity-100">X</button></div>`).join('');
+    }
+    async function delGallery(n) { if(confirm("Delete?")) { await fetch(`${API}/gallery/images/${n}`, {method:'DELETE'}); loadGallery(); }}
+
+    // --- 3. DOCUMENTS ---
+    async function uploadDoc() {
+        const f = document.getElementById('doc-input').files[0]; if(!f) return;
+        const data = new FormData(); data.append('file', f); data.append('title', document.getElementById('doc-title').value);
+        await fetch(`${API}/documents/upload`, {method:'POST', body:data});
+        document.getElementById('doc-input').value=''; document.getElementById('doc-title').value=''; loadDocs();
+    }
+    async function loadDocs() {
+        const res = await fetch(`${API}/documents/list`); const items = await res.json();
+        document.getElementById('doc-list').innerHTML = items.map(i => `<div class="flex justify-between bg-gray-700 p-2 rounded text-sm text-gray-300 hover:bg-gray-600 transition"><span class="truncate w-3/4">${i.title}</span><button onclick="delDoc('${i.filename}')" class="text-red-400 hover:text-white font-bold">Del</button></div>`).join('');
+    }
+    async function delDoc(n) { if(confirm("Delete?")) { await fetch(`${API}/documents/${n}`, {method:'DELETE'}); loadDocs(); }}
+
+    // --- 4. SCHEDULE ---
+    async function addEvent() {
+        const d = document.getElementById('sched-date').value; const t = document.getElementById('sched-title').value; const y = document.getElementById('sched-type').value;
+        if(!d || !t) return;
+        await fetch(`${API}/schedule/add`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({date:d, title:t, type:y})});
+        document.getElementById('sched-title').value=''; loadSchedule();
+    }
+    async function loadSchedule() {
+        const res = await fetch(`${API}/schedule/list`); const items = await res.json();
+        document.getElementById('sched-list').innerHTML = items.map(e => `<div class="flex justify-between bg-gray-700 p-2 rounded text-sm text-gray-300"><span>${e.date} - ${e.title}</span><button onclick="delEvent(${e.id})" class="text-red-400 font-bold">X</button></div>`).join('');
+    }
+    async function delEvent(id) { if(confirm("Delete?")) { await fetch(`${API}/schedule/${id}`, {method:'DELETE'}); loadSchedule(); }}
+
+    // --- 5. ANNOUNCEMENTS ---
+    async function addAnnouncement() {
+        const msg = document.getElementById('announce-msg').value; if(!msg) return;
+        await fetch(`${API}/announcement/add`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: msg }) });
+        document.getElementById('announce-msg').value = ''; loadAnnouncements();
+    }
+    async function loadAnnouncements() {
+        const res = await fetch(`${API}/announcement/list`); const data = await res.json();
+        document.getElementById('announce-list').innerHTML = data.length === 0 ? '<p class="text-gray-500 italic text-sm p-2">No active notices.</p>' : data.map(item => `<div class="flex justify-between items-center bg-gray-700 p-2 rounded border border-gray-600 hover:bg-gray-600 transition"><div class="text-sm text-gray-200 truncate w-3/4">${item.message}</div><button onclick="delAnnouncement(${item.id})" class="text-red-400 hover:text-white px-2 font-bold text-sm bg-gray-800 rounded border border-gray-700 hover:bg-red-600 hover:border-red-600 transition">Delete</button></div>`).join('');
+    }
+    async function delAnnouncement(id) { if(confirm("Delete notice?")) { await fetch(`${API}/announcement/${id}`, {method:'DELETE'}); loadAnnouncements(); }}
+
+    // --- 6. LOCATIONS ---
+    async function loadAdminLocations() {
+        try {
+            const res = await fetch(`${API}/locations`); const locations = await res.json();
+            const list = document.getElementById('locationsList'); list.innerHTML = '';
+            if (locations.length === 0) { list.innerHTML = '<p class="text-gray-500 italic">No locations found.</p>'; return; }
+            locations.forEach(loc => {
+                list.innerHTML += `<div class="flex justify-between items-center bg-gray-900 p-4 rounded-lg border border-gray-700"><div><h4 class="text-brand-accent font-bold">${loc.name}</h4><p class="text-xs text-gray-400">${loc.label}</p></div><button onclick="deleteLocation('${loc.id}')" class="bg-red-900/50 hover:bg-red-600 text-red-200 hover:text-white px-3 py-1 rounded text-xs border border-red-800 transition">Remove 🗑️</button></div>`;
+            });
+        } catch (e) { console.error(e); }
+    }
+    async function deleteLocation(id) { if (confirm("Remove location?")) { await fetch(`${API}/locations/${id}`, { method: 'DELETE' }); loadAdminLocations(); }}
+    document.getElementById('addLocationForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newLoc = {
+            id: Date.now().toString(), name: document.getElementById('locName').value, label: document.getElementById('locLabel').value, mapUrl: document.getElementById('locMap').value,
+            pricing: { beginner: { price: "₹" + document.getElementById('locBegPrice').value, features: document.getElementById('locBegFeat').value.split(',') }, advanced: { price: "₹" + document.getElementById('locAdvPrice').value, features: document.getElementById('locAdvFeat').value.split(',') } }
+        };
+        await fetch(`${API}/locations`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(newLoc) });
+        e.target.reset(); alert("Location Added!"); loadAdminLocations();
+    });
+
+    // --- 7. INSTRUCTORS (FIXED) ---
+    async function loadInstructors() {
+        try {
+            const res = await fetch(`${API}/instructors`);
+            const list = await res.json();
+            const container = document.getElementById('instructorList');
+            container.innerHTML = ''; // Clear loading text
+
+            if(list.length === 0) { container.innerHTML = '<p class="text-gray-500">No instructors found.</p>'; return; }
+
+            list.forEach(inst => {
+                const imgPath = inst.frontImage ? `${SERVER_URL}${inst.frontImage}` : 'https://placehold.co/50';
+                container.innerHTML += `
+                    <div class="flex items-center justify-between bg-gray-900 p-3 rounded border border-gray-700">
+                        <div class="flex items-center gap-3">
+                            <img src="${imgPath}" class="w-12 h-12 rounded-full object-cover border border-gray-500">
+                            <div><h4 class="text-white font-bold text-sm">${inst.name}</h4><p class="text-xs text-gray-400">${inst.role}</p></div>
+                        </div>
+                        <button onclick="deleteInstructor('${inst.id}')" class="bg-red-900/40 hover:bg-red-600 text-red-300 hover:text-white px-3 py-1 rounded text-xs border border-red-800 transition">Remove 🗑️</button>
+                    </div>`;
+            });
+        } catch (e) { console.error("Error loading instructors:", e); document.getElementById('instructorList').innerHTML = '<p class="text-red-500">Error.</p>'; }
+    }
+
+    document.getElementById('instructorForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append('name', document.getElementById('instName').value);
+        formData.append('role', document.getElementById('instRole').value);
+        formData.append('rank', document.getElementById('instRank').value);
+        formData.append('description', document.getElementById('instDesc').value);
+        formData.append('frontImage', document.getElementById('instFront').files[0]);
+        formData.append('backImage', document.getElementById('instBack').files[0]);
+
+        const btn = e.target.querySelector('button'); btn.innerText = "Uploading..."; btn.disabled = true;
+        await fetch(`${API}/instructors`, { method: 'POST', body: formData });
+        alert("Instructor Added!"); e.target.reset(); btn.innerText = "+ Add Instructor"; btn.disabled = false; loadInstructors();
+    });
+
+    async function deleteInstructor(id) {
+        if(confirm("Remove instructor?")) { await fetch(`${API}/instructors/${id}`, { method: 'DELETE' }); loadInstructors(); }
+    }
+</script>
+</body>
+</html>

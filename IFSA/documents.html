@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documents - IFSA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { dark: 'rgb(2, 6, 23)', accent: '#fbbf24', text: '#f8fafc' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-brand-dark text-brand-text font-sans">
+
+<header class="bg-brand-dark/90 sticky top-0 z-50 backdrop-blur-md border-b border-gray-700/50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-white">IFSA</a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="index.html" class="hover:text-brand-accent">Home</a>
+                <a href="about.html" class="hover:text-brand-accent">About</a>
+                <a href="index.html#programs" class="hover:text-brand-accent">Programs</a>
+                <a href="gallery.html" class="hover:text-brand-accent">Gallery</a>
+                <a href="calender.html" class="hover:text-brand-accent">Schedule</a>
+                <!-- Active Link -->
+                <a href="documents.html" class="text-brand-accent font-bold border-b-2 border-brand-accent">Documents</a>
+                <a href="pricing.html" class="bg-brand-accent text-black px-4 py-2 rounded font-bold hover:bg-amber-500 transition">Join Now</a>
+            </div>
+            <!-- Mobile Menu Btn -->
+            <div class="md:hidden">
+                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-white focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-t border-gray-700 p-4 space-y-3">
+            <a href="index.html" class="block hover:text-brand-accent">Home</a>
+            <a href="about.html" class="block hover:text-brand-accent">About</a>
+            <a href="index.html#programs" class="block hover:text-brand-accent">Programs</a>
+            <a href="gallery.html" class="block hover:text-brand-accent">Gallery</a>
+            <a href="calender.html" class="block hover:text-brand-accent">Schedule</a>
+            <a href="documents.html" class="block text-brand-accent font-bold">Documents</a>
+            <a href="pricing.html" class="block text-brand-accent">Join Now</a>
+        </div>
+    </header>
+
+    <section class="py-16 text-center">
+        <h1 class="text-4xl font-extrabold text-white mb-4">Document Library</h1>
+        <p class="text-gray-400">Official rules, forms, and newsletters.</p>
+    </section>
+
+    <section class="container mx-auto px-4 pb-20">
+        <div id="doc-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        <div id="empty-msg" class="hidden text-center text-gray-500">No documents available.</div>
+    </section>
+
+    <script>
+        async function loadUserDocs() {
+            try {
+                const res = await fetch('http://localhost:3000/api/documents/list');
+                const docs = await res.json();
+                const grid = document.getElementById('doc-grid');
+
+                if(docs.length === 0) {
+                    document.getElementById('empty-msg').classList.remove('hidden');
+                    return;
+                }
+
+                grid.innerHTML = docs.map(doc => `
+                    <div class="bg-gray-800 p-6 rounded-xl border border-white/10 shadow-lg hover:border-brand-accent transition group">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="bg-red-500/20 p-3 rounded-lg">
+                                <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <span class="text-xs text-gray-500 bg-gray-900 px-2 py-1 rounded border border-gray-700">${doc.date}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-accent transition">${doc.title}</h3>
+                        <p class="text-sm text-gray-400 mb-6">Click to read online.</p>
+                        <a href="${doc.url}#toolbar=0&navpanes=0&scrollbar=0" target="_blank" class="block w-full bg-gray-700 hover:bg-brand-accent hover:text-black text-white text-center py-3 rounded-lg font-bold transition">Read Document</a>
+                    </div>
+                `).join('');
+            } catch(e) { console.error(e); }
+        }
+        loadUserDocs();
+    </script>
+</body>
+</html>
