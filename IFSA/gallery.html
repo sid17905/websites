@@ -23,36 +23,38 @@
             }
         }
     </script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="STYLE.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body class="bg-brand-dark text-brand-text font-sans">
 
-    <!-- Navbar (Synced) -->
-    <header class="bg-brand-dark/90 sticky top-0 z-50 backdrop-blur-md border-b border-gray-700/50">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="flex items-center space-x-2">
-                <img src="public/image 1.png" alt="IFSA" class="h-10 w-10 rounded-full border border-brand-accent object-cover">
+<div class="custom-cursor" id="cursor"></div>
+
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50 backdrop-blur-xl" style="background:rgba(15,23,42,0.85);box-shadow:0 1px 0 0 rgba(251,191,36,0.25),0 4px 24px rgba(0,0,0,0.6);">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <div class="h-10 w-10 rounded-full border border-brand-accent overflow-hidden flex items-center justify-center bg-black transition-all group-hover:scale-105 group-hover:shadow-[0_0_16px_rgba(251,191,36,0.5)]">
+                    <img src="public/image 1.png" alt="IFSA" class="h-10 w-10 rounded-full border border-brand-accent object-cover">
+                </div>
                 <span class="text-2xl font-bold text-white">IFSA</span>
             </a>
             <div class="hidden md:flex items-center space-x-6">
                 <a href="index.html" class="text-brand-text hover:text-brand-accent transition">Home</a>
                 <a href="about.html" class="text-brand-text hover:text-brand-accent transition">About</a>
                 <a href="index.html#programs" class="text-brand-text hover:text-brand-accent transition">Programs</a>
-                <!-- Active Link -->
                 <a href="gallery.html" class="text-brand-accent font-bold border-b-2 border-brand-accent">Gallery</a>
                 <a href="calender.html" class="text-brand-text hover:text-brand-accent transition">Schedule</a>
                 <a href="documents.html" class="text-brand-text hover:text-brand-accent transition">Documents</a>
-                <a href="pricing.html" class="bg-brand-accent text-white px-5 py-2 rounded-lg font-medium hover:bg-brand-accent-hover transition duration-300">
-                    Join Now
-                </a>
+                <a href="pricing.html" class="btn-shimmer bg-brand-accent text-black px-5 py-2 rounded-lg font-bold hover:bg-amber-400 transition shadow-[0_0_16px_rgba(251,191,36,0.3)]">Join Now</a>
             </div>
             <div class="md:hidden">
-                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-white focus:outline-none">
+                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-white focus:outline-none p-2 border border-gray-700 rounded bg-gray-800">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
                 </button>
             </div>
         </nav>
+        <div class="h-px w-full" style="background:linear-gradient(90deg,transparent,rgba(251,191,36,0.5) 30%,rgba(251,191,36,0.8) 50%,rgba(251,191,36,0.5) 70%,transparent);"></div>
         <div id="mobile-menu" class="hidden md:hidden bg-brand-light">
             <a href="index.html" class="block text-brand-text py-3 px-6 hover:bg-gray-700">Home</a>
             <a href="about.html" class="block text-brand-text py-3 px-6 hover:bg-gray-700">About</a>
@@ -60,14 +62,30 @@
             <a href="gallery.html" class="block text-brand-text py-3 px-6 hover:bg-gray-700">Gallery</a>
             <a href="calender.html" class="block text-brand-text py-3 px-6 hover:bg-gray-700">Schedule</a>
             <a href="documents.html" class="block text-brand-text py-3 px-6 hover:bg-gray-700">Documents</a>
-            <a href="pricing.html" class="block bg-brand-accent text-white text-center m-4 py-3 px-6 rounded-lg font-medium">Join Now</a>
+            <a href="pricing.html" class="block bg-brand-accent text-black text-center m-4 py-3 px-6 rounded-lg font-bold">Join Now</a>
         </div>
     </header>
 
-    <!-- Gallery Header -->
-    <section class="py-16 bg-brand-light/20 text-center">
-        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-4">Our Gallery</h1>
-        <p class="text-brand-muted text-lg max-w-2xl mx-auto">
+    <!-- PAGE HERO BANNER -->
+    <section class="relative overflow-hidden flex items-center justify-center" style="height:200px;background:radial-gradient(ellipse 70% 80% at 50% 100%, rgba(251,191,36,0.18) 0%, transparent 70%),rgb(var(--bg-primary-rgb));">
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden" aria-hidden="true">
+            <span class="font-black text-white" style="font-size:10rem;opacity:0.04;letter-spacing:-0.04em;">GALLERY</span>
+        </div>
+        <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+            <div class="page-particle" style="left:12%;top:35%;width:4px;height:4px;animation-delay:0s;"></div>
+            <div class="page-particle" style="left:80%;top:55%;width:3px;height:3px;animation-delay:1.5s;"></div>
+            <div class="page-particle" style="left:55%;top:25%;width:5px;height:5px;animation-delay:0.8s;"></div>
+            <div class="page-particle" style="left:90%;top:45%;width:3px;height:3px;animation-delay:2.2s;"></div>
+        </div>
+        <div class="relative z-10 text-center px-4">
+            <p class="text-xs text-brand-accent uppercase tracking-[0.4em] mb-2 font-bold">| IFSA</p>
+            <h1 class="font-black text-white uppercase leading-tight" style="font-size:clamp(2rem,6vw,4rem);">OUR GALLERY</h1>
+        </div>
+    </section>
+
+    <!-- Gallery intro -->
+    <section class="py-8 bg-brand-dark text-center">
+        <p class="text-brand-muted text-lg max-w-2xl mx-auto px-4">
             Snapshots of training, tournaments, and team spirit at IFSA.
         </p>
     </section>
@@ -76,9 +94,7 @@
     <section class="py-12">
         <div class="container mx-auto px-4">
             <div id="loading-msg" class="text-center text-brand-accent text-xl animate-pulse">Loading Images...</div>
-            
             <div id="full-gallery-grid" class="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6 space-y-6"></div>
-            
             <div id="empty-msg" class="hidden text-center py-20">
                 <p class="text-gray-500 text-xl">No photos uploaded yet.</p>
                 <a href="index.html" class="text-brand-accent hover:underline mt-4 block">Return Home</a>
@@ -87,73 +103,104 @@
     </section>
 
     <!-- Footer -->
+    <div class="flex justify-center"><div class="h-px w-48" style="background:linear-gradient(90deg,transparent,#fbbf24,transparent);"></div></div>
     <footer class="bg-brand-dark border-t border-gray-700/50 pt-10 pb-8 mt-auto">
         <div class="container mx-auto px-6 text-center">
             <p class="text-brand-muted">&copy; 2025 IFSA. All Rights Reserved.</p>
         </div>
     </footer>
 
-    <!-- Script -->
-    <script>
-        const SERVER_URL = 'http://localhost:3000';
-        const galleryGrid = document.getElementById('full-gallery-grid');
+<script>
+const SERVER_URL = 'http://localhost:3000';
+const galleryGrid = document.getElementById('full-gallery-grid');
 
-        async function loadFullGallery() {
-            try {
-                const response = await fetch(`${SERVER_URL}/api/gallery/images`);
-                let items = await response.json();
+// Custom cursor
+(function() {
+    const cursor = document.getElementById('cursor');
+    if (!cursor || window.matchMedia('(pointer: coarse)').matches) {
+        if (cursor) cursor.style.display = 'none'; return;
+    }
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top  = e.clientY + 'px';
+    });
+})();
 
-                if (items.length === 0) {
-                    document.getElementById('empty-msg').classList.remove('hidden');
-                    document.getElementById('loading-msg').classList.add('hidden');
-                    return;
-                }
+// Scroll reveal
+(function() {
+    const revealEls = document.querySelectorAll('.reveal-up');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); }
+        });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => observer.observe(el));
+})();
 
-                document.getElementById('loading-msg').classList.add('hidden');
-                galleryGrid.innerHTML = '';
+async function loadFullGallery() {
+    try {
+        const response = await fetch(`${SERVER_URL}/api/gallery/images`);
+        let items = await response.json();
 
-                items.forEach((item) => {
-                    const div = document.createElement('div');
-                    // ADDED: 'break-inside-avoid' prevents the card from being cut in half between columns
-                    // ADDED: 'mb-6' ensures spacing
-                    div.className = "group relative bg-gray-800 rounded-xl border border-white/10 shadow-lg overflow-hidden flex flex-col break-inside-avoid mb-6";
-                    
-                    const isVideo = item.url.match(/\.(mp4|webm)$/i);
-                    let mediaHTML = '';
-
-                    if (isVideo) {
-                        // Videos still keep a manageable ratio so controls appear correctly
-                        mediaHTML = `<div class="w-full bg-black flex items-center justify-center"><video src="${item.url}" controls class="w-full h-auto"></video></div>`;
-                    } else {
-                        // CHANGED: Removed 'aspect-[4/3]' and 'h-full'. 
-                        // ADDED: 'h-auto' to let image dictate height.
-                        mediaHTML = `
-                            <div class="w-full relative">
-                                <img src="${item.url}" class="w-full h-auto block transition duration-500 group-hover:scale-105" loading="lazy" alt="Gallery Media">
-                                <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
-                                    <span class="text-white font-semibold border border-white px-4 py-2 rounded-full">View</span>
-                                </div>
-                            </div>`;
-                    }
-
-                    div.innerHTML = `
-                        ${mediaHTML}
-                        <div class="p-4 flex justify-between items-center bg-gray-900 border-t border-white/5 mt-auto">
-                            <span class="text-brand-accent font-bold text-sm uppercase tracking-wider">${item.month} ${item.year}</span>
-                            ${!isVideo ? `<button onclick="window.open('${item.url}', '_blank')" class="text-xs text-gray-400 hover:text-white border border-gray-600 px-3 py-1 rounded-full transition">Expand</button>` : ''}
-                        </div>
-                    `;
-
-                    if(!isVideo) {
-                        div.onclick = (e) => {
-                            if(e.target.tagName !== 'BUTTON' && e.target.tagName !== 'VIDEO') window.open(item.url, '_blank');
-                        };
-                    }
-                    galleryGrid.appendChild(div);
-                });
-            } catch (error) { console.error(error); }
+        if (items.length === 0) {
+            document.getElementById('empty-msg').classList.remove('hidden');
+            document.getElementById('loading-msg').classList.add('hidden');
+            return;
         }
-        loadFullGallery();
-    </script>
+
+        document.getElementById('loading-msg').classList.add('hidden');
+        galleryGrid.innerHTML = '';
+
+        items.forEach((item) => {
+            const div = document.createElement('div');
+            div.className = "group relative bg-gray-800 rounded-xl border border-white/10 shadow-lg overflow-hidden flex flex-col break-inside-avoid mb-6 hover:border-brand-accent transition-all duration-300";
+            
+            const isVideo = item.url.match(/\.(mp4|webm)$/i);
+            let mediaHTML = '';
+
+            if (isVideo) {
+                mediaHTML = `<div class="w-full bg-black flex items-center justify-center"><video src="${item.url}" controls class="w-full h-auto"></video></div>`;
+            } else {
+                mediaHTML = `
+                    <div class="w-full relative">
+                        <img src="${item.url}" class="w-full h-auto block transition duration-500 group-hover:scale-105" loading="lazy" alt="Gallery Media">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
+                            <span class="text-white font-semibold border border-white px-4 py-2 rounded-full">View</span>
+                        </div>
+                    </div>`;
+            }
+
+            div.innerHTML = `
+                ${mediaHTML}
+                <div class="p-4 flex justify-between items-center bg-gray-900 border-t border-white/5 mt-auto">
+                    <span class="text-brand-accent font-bold text-sm uppercase tracking-wider">${item.month} ${item.year}</span>
+                    ${!isVideo ? `<button onclick="window.open('${item.url}', '_blank')" class="text-xs text-gray-400 hover:text-white border border-gray-600 px-3 py-1 rounded-full transition">Expand</button>` : ''}
+                </div>
+            `;
+
+            if(!isVideo) {
+                div.onclick = (e) => {
+                    if(e.target.tagName !== 'BUTTON' && e.target.tagName !== 'VIDEO') window.open(item.url, '_blank');
+                };
+            }
+            galleryGrid.appendChild(div);
+        });
+    } catch (error) { console.error(error); }
+}
+loadFullGallery();
+</script>
+
+<style>
+.page-particle {
+    position: absolute;
+    background: rgba(251,191,36,0.6);
+    border-radius: 50%;
+    animation: floatParticle 4s ease-in-out infinite;
+}
+@keyframes floatParticle {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+    50%       { transform: translateY(-18px) scale(1.2); opacity: 1; }
+}
+</style>
 </body>
 </html>

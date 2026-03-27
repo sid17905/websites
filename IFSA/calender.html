@@ -11,39 +11,82 @@
                 extend: {
                     colors: {
                         brand: {
-                            dark: 'rgb(2, 6, 23)',
-                            accent: '#fbbf24',
+                            dark: 'rgb(var(--bg-primary-rgb))',
+                            light: 'rgb(var(--bg-secondary-rgb))',
+                            accent: 'var(--accent-color)',
+                            'accent-hover': 'var(--accent-hover)',
+                            text: 'var(--text-main)',
+                            muted: 'var(--text-muted)',
                         }
                     }
                 }
             }
         }
     </script>
+    <!-- STYLE.css was missing — added here -->
+    <link rel="stylesheet" href="STYLE.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
-<body class="bg-brand-dark text-gray-100 font-sans">
+<body class="bg-brand-dark text-brand-text font-sans">
+
+<div class="custom-cursor" id="cursor"></div>
 
     <!-- Navbar -->
-    <header class="bg-brand-dark/90 sticky top-0 z-50 backdrop-blur-md border-b border-gray-700/50">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-bold text-white">IFSA</a>
-            <div class="hidden md:flex space-x-6">
-                <a href="index.html" class="hover:text-brand-accent">Home</a>
-                <a href="gallery.html" class="hover:text-brand-accent">Gallery</a>
+    <header class="sticky top-0 z-50 backdrop-blur-xl" style="background:rgba(15,23,42,0.85);box-shadow:0 1px 0 0 rgba(251,191,36,0.25),0 4px 24px rgba(0,0,0,0.6);">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <a href="index.html" class="flex items-center space-x-2 group">
+                <div class="h-10 w-10 rounded-full border border-brand-accent overflow-hidden flex items-center justify-center bg-black transition-all group-hover:scale-105 group-hover:shadow-[0_0_16px_rgba(251,191,36,0.5)]">
+                    <img src="public/image 1.png" alt="IFSA" class="w-full h-full object-cover rounded-full">
+                </div>
+                <span class="text-2xl font-bold text-white">IFSA</span>
+            </a>
+            <div class="hidden md:flex space-x-6 items-center">
+                <a href="index.html" class="hover:text-brand-accent transition">Home</a>
+                <a href="gallery.html" class="hover:text-brand-accent transition">Gallery</a>
                 <a href="calender.html" class="text-brand-accent font-bold border-b-2 border-brand-accent">Schedule</a>
-                <a href="pricing.html" class="hover:text-brand-accent">Join Now</a>
+                <a href="documents.html" class="hover:text-brand-accent transition">Documents</a>
+                <a href="pricing.html" class="btn-shimmer bg-brand-accent text-black px-4 py-2 rounded font-bold hover:bg-amber-400 transition">Join Now</a>
+            </div>
+            <div class="md:hidden">
+                <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-white focus:outline-none p-2 border border-gray-700 rounded bg-gray-800">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+                </button>
             </div>
         </nav>
+        <div class="h-px w-full" style="background:linear-gradient(90deg,transparent,rgba(251,191,36,0.5) 30%,rgba(251,191,36,0.8) 50%,rgba(251,191,36,0.5) 70%,transparent);"></div>
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-dark border-t border-gray-700 p-4 space-y-3">
+            <a href="index.html" class="block hover:text-brand-accent">Home</a>
+            <a href="gallery.html" class="block hover:text-brand-accent">Gallery</a>
+            <a href="calender.html" class="block text-brand-accent font-bold">Schedule</a>
+            <a href="documents.html" class="block hover:text-brand-accent">Documents</a>
+            <a href="pricing.html" class="block text-brand-accent">Join Now</a>
+        </div>
     </header>
 
+    <!-- PAGE HERO BANNER -->
+    <section class="relative overflow-hidden flex items-center justify-center" style="height:200px;background:radial-gradient(ellipse 70% 80% at 50% 100%, rgba(251,191,36,0.18) 0%, transparent 70%),rgb(var(--bg-primary-rgb));">
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden" aria-hidden="true">
+            <span class="font-black text-white" style="font-size:9rem;opacity:0.04;letter-spacing:-0.04em;">SCHEDULE</span>
+        </div>
+        <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+            <div class="page-particle" style="left:20%;top:35%;width:4px;height:4px;animation-delay:0.2s;"></div>
+            <div class="page-particle" style="left:76%;top:58%;width:3px;height:3px;animation-delay:1.4s;"></div>
+            <div class="page-particle" style="left:48%;top:18%;width:5px;height:5px;animation-delay:0.7s;"></div>
+            <div class="page-particle" style="left:92%;top:44%;width:3px;height:3px;animation-delay:2.3s;"></div>
+        </div>
+        <div class="relative z-10 text-center px-4">
+            <p class="text-xs text-brand-accent uppercase tracking-[0.4em] mb-2 font-bold">| IFSA</p>
+            <h1 class="font-black text-white uppercase leading-tight" style="font-size:clamp(2rem,6vw,4rem);">ANNUAL CALENDAR</h1>
+        </div>
+    </section>
+
     <div class="container mx-auto px-4 py-12 max-w-5xl">
-        <h1 class="text-4xl font-bold text-center mb-10 text-white">Annual Calendar</h1>
 
         <!-- Calendar Controls -->
         <div class="flex justify-between items-center mb-6 bg-gray-800 p-4 rounded-lg border border-gray-700">
-            <button onclick="changeMonth(-1)" class="px-4 py-2 bg-gray-700 hover:bg-brand-accent hover:text-black rounded transition">&larr; Prev</button>
-            <h2 id="monthYear" class="text-2xl font-bold text-brand-accent">Month Year</h2>
-            <button onclick="changeMonth(1)" class="px-4 py-2 bg-gray-700 hover:bg-brand-accent hover:text-black rounded transition">Next &rarr;</button>
+            <button onclick="changeMonth(-1)" class="px-4 py-2 bg-gray-700 hover:bg-brand-accent hover:text-black rounded transition font-bold">&larr; Prev</button>
+            <h2 id="monthYear" class="text-2xl font-black text-brand-accent">Month Year</h2>
+            <button onclick="changeMonth(1)" class="px-4 py-2 bg-gray-700 hover:bg-brand-accent hover:text-black rounded transition font-bold">Next &rarr;</button>
         </div>
 
         <!-- Calendar Grid -->
@@ -56,101 +99,141 @@
 
         <!-- Upcoming List -->
         <div class="mt-12 bg-gray-800 p-6 rounded-xl border border-gray-700">
-            <h3 class="text-xl font-bold text-white mb-4 border-b border-gray-600 pb-2">Upcoming Events List</h3>
+            <h3 class="text-xl font-black text-white mb-4 border-b border-gray-600 pb-2">
+                <span class="text-brand-accent">|</span> Upcoming Events List
+            </h3>
             <div id="event-list" class="space-y-3">
                 <p class="text-gray-500">Loading events...</p>
             </div>
         </div>
     </div>
 
-    <script>
-        let currentDate = new Date();
-        let events = [];
+    <div class="flex justify-center"><div class="h-px w-48" style="background:linear-gradient(90deg,transparent,#fbbf24,transparent);"></div></div>
+    <footer class="bg-brand-dark border-t border-gray-700/50 pt-10 pb-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-brand-muted">&copy; 2025 IFSA. All Rights Reserved.</p>
+        </div>
+    </footer>
 
-        const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+<script>
+let currentDate = new Date();
+let events = [];
 
-        async function loadEvents() {
-            try {
-                const res = await fetch('http://localhost:3000/api/schedule/list');
-                events = await res.json();
-                renderCalendar();
-                renderEventList();
-            } catch(e) { console.error("Error loading schedule"); }
-        }
+const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
-        function renderCalendar() {
-            const grid = document.getElementById('calendar-grid');
-            const monthLabel = document.getElementById('monthYear');
-            
-            grid.innerHTML = "";
-            
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            
-            monthLabel.innerText = `${monthNames[month]} ${year}`;
+// Custom cursor
+(function() {
+    const cursor = document.getElementById('cursor');
+    if (!cursor || window.matchMedia('(pointer: coarse)').matches) {
+        if (cursor) cursor.style.display = 'none'; return;
+    }
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top  = e.clientY + 'px';
+    });
+})();
 
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
+// Scroll reveal
+(function() {
+    const revealEls = document.querySelectorAll('.reveal-up');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); }
+        });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => observer.observe(el));
+})();
 
-            // Empty slots for previous month
-            for (let i = 0; i < firstDay; i++) {
-                grid.innerHTML += `<div class="h-24 bg-gray-900/50 rounded"></div>`;
-            }
+async function loadEvents() {
+    try {
+        const res = await fetch('http://localhost:3000/api/schedule/list');
+        events = await res.json();
+        renderCalendar();
+        renderEventList();
+    } catch(e) { console.error("Error loading schedule"); }
+}
 
-            // Days
-            for (let day = 1; day <= daysInMonth; day++) {
-                // Check for events on this day
-                const dateString = `${year}-${String(month+1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const dayEvents = events.filter(e => e.date === dateString);
+function renderCalendar() {
+    const grid = document.getElementById('calendar-grid');
+    const monthLabel = document.getElementById('monthYear');
+    
+    grid.innerHTML = "";
+    
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    
+    monthLabel.innerText = `${monthNames[month]} ${year}`;
 
-                let eventHTML = dayEvents.map(e => {
-                    let color = e.type === 'Exam' ? 'bg-red-600' : e.type === 'Tournament' ? 'bg-amber-500 text-black' : 'bg-blue-600';
-                    return `<div class="text-[10px] ${color} text-white rounded px-1 mt-1 truncate">${e.title}</div>`;
-                }).join('');
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-                // Highlight Today
-                const isToday = new Date().toDateString() === new Date(year, month, day).toDateString();
-                const bgClass = isToday ? 'bg-gray-700 border-brand-accent border-2' : 'bg-gray-800 hover:bg-gray-700';
+    for (let i = 0; i < firstDay; i++) {
+        grid.innerHTML += `<div class="h-24 bg-gray-900/50 rounded"></div>`;
+    }
 
-                grid.innerHTML += `
-                    <div class="${bgClass} h-24 p-2 rounded border border-gray-700 flex flex-col transition">
-                        <span class="font-bold text-sm ${isToday ? 'text-brand-accent': 'text-gray-400'}">${day}</span>
-                        <div class="overflow-y-auto custom-scrollbar">${eventHTML}</div>
-                    </div>
-                `;
-            }
-        }
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateString = `${year}-${String(month+1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const dayEvents = events.filter(e => e.date === dateString);
 
-        function renderEventList() {
-            const list = document.getElementById('event-list');
-            // Filter only future events
-            const futureEvents = events.filter(e => new Date(e.date) >= new Date().setHours(0,0,0,0));
-            
-            if(futureEvents.length === 0) {
-                list.innerHTML = '<p class="text-gray-500">No upcoming events scheduled.</p>';
-                return;
-            }
+        let eventHTML = dayEvents.map(e => {
+            let color = e.type === 'Exam' ? 'bg-red-600' : e.type === 'Tournament' ? 'bg-amber-500 text-black' : 'bg-blue-600';
+            return `<div class="text-[10px] ${color} text-white rounded px-1 mt-1 truncate">${e.title}</div>`;
+        }).join('');
 
-            list.innerHTML = futureEvents.map(e => `
-                <div class="flex items-center gap-4 bg-gray-700/50 p-3 rounded border-l-4 ${e.type === 'Exam' ? 'border-red-500' : 'border-amber-500'}">
-                    <div class="text-center min-w-[60px]">
-                        <div class="text-xs text-gray-400 uppercase">${new Date(e.date).toLocaleString('default', {month:'short'})}</div>
-                        <div class="text-xl font-bold text-white">${new Date(e.date).getDate()}</div>
-                    </div>
-                    <div>
-                        <div class="font-bold text-white">${e.title}</div>
-                        <div class="text-xs text-gray-400 bg-gray-900 inline-block px-2 py-0.5 rounded mt-1">${e.type}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
+        const isToday = new Date().toDateString() === new Date(year, month, day).toDateString();
+        const bgClass = isToday ? 'bg-gray-700 border-brand-accent border-2' : 'bg-gray-800 hover:bg-gray-700';
 
-        function changeMonth(dir) {
-            currentDate.setMonth(currentDate.getMonth() + dir);
-            renderCalendar();
-        }
+        grid.innerHTML += `
+            <div class="${bgClass} h-24 p-2 rounded border border-gray-700 flex flex-col transition">
+                <span class="font-bold text-sm ${isToday ? 'text-brand-accent': 'text-gray-400'}">${day}</span>
+                <div class="overflow-y-auto custom-scrollbar">${eventHTML}</div>
+            </div>
+        `;
+    }
+}
 
-        loadEvents();
-    </script>
+function renderEventList() {
+    const list = document.getElementById('event-list');
+    const futureEvents = events.filter(e => new Date(e.date) >= new Date().setHours(0,0,0,0));
+    
+    if(futureEvents.length === 0) {
+        list.innerHTML = '<p class="text-gray-500">No upcoming events scheduled.</p>';
+        return;
+    }
+
+    list.innerHTML = futureEvents.map(e => `
+        <div class="flex items-center gap-4 bg-gray-700/50 p-3 rounded border-l-4 ${e.type === 'Exam' ? 'border-red-500' : 'border-amber-500'} hover:bg-gray-700/80 transition">
+            <div class="text-center min-w-[60px]">
+                <div class="text-xs text-gray-400 uppercase">${new Date(e.date).toLocaleString('default', {month:'short'})}</div>
+                <div class="text-xl font-black text-white">${new Date(e.date).getDate()}</div>
+            </div>
+            <div>
+                <div class="font-bold text-white">${e.title}</div>
+                <div class="text-xs text-gray-400 bg-gray-900 inline-block px-2 py-0.5 rounded mt-1">${e.type}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function changeMonth(dir) {
+    currentDate.setMonth(currentDate.getMonth() + dir);
+    renderCalendar();
+}
+
+loadEvents();
+</script>
+
+<style>
+.page-particle {
+    position: absolute;
+    background: rgba(251,191,36,0.6);
+    border-radius: 50%;
+    animation: floatParticle 4s ease-in-out infinite;
+}
+@keyframes floatParticle {
+    0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+    50%       { transform: translateY(-18px) scale(1.2); opacity: 1; }
+}
+</style>
 </body>
 </html>

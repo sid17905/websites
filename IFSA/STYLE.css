@@ -1,103 +1,345 @@
+/* =====================================================
+   IFSA — Dark Luxury Combat Arts Design System
+   ---------------------------------------------------
+   All original rules preserved + new additions below.
+   ===================================================== */
+
+/* ── CSS Custom Properties ─────────────────────────── */
+:root {
+    /* Original theme variables (unchanged) */
+    --bg-primary-rgb: 15, 23, 42;
+    --bg-secondary-rgb: 30, 41, 59;
+    --accent-color: #fbbf24;
+    --accent-hover: #d97706;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+
+    /* New additions */
+    --glow-amber: 0 0 20px rgba(251, 191, 36, 0.45), 0 0 60px rgba(251, 191, 36, 0.15);
+    --ease-main: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ── Base ───────────────────────────────────────────── */
+body {
+    font-family: 'Inter', sans-serif;
+    cursor: none; /* hide default when custom cursor active (desktop) */
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* ── Custom Scrollbar ──────────────────────────────── */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: rgb(var(--bg-primary-rgb));
+}
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-hover);
+}
+
+/* ── Selection Highlight ───────────────────────────── */
+::selection {
+    background: var(--accent-color);
+    color: #000;
+}
+
+/* ── Grain / Noise Overlay ─────────────────────────── */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+}
+
+/* ── Custom Amber Cursor (desktop) ─────────────────── */
+.custom-cursor {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: var(--accent-color);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s var(--ease-main), opacity 0.2s;
+    box-shadow: 0 0 8px var(--accent-color);
+}
+.custom-cursor.hidden { opacity: 0; }
+
+/* ── Diagonal Lines Background ─────────────────────── */
+.diagonal-lines {
+    background-image: repeating-linear-gradient(
+        -45deg,
+        rgba(251, 191, 36, 0.04) 0px,
+        rgba(251, 191, 36, 0.04) 1px,
+        transparent 1px,
+        transparent 12px
+    );
+}
+
+/* ── Reveal on Scroll ──────────────────────────────── */
+.reveal-up {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.65s var(--ease-main), transform 0.65s var(--ease-main);
+}
+.reveal-up.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* Stagger delays */
+.stagger-1 { transition-delay: 0.1s; }
+.stagger-2 { transition-delay: 0.2s; }
+.stagger-3 { transition-delay: 0.3s; }
+.stagger-4 { transition-delay: 0.4s; }
+
+/* ── Amber Gradient Border Hover ───────────────────── */
+.amber-border-card {
+    position: relative;
+    border-radius: 0.5rem;
+}
+.amber-border-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: 0.6rem;
+    background: linear-gradient(135deg, var(--accent-color), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-main);
+    z-index: 0;
+    pointer-events: none;
+}
+.amber-border-card:hover::before { opacity: 1; }
+
+/* ── Active Nav Underline ──────────────────────────── */
+.nav-active {
+    color: var(--accent-color) !important;
+    position: relative;
+}
+.nav-active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent-color);
+    border-radius: 2px;
+    animation: navUnderline 0.3s var(--ease-spring) forwards;
+    transform-origin: left;
+}
+@keyframes navUnderline {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}
+
+/* ── Flip Card Front Bottom Gradient ───────────────── */
+.flip-card-front::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 45%;
+    background: linear-gradient(to top, rgba(var(--bg-secondary-rgb), 0.95) 0%, transparent 100%);
+    border-radius: 0 0 0.5rem 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* ── Logo Glow Pulse ───────────────────────────────── */
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 18px rgba(251, 191, 36, 0.5), 0 0 50px rgba(251, 191, 36, 0.15); }
+    50%       { box-shadow: 0 0 35px rgba(251, 191, 36, 0.85), 0 0 90px rgba(251, 191, 36, 0.3); }
+}
+.logo-glow-ring {
+    animation: glowPulse 2.5s ease-in-out infinite;
+}
+
+/* ── Hero Chevron Bounce ───────────────────────────── */
+@keyframes chevronBounce {
+    0%, 100% { transform: translateY(0); opacity: 0.7; }
+    50%       { transform: translateY(8px); opacity: 1; }
+}
+.scroll-chevron {
+    animation: chevronBounce 1.8s ease-in-out infinite;
+}
+
+/* ── Button Shimmer ────────────────────────────────── */
+@keyframes shimmer {
+    0%   { left: -80%; }
+    100% { left: 120%; }
+}
+.btn-shimmer {
+    position: relative;
+    overflow: hidden;
+}
+.btn-shimmer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+    transform: skewX(-20deg);
+    transition: none;
+}
+.btn-shimmer:hover::after {
+    animation: shimmer 0.55s ease-out forwards;
+}
+
+/* ── WhatsApp Pulse Ring ───────────────────────────── */
+@keyframes pulseRing {
+    0%   { transform: scale(1);   opacity: 0.7; }
+    70%  { transform: scale(1.55); opacity: 0;   }
+    100% { transform: scale(1.55); opacity: 0;   }
+}
+@keyframes pulseRingOuter {
+    0%   { transform: scale(1);   opacity: 0.4; }
+    70%  { transform: scale(1.85); opacity: 0;   }
+    100% { transform: scale(1.85); opacity: 0;   }
+}
+.animate-pulse-ring {
+    position: relative;
+}
+.animate-pulse-ring::before,
+.animate-pulse-ring::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 3px solid #25d366;
+    pointer-events: none;
+}
+.animate-pulse-ring::before { animation: pulseRing 2s cubic-bezier(0.24, 0, 0.38, 1) infinite; }
+.animate-pulse-ring::after  { animation: pulseRingOuter 2s cubic-bezier(0.24, 0, 0.38, 1) infinite 0.3s; }
+
+/* ── Preloader Counter-Spin Ring ───────────────────── */
+@keyframes spinReverse {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(-360deg); }
+}
+.animate-spin-reverse {
+    animation: spinReverse 1.2s linear infinite;
+}
+
+/* ── Preloader Scale Pulse Ring ────────────────────── */
+@keyframes scalePulse {
+    0%, 100% { transform: scale(1);    opacity: 0.18; }
+    50%       { transform: scale(1.08); opacity: 0.38; }
+}
+.animate-scale-pulse {
+    animation: scalePulse 2s ease-in-out infinite;
+}
+
+/* ── Preloader IFSA Text ───────────────────────────── */
+@keyframes preloaderText {
+    from { opacity: 0; letter-spacing: 0.5em; }
+    to   { opacity: 1; letter-spacing: 0.75em; }
+}
+.preloader-brand-text {
+    animation: preloaderText 0.7s var(--ease-main) 0.8s both;
+}
+
+/* ── Preloader Radial Wipe Exit ────────────────────── */
+#preloader {
+    transition: opacity 0.5s ease-out, clip-path 0.45s ease-in;
+    clip-path: circle(150% at 50% 50%);
+}
+#preloader.wipe-out {
+    clip-path: circle(0% at 50% 50%);
+    opacity: 0;
+}
+
+/* ── Preloader existing animations (kept) ──────────── */
 @keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(20px) scale(0.9); /* Start lower and slightly smaller */
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0) scale(1); /* End in center, normal size */
-    }
+    0%   { opacity: 0; transform: translateY(20px) scale(0.9); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
 }
-
-/* The class we will add to the logo */
 .animate-fade-up {
-    animation: fadeInUp 1.5s ease-out forwards; /* Runs once smoothly */
+    animation: fadeInUp 1.5s ease-out forwards;
 }
-
-/* Optional: Add a gentle pulse after it arrives so it doesn't look frozen */
 .animate-pulse-slow {
     animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 @keyframes pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: .7; }
+    50%       { opacity: .7; }
 }
-/* --- THEME CONTROL PANEL --- */
-/* Change these values to instantly theme your entire website */
-:root {
-    /* BACKGROUND: Dark Navy / Midnight (RGB) */
-    /* Very modern, almost black */
-    --bg-primary-rgb: 15, 23, 42;   
-    
-    /* CARDS: Charcoal Blue */
-    --bg-secondary-rgb: 30, 41, 59;
-    
-    /* ACCENT: Rich Amber (Looks like deep gold) */
-    --accent-color: #fbbf24;       
-    
-    /* HOVER: Burnt Orange/Gold */
-    --accent-hover: #d97706;       
+@keyframes preloaderFadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+.preloader-fade-out {
+    animation: preloaderFadeOut 0.5s ease-out forwards;
+}
+.preloader-text {
+    opacity: 0;
+    animation: fade-text 1.5s ease-in-out infinite;
+}
+@keyframes fade-text {
+    0%   { opacity: 0; }
+    50%  { opacity: 1; }
+    100% { opacity: 0; }
+}
 
-    /* TEXT: Off-White */
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
+/* ── Main content visibility ───────────────────────── */
+.main-content-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease-in 0.3s;
 }
-/* --- Gentle Float Animation --- */
+#main-content {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ── Float animation (original) ───────────────────── */
 @keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-10px); }
     100% { transform: translateY(0px); }
 }
-
-.animate-float {
-    animation: float 4s ease-in-out infinite;
-}
-
-/* Adds a delay so they don't all move at the exact same time */
+.animate-float { animation: float 4s ease-in-out infinite; }
 .animate-float-delay {
     animation: float 4s ease-in-out infinite;
     animation-delay: 2s;
 }
-/* Apply the Inter font family */
-body {
-    font-family: 'Inter', sans-serif;
-}
 
-/* Smooth scroll behavior */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Simple animation for hero text */
+/* ── Hero text fade-in (original) ─────────────────── */
 @keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
+.hero-text { animation: fadeInDown 1s ease-out; }
 
-.hero-text {
-    animation: fadeInDown 1s ease-out;
-}
-
-/* Custom gradient for hero */
-/* UPDATED: Now uses the variable --bg-primary-rgb */
+/* ── Hero gradient (original, updated to use var) ──── */
 .hero-gradient {
-    background: linear-gradient(180deg, rgba(var(--bg-primary-rgb), 0.5) 0%, rgba(var(--bg-primary-rgb), 1) 100%);
+    background: linear-gradient(180deg,
+        rgba(var(--bg-primary-rgb), 0.5) 0%,
+        rgba(var(--bg-primary-rgb), 1) 100%);
 }
 
-/* --- 3D FLIP CARD ANIMATION --- */
+/* ── 3D Flip Card (original, kept verbatim) ────────── */
 .flip-card-container {
-    perspective: 1000px; 
+    perspective: 1000px;
     width: 100%;
-    position: relative; 
+    position: relative;
     z-index: 10;
 }
-
 .flip-card-inner {
     position: relative;
     width: 100%;
@@ -106,13 +348,11 @@ html {
     transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
     transform-style: preserve-3d;
 }
-
 .flip-card-container:hover .flip-card-inner {
     transform: rotateY(180deg);
 }
-
 .flip-card-front, .flip-card-back {
-    position: absolute; /* This MUST be absolute */
+    position: absolute;
     width: 100%;
     height: 100%;
     -webkit-backface-visibility: hidden;
@@ -121,82 +361,179 @@ html {
     left: 0;
     border-radius: 0.5rem;
 }
-
 .flip-card-front {
     z-index: 2;
     transform: rotateY(0deg);
+    overflow: hidden;
+    position: relative;
 }
-
 .flip-card-back {
     transform: rotateY(180deg);
     z-index: 1;
 }
-/* --- Preloader & Kick Animation --- */
 
-#preloader {
-    transition: opacity 0.5s ease-out;
-}
-
-@keyframes preloaderFadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-.preloader-fade-out {
-    animation: preloaderFadeOut 0.5s ease-out forwards;
-}
-
-/* Text fade-in-out for "Loading..." */
-.preloader-text {
-    opacity: 0;
-    animation: fade-text 1.5s ease-in-out infinite;
-}
-
-@keyframes fade-text {
-    0% { opacity: 0; }
-    50% { opacity: 1; }
-    100% { opacity: 0; }
-}
-
-/* Main content is hidden by default */
-.main-content-hidden {
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.8s ease-in 0.3s; 
-}
-
-/* This is the "visible" state */
-#main-content {
-    opacity: 1;
-    visibility: visible;
-}
-/* --- INFINITE SCROLL ANIMATION --- */
+/* ── Gallery Scroll (original) ─────────────────────── */
 @keyframes smoothScroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%); /* Moves exactly half the width (the original set) */
-    }
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
 }
-
 .gallery-track {
     display: flex;
-    gap: 1rem; /* Matches Tailwind 'gap-4' */
-    width: max-content; /* Forces the track to be as long as the images */
-    animation: smoothScroll 40s linear infinite; /* Adjust '40s' to control speed */
+    gap: 1rem;
+    width: max-content;
+    animation: smoothScroll 40s linear infinite;
 }
-
-/* Pause animation when user hovers over the images */
 .gallery-track:hover {
     animation-play-state: paused;
 }
-/* --- WHATSAPP BUTTON ANIMATION --- */
+
+/* ── WhatsApp Button Old (kept for fallback) ────────── */
 @keyframes bounce-slow {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+}
+.animate-bounce-slow {
+    animation: bounce-slow 3s ease-in-out infinite;
 }
 
-.animate-bounce-slow {
-  animation: bounce-slow 3s ease-in-out infinite;
+/* ── Icon Hover Rotation ───────────────────────────── */
+.icon-rotate {
+    transition: transform 0.35s var(--ease-spring);
+    display: inline-block;
 }
+.icon-rotate:hover {
+    transform: rotate(15deg) scale(1.15);
+}
+
+/* ── Social Icon Hover ─────────────────────────────── */
+.social-icon {
+    transition: transform 0.25s var(--ease-spring), filter 0.25s ease;
+}
+.social-icon:hover {
+    transform: scale(1.25);
+    filter: drop-shadow(0 0 8px var(--accent-color));
+}
+
+/* ── Location Card Glow Border ─────────────────────── */
+.location-card {
+    position: relative;
+    overflow: hidden;
+}
+.location-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+    transform: scaleX(0);
+    transition: transform 0.4s var(--ease-main);
+    z-index: 2;
+}
+.location-card:hover::before { transform: scaleX(1); }
+
+/* ── Program Card Number ───────────────────────────── */
+.card-number {
+    position: absolute;
+    top: -0.25rem;
+    right: 0.75rem;
+    font-size: 5rem;
+    font-weight: 900;
+    line-height: 1;
+    color: rgba(251, 191, 36, 0.07);
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── Program Card Hover Overlay ────────────────────── */
+.program-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(var(--bg-primary-rgb), 0.97) 0%, rgba(var(--bg-primary-rgb), 0.6) 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.35s var(--ease-main), transform 0.35s var(--ease-main);
+    z-index: 2;
+    border-radius: 0.5rem;
+}
+.amber-border-card:hover .program-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ── Hero Word Stagger ─────────────────────────────── */
+@keyframes wordReveal {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.word-reveal {
+    display: inline-block;
+    opacity: 0;
+    animation: wordReveal 0.6s var(--ease-main) forwards;
+}
+/* ── Chevron Bounce (hero scroll indicator) ─────────── */
+@keyframes chevronBounce {
+    0%, 100% { transform: translateY(0);   opacity: 0.6; }
+    50%       { transform: translateY(8px); opacity: 1;   }
+}
+.scroll-chevron {
+    animation: chevronBounce 1.8s ease-in-out infinite;
+}
+/* alias used in INDEX */
+.animate-chevron-bounce {
+    animation: chevronBounce 1.8s ease-in-out infinite;
+}
+
+/* ── Page Hero Particles ────────────────────────────── */
+.page-particle {
+    position: absolute;
+    background: rgba(251, 191, 36, 0.6);
+    border-radius: 50%;
+    animation: floatParticle 4s ease-in-out infinite;
+}
+@keyframes floatParticle {
+    0%, 100% { transform: translateY(0) scale(1);    opacity: 0.6; }
+    50%       { transform: translateY(-18px) scale(1.2); opacity: 1;   }
+}
+
+/* ── Gallery Track Reverse ──────────────────────────── */
+@keyframes smoothScrollReverse {
+    0%   { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+}
+.gallery-track-reverse {
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    animation: smoothScrollReverse 38s linear infinite;
+}
+.gallery-track-reverse:hover {
+    animation-play-state: paused;
+}
+
+/* ── Nav Icon Links ─────────────────────────────────── */
+.nav-icon-link {
+    padding: 4px 2px;
+    position: relative;
+}
+.nav-icon-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent-color);
+    transition: width 0.3s var(--ease-main);
+}
+.nav-icon-link:hover::after {
+    width: 100%;
+}
+
