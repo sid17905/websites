@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>if(localStorage.getItem("ifsa-theme")==="light")document.documentElement.classList.add("light");</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery - IFSA</title>
+    <title>Gallery – IFSA Karate Mumbai | Training & Tournament Photos</title>
+    <meta name="description" content="Browse IFSA's gallery of karate training sessions, grading ceremonies, and tournament victories in Mumbai.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ifsaacademy.in/gallery.html">
+    <meta property="og:title" content="IFSA Gallery – Karate Training & Tournaments Mumbai">
+    <meta property="og:description" content="Photos and videos from IFSA karate training, gradings, and tournaments in Mumbai.">
+    <meta property="og:image" content="https://ifsaacademy.in/public/image%201.png">
+    <meta property="og:url" content="https://ifsaacademy.in/gallery.html">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#fbbf24">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -47,6 +57,7 @@
                 <a href="calender.html" class="text-brand-text hover:text-brand-accent transition">Schedule</a>
                 <a href="documents.html" class="text-brand-text hover:text-brand-accent transition">Documents</a>
                 <a href="pricing.html" class="btn-shimmer bg-brand-accent text-black px-5 py-2 rounded-lg font-bold hover:bg-amber-400 transition shadow-[0_0_16px_rgba(251,191,36,0.3)]">Join Now</a>
+                <button class="theme-toggle" onclick="(function(){var l=document.documentElement.classList.toggle('light');localStorage.setItem('ifsa-theme',l?'light':'dark');})()" aria-label="Toggle dark/light mode"><svg class="sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="5" stroke-width="2"/><path stroke-width="2" stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg><svg class="moon-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18"><path stroke-width="2" stroke-linecap="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
             </div>
             <div class="md:hidden">
                 <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="text-white focus:outline-none p-2 border border-gray-700 rounded bg-gray-800">
@@ -151,9 +162,11 @@ async function loadFullGallery() {
         document.getElementById('loading-msg').classList.add('hidden');
         galleryGrid.innerHTML = '';
 
-        items.forEach((item) => {
+        items.forEach((item, idx) => {
             const div = document.createElement('div');
-            div.className = "group relative bg-gray-800 rounded-xl border border-white/10 shadow-lg overflow-hidden flex flex-col break-inside-avoid mb-6 hover:border-brand-accent transition-all duration-300";
+            // 4.7 stagger-card: each card fades in with 60ms offset
+            div.className = "stagger-card group relative bg-gray-800 rounded-xl border border-white/10 shadow-lg overflow-hidden flex flex-col break-inside-avoid mb-6 hover:border-brand-accent transition-all duration-300";
+            div.style.transitionDelay = `${idx * 60}ms`;
             
             const isVideo = item.url.match(/\.(mp4|webm)$/i);
             let mediaHTML = '';
@@ -163,7 +176,7 @@ async function loadFullGallery() {
             } else {
                 mediaHTML = `
                     <div class="w-full relative">
-                        <img src="${item.url}" class="w-full h-auto block transition duration-500 group-hover:scale-105" loading="lazy" alt="Gallery Media">
+                        <img src="${item.url}" class="w-full h-auto block transition duration-500 group-hover:scale-105" loading="lazy" alt="${item.alt || 'IFSA Karate Gallery'}">
                         <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
                             <span class="text-white font-semibold border border-white px-4 py-2 rounded-full">View</span>
                         </div>
@@ -185,6 +198,17 @@ async function loadFullGallery() {
             }
             galleryGrid.appendChild(div);
         });
+
+        // 4.7 Trigger stagger-card visibility via IntersectionObserver
+        const staggerObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    staggerObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.05 });
+        document.querySelectorAll('.stagger-card').forEach(el => staggerObserver.observe(el));
     } catch (error) { console.error(error); }
 }
 loadFullGallery();
@@ -202,5 +226,13 @@ loadFullGallery();
     50%       { transform: translateY(-18px) scale(1.2); opacity: 1; }
 }
 </style>
+
+<!-- WhatsApp Floating Button (Task 3.1) -->
+<a href="https://wa.me/919004383448?text=Hi%20IFSA!%20I%27d%20like%20to%20enquire%20about%20joining%20your%20karate%20classes."
+   target="_blank" rel="noopener" class="whatsapp-fab" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="white" width="28" height="28">
+        <path d="M16 0C7.164 0 0 7.163 0 16c0 2.822.737 5.469 2.027 7.773L0 32l8.489-2.002A15.93 15.93 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 01-6.77-1.848l-.484-.287-5.037 1.188 1.237-4.896-.316-.502A13.266 13.266 0 012.667 16C2.667 8.636 8.637 2.667 16 2.667S29.333 8.636 29.333 16 23.363 29.333 16 29.333zm7.27-9.927c-.398-.199-2.354-1.162-2.72-1.294-.365-.133-.631-.199-.897.199-.265.398-1.029 1.294-1.261 1.56-.232.265-.465.298-.863.1-.398-.199-1.681-.619-3.202-1.977-1.183-1.056-1.982-2.36-2.214-2.758-.232-.398-.025-.613.175-.811.179-.178.398-.465.597-.697.199-.232.265-.398.398-.664.133-.265.066-.497-.033-.696-.1-.199-.897-2.162-1.229-2.96-.324-.776-.653-.671-.897-.683l-.764-.013c-.265 0-.696.1-1.061.497-.365.398-1.394 1.362-1.394 3.322s1.427 3.854 1.626 4.12c.199.265 2.808 4.286 6.802 5.814.951.366 1.693.585 2.272.749.954.271 1.822.233 2.509.141.765-.113 2.354-.962 2.686-1.891.332-.929.332-1.726.232-1.891-.099-.166-.365-.265-.763-.464z"/>
+    </svg>
+</a>
 </body>
 </html>

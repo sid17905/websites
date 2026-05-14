@@ -5,33 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IFSA Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- DOMPurify: sanitizes all server data before inserting into DOM (Task 1.4) -->
+    <!-- SortableJS: drag-and-drop slideshow reordering (Task 6.1) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.2/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.5/purify.min.js"></script>
 </head>
 <body class="bg-gray-900 text-white min-h-screen font-sans">
 
-    <!-- LOGIN OVERLAY -->
+    <!-- ═══════════════════════════ LOGIN OVERLAY ══════════════════════════ -->
     <div id="login-section" class="fixed inset-0 bg-gray-900 flex items-center justify-center z-50">
         <div class="bg-gray-800 p-8 rounded-lg w-96 border border-gray-700 shadow-2xl">
-            <h2 class="text-2xl font-bold mb-4 text-amber-500 text-center">Admin Login</h2>
+            <div class="flex items-center justify-center mb-6">
+                <div class="w-14 h-14 rounded-full bg-amber-500/20 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                </div>
+            </div>
+            <h2 class="text-2xl font-bold mb-1 text-amber-500 text-center">Admin Login</h2>
+            <p class="text-gray-500 text-xs text-center mb-6">IFSA Content Manager</p>
+
             <form onsubmit="event.preventDefault(); checkLogin();">
-                <input type="password" id="password-input" placeholder="Password" class="w-full p-3 mb-4 bg-gray-700 rounded text-white border border-gray-600 focus:border-amber-500 outline-none">
-                <button type="submit" class="w-full bg-amber-600 py-3 rounded font-bold hover:bg-amber-700 transition shadow-lg">Login</button>
+                <input type="password" id="password-input" placeholder="Password"
+                    class="w-full p-3 mb-3 bg-gray-700 rounded text-white border border-gray-600 focus:border-amber-500 outline-none"
+                    autocomplete="current-password">
+                <button type="submit" id="login-btn"
+                    class="w-full bg-amber-600 py-3 rounded font-bold hover:bg-amber-700 transition shadow-lg flex items-center justify-center gap-2">
+                    <span id="login-btn-text">Login</span>
+                </button>
             </form>
-            <p id="login-error" class="text-red-500 text-center mt-4 hidden">Incorrect Password!</p>
-            <a href="index.html" class="block text-center text-gray-400 text-sm mt-6 hover:text-white transition">&larr; Back to Home Page</a>
+
+            <!-- Error messages -->
+            <p id="login-error" class="text-red-400 text-center mt-4 text-sm hidden"></p>
+            <!-- Rate limit warning -->
+            <p id="login-warning" class="text-amber-400 text-center mt-4 text-sm hidden"></p>
+
+            <a href="index.html" class="block text-center text-gray-500 text-sm mt-6 hover:text-white transition">&larr; Back to Home Page</a>
         </div>
     </div>
 
-    <!-- MAIN DASHBOARD -->
+
+    <!-- ═══════════════════════════ MAIN DASHBOARD ════════════════════════ -->
     <div id="dashboard" class="container mx-auto p-6 hidden max-w-6xl">
-        
+
         <!-- Header -->
         <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-gray-700 pb-6 gap-4">
             <div>
                 <h1 class="text-3xl font-bold text-white">Admin Dashboard</h1>
-                <p class="text-gray-400 mt-1">Content Manager (Auto-Compress Enabled ⚡)</p>
+                <p class="text-gray-400 mt-1">Content Manager (Auto-Compress Enabled ⚡) &nbsp;
+                    <span class="text-green-400 text-xs font-bold">🔒 Secured</span>
+                </p>
             </div>
-            <div class="flex gap-3">
-                <a href="index.html" target="_blank" class="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 px-5 py-2 rounded text-white transition font-medium border border-gray-600">
+            <div class="flex gap-3 items-center">
+                <!-- Session timer -->
+                <span id="session-timer" class="text-xs text-gray-500 border border-gray-700 px-3 py-2 rounded">Session: <span id="timer-val">8:00:00</span></span>
+                <a href="index.html" target="_blank"
+                    class="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 px-5 py-2 rounded text-white transition font-medium border border-gray-600">
                     <span>View Website</span>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                 </a>
@@ -39,34 +66,137 @@
             </div>
         </div>
 
+        <!-- Hero Video — Desktop + Mobile (Responsive) -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-yellow-500/30 shadow-lg">
+            <h2 class="text-xl font-bold mb-1 text-yellow-400 flex items-center gap-2">
+                <span class="bg-yellow-400/20 p-2 rounded-lg">🎬</span> Hero Video Background
+            </h2>
+            <p class="text-xs text-gray-500 mb-5">Upload <strong class="text-yellow-400">separate videos</strong> for desktop (landscape 16:9) and mobile (portrait 9:16). The site automatically shows the right one. Accepted: MP4 · WebM · Max 200 MB each.</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <!-- Desktop Video -->
+                <div class="rounded-xl border border-white/10 bg-gray-900 p-4">
+                    <p class="text-sm font-bold text-white mb-3">🖥️ Desktop Video</p>
+                    <div id="hero-desktop-preview" class="mb-3 rounded-lg overflow-hidden bg-black hidden">
+                        <video id="hero-desktop-player" controls class="w-full max-h-40 object-contain"></video>
+                        <div class="flex justify-between items-center px-3 py-2 bg-gray-800">
+                            <span id="hero-desktop-label" class="text-xs text-gray-400 truncate max-w-[160px]"></span>
+                            <button onclick="deleteHeroVideoSlot('desktop')" class="text-xs text-red-400 hover:text-red-300 font-semibold">Remove</button>
+                        </div>
+                    </div>
+                    <div id="hero-desktop-empty" class="mb-3 rounded-lg border-2 border-dashed border-gray-600 h-20 flex items-center justify-center text-gray-500 text-sm">No desktop video</div>
+                    <label class="flex items-center gap-2 cursor-pointer bg-yellow-400 hover:bg-amber-300 text-black font-bold text-sm px-4 py-2 rounded-lg w-fit transition">
+                        ↑ Upload Desktop Video
+                        <input type="file" accept="video/mp4,video/webm,video/quicktime" class="hidden" onchange="uploadHeroVideoSlot(this,'desktop')">
+                    </label>
+                </div>
+                <!-- Mobile Video -->
+                <div class="rounded-xl border border-white/10 bg-gray-900 p-4">
+                    <p class="text-sm font-bold text-white mb-3">📱 Mobile Video</p>
+                    <div id="hero-mobile-preview" class="mb-3 rounded-lg overflow-hidden bg-black hidden">
+                        <video id="hero-mobile-player" controls class="w-full max-h-40 object-contain"></video>
+                        <div class="flex justify-between items-center px-3 py-2 bg-gray-800">
+                            <span id="hero-mobile-label" class="text-xs text-gray-400 truncate max-w-[160px]"></span>
+                            <button onclick="deleteHeroVideoSlot('mobile')" class="text-xs text-red-400 hover:text-red-300 font-semibold">Remove</button>
+                        </div>
+                    </div>
+                    <div id="hero-mobile-empty" class="mb-3 rounded-lg border-2 border-dashed border-gray-600 h-20 flex items-center justify-center text-gray-500 text-sm">No mobile video</div>
+                    <label class="flex items-center gap-2 cursor-pointer bg-yellow-400 hover:bg-amber-300 text-black font-bold text-sm px-4 py-2 rounded-lg w-fit transition">
+                        ↑ Upload Mobile Video
+                        <input type="file" accept="video/mp4,video/webm,video/quicktime" class="hidden" onchange="uploadHeroVideoSlot(this,'mobile')">
+                    </label>
+                </div>
+            </div>
+            <div id="hero-video-status" class="text-sm hidden mt-2"></div>
+        </div>
+
+        <!-- Program Card Images -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-orange-500/30 shadow-lg">
+            <h2 class="text-xl font-bold mb-1 text-orange-400 flex items-center gap-2">
+                <span class="bg-orange-400/20 p-2 rounded-lg">🥋</span> Program Card Images
+            </h2>
+            <p class="text-xs text-gray-500 mb-5">Upload a photo for each training track — replaces the silhouette icons on the homepage. Best ratio: <strong class="text-orange-400">4:3</strong>. JPG · PNG · WebP · Max 10 MB.</p>
+            <div id="program-image-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-6"></div>
+            <div id="program-img-status" class="text-sm hidden mt-3"></div>
+        </div>
+
         <!-- 1. SLIDESHOW SECTION -->
         <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-gray-700 shadow-lg">
-            <h2 class="text-xl font-bold mb-4 text-blue-400 flex items-center gap-2"><span class="bg-blue-400/20 p-2 rounded-lg">1</span> Home Page Slideshow</h2>
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-blue-400 flex items-center gap-2">
+                    <span class="bg-blue-400/20 p-2 rounded-lg">1</span> Home Page Slideshow
+                </h2>
+                <button id="btn-save-order" onclick="saveSlideOrder()"
+                    class="bg-blue-700 hover:bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded border border-blue-500 transition hidden">
+                    💾 Save Order
+                </button>
+            </div>
+            <p class="text-xs text-gray-500 mb-3">Drag slides to reorder, then click <strong class="text-blue-300">Save Order</strong>.</p>
             <div class="flex gap-4 mb-4">
-                <input type="file" id="slide-input" multiple accept="image/*" class="bg-gray-900 p-2 rounded text-gray-300 w-full border border-gray-600 cursor-pointer">
-                <button onclick="uploadSlideshow()" id="btn-slide" class="bg-blue-600 px-6 py-2 rounded font-bold hover:bg-blue-700 w-40 transition">Upload</button>
+                <input type="file" id="slide-input" multiple accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/tiff,image/bmp,.heic,.heif,.tiff,.tif,.bmp"
+                    class="bg-gray-900 p-2 rounded text-gray-300 w-full border border-gray-600 cursor-pointer">
+                <button onclick="uploadSlideshow()" id="btn-slide"
+                    class="bg-blue-600 px-6 py-2 rounded font-bold hover:bg-blue-700 w-40 transition">Upload</button>
             </div>
             <div id="slide-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
         </div>
 
         <!-- 2. GALLERY SECTION -->
         <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-gray-700 shadow-lg">
-            <h2 class="text-xl font-bold mb-4 text-green-400 flex items-center gap-2"><span class="bg-green-400/20 p-2 rounded-lg">2</span> Main Gallery</h2>
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-green-400 flex items-center gap-2">
+                    <span class="bg-green-400/20 p-2 rounded-lg">2</span> Main Gallery
+                </h2>
+                <button id="btn-bulk-delete" onclick="bulkDeleteGallery()"
+                    class="hidden bg-red-700 hover:bg-red-600 text-white text-xs font-bold px-4 py-2 rounded border border-red-500 transition">
+                    🗑 Delete Selected (<span id="bulk-count">0</span>)
+                </button>
+            </div>
             <div class="flex flex-col md:flex-row gap-4 mb-4 items-end bg-gray-900 p-4 rounded-lg border border-gray-700">
-                <div class="flex-1 w-full"><label class="block text-xs text-gray-400 mb-1">Select Files</label><input type="file" id="gallery-input" multiple accept="image/*,video/mp4,video/webm" class="bg-gray-800 p-2 rounded text-gray-300 w-full border border-gray-600 cursor-pointer"></div>
-                <div class="w-full md:w-40"><label class="block text-xs text-gray-400 mb-1">Month</label><select id="gal-month" class="w-full bg-gray-800 p-2.5 rounded text-white border border-gray-600 cursor-pointer"><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select></div>
-                <div class="w-full md:w-32"><label class="block text-xs text-gray-400 mb-1">Year</label><input type="number" id="gal-year" value="2025" class="w-full bg-gray-800 p-2 rounded text-white border border-gray-600"></div>
-                <button onclick="uploadGallery()" id="btn-gallery" class="bg-green-600 px-8 py-2.5 rounded font-bold hover:bg-green-700 w-full md:w-auto transition">Upload</button>
+                <div class="flex-1 w-full">
+                    <label class="block text-xs text-gray-400 mb-1">Select Files</label>
+                    <input type="file" id="gallery-input" multiple accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/tiff,image/bmp,.heic,.heif,.tiff,.tif,.bmp,video/mp4,video/webm,video/quicktime,video/x-matroska,video/x-msvideo,.mkv,.mov,.avi"
+                        class="bg-gray-800 p-2 rounded text-gray-300 w-full border border-gray-600 cursor-pointer">
+                </div>
+                <div class="w-full md:w-40">
+                    <label class="block text-xs text-gray-400 mb-1">Month</label>
+                    <select id="gal-month" class="w-full bg-gray-800 p-2.5 rounded text-white border border-gray-600 cursor-pointer">
+                        <option>January</option><option>February</option><option>March</option><option>April</option>
+                        <option>May</option><option>June</option><option>July</option><option>August</option>
+                        <option>September</option><option>October</option><option>November</option><option>December</option>
+                    </select>
+                </div>
+                <div class="w-full md:w-32">
+                    <label class="block text-xs text-gray-400 mb-1">Year</label>
+                    <input type="number" id="gal-year" value="2025" class="w-full bg-gray-800 p-2 rounded text-white border border-gray-600">
+                </div>
+                <div class="w-full md:w-64">
+                    <label class="block text-xs text-gray-400 mb-1">Alt Text <span class="text-gray-600">(for SEO & accessibility)</span></label>
+                    <input type="text" id="gal-alt" placeholder="e.g. Students at belt grading"
+                        class="w-full bg-gray-800 p-2 rounded text-white border border-gray-600">
+                </div>
+                <button onclick="uploadGallery()" id="btn-gallery"
+                    class="bg-green-600 px-8 py-2.5 rounded font-bold hover:bg-green-700 w-full md:w-auto transition">Upload</button>
             </div>
             <div id="gallery-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
         </div>
 
         <!-- 3. DOCUMENTS SECTION -->
         <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-gray-700 shadow-lg">
-            <h2 class="text-xl font-bold mb-4 text-red-400 flex items-center gap-2"><span class="bg-red-400/20 p-2 rounded-lg">3</span> Documents</h2>
+            <h2 class="text-xl font-bold mb-4 text-red-400 flex items-center gap-2">
+                <span class="bg-red-400/20 p-2 rounded-lg">3</span> Documents
+            </h2>
             <div class="flex flex-col md:flex-row gap-4 mb-4 items-end bg-gray-900 p-4 rounded-lg border border-gray-700">
-                <div class="flex-1 w-full"><label class="block text-xs text-gray-400 mb-1">Select PDF</label><input type="file" id="doc-input" accept="application/pdf" class="bg-gray-800 p-2 rounded text-gray-300 w-full border border-gray-600 cursor-pointer"></div>
-                <div class="w-full md:w-64"><label class="block text-xs text-gray-400 mb-1">Document Title</label><input type="text" id="doc-title" placeholder="e.g. Tournament Rules" class="w-full bg-gray-800 p-2 rounded text-white border border-gray-700"></div>
+                <div class="flex-1 w-full">
+                    <label class="block text-xs text-gray-400 mb-1">Select PDF</label>
+                    <input type="file" id="doc-input" accept="application/pdf"
+                        class="bg-gray-800 p-2 rounded text-gray-300 w-full border border-gray-600 cursor-pointer">
+                </div>
+                <div class="w-full md:w-64">
+                    <label class="block text-xs text-gray-400 mb-1">Document Title</label>
+                    <input type="text" id="doc-title" placeholder="e.g. Tournament Rules"
+                        class="w-full bg-gray-800 p-2 rounded text-white border border-gray-700">
+                </div>
                 <button onclick="uploadDoc()" class="bg-red-600 px-8 py-2.5 rounded font-bold hover:bg-red-700 w-full md:w-auto transition">Upload</button>
             </div>
             <div id="doc-list" class="space-y-2"></div>
@@ -74,26 +204,52 @@
 
         <!-- 4. SCHEDULE SECTION -->
         <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-gray-700 shadow-lg">
-            <h2 class="text-xl font-bold mb-4 text-purple-400 flex items-center gap-2"><span class="bg-purple-400/20 p-2 rounded-lg">4</span> Calendar Schedule</h2>
+            <h2 class="text-xl font-bold mb-4 text-purple-400 flex items-center gap-2">
+                <span class="bg-purple-400/20 p-2 rounded-lg">4</span> Calendar Schedule
+            </h2>
             <div class="flex flex-col md:flex-row gap-4 mb-4 items-end bg-gray-900 p-4 rounded-lg border border-gray-700">
-                <div class="w-full md:w-40"><label class="block text-xs text-gray-400 mb-1">Date</label><input type="date" id="sched-date" class="bg-gray-800 p-2 rounded text-white w-full border border-gray-700 cursor-pointer"></div>
-                <div class="flex-1 w-full"><label class="block text-xs text-gray-400 mb-1">Event Title</label><input type="text" id="sched-title" placeholder="e.g. Black Belt Grading" class="bg-gray-800 p-2 rounded text-white w-full border border-gray-700"></div>
-                <div class="w-full md:w-40"><label class="block text-xs text-gray-400 mb-1">Type</label><select id="sched-type" class="bg-gray-800 p-2.5 rounded text-white w-full border border-gray-700 cursor-pointer"><option value="General">General</option><option value="Exam">Exam</option><option value="Tournament">Tournament</option><option value="Holiday">Holiday</option></select></div>
+                <div class="w-full md:w-40">
+                    <label class="block text-xs text-gray-400 mb-1">Date</label>
+                    <input type="date" id="sched-date" class="bg-gray-800 p-2 rounded text-white w-full border border-gray-700 cursor-pointer">
+                </div>
+                <div class="flex-1 w-full">
+                    <label class="block text-xs text-gray-400 mb-1">Event Title</label>
+                    <input type="text" id="sched-title" placeholder="e.g. Black Belt Grading"
+                        class="bg-gray-800 p-2 rounded text-white w-full border border-gray-700">
+                </div>
+                <div class="w-full md:w-40">
+                    <label class="block text-xs text-gray-400 mb-1">Type</label>
+                    <select id="sched-type" class="bg-gray-800 p-2.5 rounded text-white w-full border border-gray-700 cursor-pointer">
+                        <option value="General">General</option>
+                        <option value="Exam">Exam</option>
+                        <option value="Tournament">Tournament</option>
+                        <option value="Holiday">Holiday</option>
+                    </select>
+                </div>
                 <button onclick="addEvent()" class="bg-purple-600 px-6 py-2.5 rounded font-bold hover:bg-purple-700 w-full md:w-auto transition">Add</button>
             </div>
             <div id="sched-list" class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar"></div>
         </div>
 
-        <!-- 5. ANNOUNCEMENTS SECTION (FIXED) -->
-        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg border-l-4 border-amber-500">
-            <h2 class="text-xl font-bold mb-4 text-amber-400 flex items-center gap-2"><span class="bg-amber-500/20 p-2 rounded-lg">5</span> Notice Board</h2>
+        <!-- 5. ANNOUNCEMENTS SECTION -->
+        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg border-l-4 border-amber-500 mb-8">
+            <h2 class="text-xl font-bold mb-4 text-amber-400 flex items-center gap-2">
+                <span class="bg-amber-500/20 p-2 rounded-lg">5</span> Notice Board
+            </h2>
             <div class="flex flex-col gap-4">
-                <div class="flex gap-4">
-                    <input type="text" id="announce-msg" placeholder="Type announcement here..." class="flex-1 bg-gray-900 text-white p-3 rounded border border-gray-600 focus:border-amber-500 outline-none">
-                    <button onclick="addAnnouncement()" class="bg-amber-600 px-6 py-2 rounded font-bold hover:bg-amber-700 text-white transition shadow-lg">Add</button>
+                <div class="flex flex-col md:flex-row gap-3">
+                    <input type="text" id="announce-msg" placeholder="Type announcement here..."
+                        class="flex-1 bg-gray-900 text-white p-3 rounded border border-gray-600 focus:border-amber-500 outline-none">
+                    <div class="flex gap-2 items-center">
+                        <div class="flex flex-col">
+                            <label class="text-xs text-gray-500 mb-1">Expires on (optional)</label>
+                            <input type="date" id="announce-expiry"
+                                class="bg-gray-900 text-gray-300 p-2 rounded border border-gray-600 text-sm cursor-pointer">
+                        </div>
+                        <button onclick="addAnnouncement()"
+                            class="bg-amber-600 px-6 py-3 rounded font-bold hover:bg-amber-700 text-white transition shadow-lg self-end">Add</button>
+                    </div>
                 </div>
-                
-                <!-- List Container -->
                 <div class="bg-gray-900 rounded border border-gray-700 p-2 max-h-60 overflow-y-auto custom-scrollbar">
                     <div id="announce-list" class="space-y-2">
                         <p class="text-gray-500 italic text-sm p-2">Loading notices...</p>
@@ -101,274 +257,1143 @@
                 </div>
             </div>
         </div>
-        <br><br>
-    <div class="bg-gray-800 p-6 rounded-lg border border-gray-700 mb-8">
-        <h3 class="text-xl font-bold text-white mb-4 border-b border-gray-700 pb-2">Manage Locations & Pricing</h3>
-        
-        <form id="addLocationForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            
-            <div class="md:col-span-2">
-                <label class="text-gray-400 text-xs uppercase">Branch Name (e.g., Santacruz)</label>
-                <input type="text" id="locName" required class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600">
-            </div>
-            <div class="md:col-span-2">
-                <label class="text-gray-400 text-xs uppercase">Label/Subtitle (e.g., Main Dojo)</label>
-                <input type="text" id="locLabel" required class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600">
-            </div>
-            
-            <div class="md:col-span-2">
-                <label class="text-gray-400 text-xs uppercase">Google Map Embed Link (src only)</label>
-                <input type="text" id="locMap" required placeholder="https://www.google.com/maps/embed?pb=..." class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600">
-            </div>
 
-            <div class="border border-gray-700 p-3 rounded">
-                <h4 class="text-brand-accent text-sm font-bold mb-2">Beginner Plan</h4>
-                <input type="number" id="locBegPrice" placeholder="Price (e.g. 1500)" class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600 mb-2">
-                <textarea id="locBegFeat" placeholder="Features (comma separated)" class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600 h-20"></textarea>
-            </div>
-
-            <div class="border border-gray-700 p-3 rounded">
-                <h4 class="text-brand-accent text-sm font-bold mb-2">Advanced Plan</h4>
-                <input type="number" id="locAdvPrice" placeholder="Price (e.g. 2500)" class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600 mb-2">
-                <textarea id="locAdvFeat" placeholder="Features (comma separated)" class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600 h-20"></textarea>
-            </div>
-
-            <button type="submit" class="md:col-span-2 bg-green-600 text-white font-bold py-2 rounded hover:bg-green-500">
-                + Add New Location
-            </button>
-        </form>
-
-        <div id="locationsList" class="space-y-2">
-            </div>
-        
-    </div>
-    <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg mb-8 border-l-4 border-pink-500">
-    <h2 class="text-xl font-bold mb-4 text-pink-400 flex items-center gap-2">
-        <span class="bg-pink-500/20 p-2 rounded-lg">6</span> Manage Instructors
-    </h2>
-    
-    <form id="instructorForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 bg-gray-900 p-4 rounded border border-gray-700">
-        
-        <div>
-            <label class="text-xs text-gray-400 uppercase">Name (e.g., Sensei Saurabh)</label>
-            <input type="text" id="instName" required class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600">
-        </div>
-        <div>
-            <label class="text-xs text-gray-400 uppercase">Role (e.g., Head Instructor)</label>
-            <input type="text" id="instRole" required class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600">
-        </div>
-        <div>
-            <label class="text-xs text-gray-400 uppercase">Rank (e.g., 5th Dan Black Belt)</label>
-            <input type="text" id="instRank" required class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600">
-        </div>
-        
-        <div>
-            <label class="text-xs text-gray-400 uppercase">Front Photo (Portrait)</label>
-            <input type="file" id="instFront" required accept="image/*" class="w-full text-sm text-gray-300">
-        </div>
-        <div>
-            <label class="text-xs text-gray-400 uppercase">Back Photo (Action Shot)</label>
-            <input type="file" id="instBack" required accept="image/*" class="w-full text-sm text-gray-300">
+        <!-- 6. LOCATIONS SECTION -->
+        <div class="bg-gray-800 p-6 rounded-lg border border-gray-700 mb-8">
+            <h3 class="text-xl font-bold text-white mb-4 border-b border-gray-700 pb-2">Manage Locations & Pricing</h3>
+            <form id="addLocationForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="md:col-span-2">
+                    <label class="text-gray-400 text-xs uppercase">Branch Name (e.g., Santacruz)</label>
+                    <input type="text" id="locName" required class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="text-gray-400 text-xs uppercase">Label/Subtitle (e.g., Main Dojo)</label>
+                    <input type="text" id="locLabel" required class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="text-gray-400 text-xs uppercase">Google Map Embed Link (src only)</label>
+                    <input type="text" id="locMap" required placeholder="https://www.google.com/maps/embed?pb=..."
+                        class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600">
+                </div>
+                <div class="border border-gray-700 p-3 rounded">
+                    <h4 class="text-amber-400 text-sm font-bold mb-2">Beginner Plan</h4>
+                    <input type="number" id="locBegPrice" placeholder="Price (e.g. 1500)"
+                        class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600 mb-2">
+                    <textarea id="locBegFeat" placeholder="Features (comma separated)"
+                        class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600 h-20"></textarea>
+                </div>
+                <div class="border border-gray-700 p-3 rounded">
+                    <h4 class="text-amber-400 text-sm font-bold mb-2">Advanced Plan</h4>
+                    <input type="number" id="locAdvPrice" placeholder="Price (e.g. 2500)"
+                        class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600 mb-2">
+                    <textarea id="locAdvFeat" placeholder="Features (comma separated)"
+                        class="w-full bg-gray-900 text-white p-2 rounded border border-gray-600 h-20"></textarea>
+                </div>
+                <button type="submit" class="md:col-span-2 bg-green-600 text-white font-bold py-2 rounded hover:bg-green-500">
+                    + Add New Location
+                </button>
+            </form>
+            <div id="locationsList" class="space-y-2"></div>
         </div>
 
-        <div class="md:col-span-2">
-            <label class="text-xs text-gray-400 uppercase">Description / Bio</label>
-            <textarea id="instDesc" required rows="2" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600"></textarea>
+        <!-- 7. INSTRUCTORS SECTION -->
+        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg mb-8 border-l-4 border-pink-500">
+            <h2 class="text-xl font-bold mb-4 text-pink-400 flex items-center gap-2">
+                <span class="bg-pink-500/20 p-2 rounded-lg">6</span> Manage Instructors
+            </h2>
+            <form id="instructorForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 bg-gray-900 p-4 rounded border border-gray-700">
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Name (e.g., Sensei Saurabh)</label>
+                    <input type="text" id="instName" required class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Role (e.g., Head Instructor)</label>
+                    <input type="text" id="instRole" required class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Rank (e.g., 5th Dan Black Belt)</label>
+                    <input type="text" id="instRank" required class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Front Photo (Portrait)</label>
+                    <input type="file" id="instFront" required accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" class="w-full text-sm text-gray-300">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Back Photo (Action Shot)</label>
+                    <input type="file" id="instBack" required accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" class="w-full text-sm text-gray-300">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="text-xs text-gray-400 uppercase">Description / Bio</label>
+                    <textarea id="instDesc" required rows="2" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600"></textarea>
+                </div>
+                <button type="submit" class="md:col-span-2 bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 rounded transition">
+                    + Add Instructor
+                </button>
+            </form>
+            <div id="instructorList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <p class="text-gray-500 animate-pulse">Loading instructors...</p>
+            </div>
         </div>
 
-        <button type="submit" class="md:col-span-2 bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 rounded transition">
-            + Add Instructor
-        </button>
-    </form>
+        <!-- 8. TRIAL BOOKINGS (Task 3.3) -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-gray-700 shadow-lg border-l-4 border-cyan-500">
+            <h2 class="text-xl font-bold mb-4 text-cyan-400 flex items-center gap-2">
+                <span class="bg-cyan-400/20 p-2 rounded-lg">8</span> Trial Bookings
+                <span id="booking-count" class="ml-auto text-xs bg-cyan-900/50 text-cyan-300 px-3 py-1 rounded-full border border-cyan-800"></span>
+            </h2>
+            <div id="booking-list" class="space-y-2 max-h-96 overflow-y-auto custom-scrollbar">
+                <p class="text-gray-500 animate-pulse text-sm">Loading bookings...</p>
+            </div>
+        </div>
 
-    <div id="instructorList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <p class="text-gray-500 animate-pulse">Loading instructors...</p>
-    </div>
-</div>
-    </div>
-</div>
+        <!-- 9. TESTIMONIALS (Task 3.4) -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-gray-700 shadow-lg border-l-4 border-teal-500">
+            <h2 class="text-xl font-bold mb-4 text-teal-400 flex items-center gap-2">
+                <span class="bg-teal-400/20 p-2 rounded-lg">9</span> Student Testimonials
+            </h2>
+            <form id="testimonialForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 bg-gray-900 p-4 rounded border border-gray-700">
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Student Name</label>
+                    <input type="text" id="tName" required class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Belt / Rank</label>
+                    <input type="text" id="tBelt" placeholder="e.g. Brown Belt" required class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="text-xs text-gray-400 uppercase">Quote / Testimonial</label>
+                    <textarea id="tQuote" required rows="2" placeholder="IFSA changed my life..." class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1"></textarea>
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Photo (optional)</label>
+                    <input type="file" id="tPhoto" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" class="w-full text-sm text-gray-300 mt-1">
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 rounded transition">+ Add Testimonial</button>
+                </div>
+            </form>
+            <div id="testimonial-admin-list" class="space-y-2">
+                <p class="text-gray-500 text-sm animate-pulse">Loading...</p>
+            </div>
+        </div>
+
+        <!-- 10. TIMETABLE (Task 3.5) -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-gray-700 shadow-lg border-l-4 border-indigo-500">
+            <h2 class="text-xl font-bold mb-4 text-indigo-400 flex items-center gap-2">
+                <span class="bg-indigo-400/20 p-2 rounded-lg">10</span> Weekly Timetable
+            </h2>
+            <form id="timetableForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 bg-gray-900 p-4 rounded border border-gray-700">
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Day</label>
+                    <select id="ttDay" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1">
+                        <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+                        <option>Thursday</option><option>Friday</option><option>Saturday</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Slot</label>
+                    <select id="ttSlot" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1">
+                        <option>Morning (6–8 AM)</option>
+                        <option>Evening (5–7 PM)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Batch Name</label>
+                    <input type="text" id="ttBatch" placeholder="e.g. Kids Karate" required class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Time (display)</label>
+                    <input type="text" id="ttTime" placeholder="e.g. 6:00–7:00 AM" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="text-xs text-gray-400 uppercase">Instructor (optional)</label>
+                    <input type="text" id="ttInstructor" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1">
+                </div>
+                <button type="submit" class="md:col-span-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded transition">Save Slot</button>
+            </form>
+            <div id="timetable-admin-list" class="space-y-2">
+                <p class="text-gray-500 text-sm animate-pulse">Loading timetable...</p>
+            </div>
+        </div>
+
+
+        <!-- 11. ACTIVITY LOG (Task 6.3) -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-gray-700 shadow-lg border-l-4 border-slate-500">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-slate-300 flex items-center gap-2">
+                    <span class="bg-slate-500/20 p-2 rounded-lg">📋</span> Activity Log
+                </h2>
+                <button onclick="loadActivityLog()"
+                    class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1 rounded border border-gray-600 transition">↻ Refresh</button>
+            </div>
+            <p class="text-xs text-gray-500 mb-3">Last 20 admin actions — automatically recorded on every upload, delete, or change.</p>
+            <div id="activity-log-list" class="space-y-1.5 max-h-72 overflow-y-auto custom-scrollbar font-mono text-xs">
+                <p class="text-gray-600 italic p-2">Loading log...</p>
+            </div>
+        </div>
+
+    </div><!-- end #dashboard -->
+
 
 <script>
-    // --- GLOBAL CONFIGURATION ---
-    const API = 'http://localhost:3000/api';
-    const SERVER_URL = 'http://localhost:3000'; // Required for images
+// ════════════════════════════════════════════════════════════
+//  IFSA ADMIN — PHASE 1 SECURED
+//  Auth flow: password → POST /api/admin/login → JWT token
+//  Token stored in sessionStorage (clears on tab close)
+//  Token sent as Authorization: Bearer <token> on every request
+// ════════════════════════════════════════════════════════════
 
-    // --- LOGIN CHECK ---
-    if(localStorage.getItem('admin_ok')) showDash();
+// Use relative URLs so the admin works on any host (localhost, LAN IP, or production domain)
+const API        = '/api';
+const SERVER_URL = '';
 
-    function checkLogin() {
-        const pass = document.getElementById('password-input').value;
-        if(pass === "admin123") {
-            localStorage.setItem('admin_ok', true);
+// ── DOMPurify config ─────────────────────────────────────────
+// Used before every innerHTML assignment with server data
+const PURIFY_CONFIG = { ALLOWED_TAGS: [], ALLOWED_ATTR: [] }; // text-only for most fields
+
+// Safe text sanitizer — strips ALL html tags from server strings
+function safe(str) {
+    return DOMPurify.sanitize(String(str ?? ''), PURIFY_CONFIG);
+}
+
+// ── Token helpers ─────────────────────────────────────────────
+function getToken() { return sessionStorage.getItem('ifsa_token'); }
+function setToken(t) { sessionStorage.setItem('ifsa_token', t); }
+function clearToken() { sessionStorage.removeItem('ifsa_token'); sessionStorage.removeItem('ifsa_login_time'); }
+
+// Attach Authorization header to all write requests
+function authHeaders() {
+    return { 'Authorization': `Bearer ${getToken()}`, 'Content-Type': 'application/json' };
+}
+function authFetch(url, opts = {}) {
+    opts.headers = { ...(opts.headers || {}), 'Authorization': `Bearer ${getToken()}` };
+    return fetch(url, opts);
+}
+
+// ── Session timer ─────────────────────────────────────────────
+let timerInterval;
+function startSessionTimer() {
+    const loginTime = parseInt(sessionStorage.getItem('ifsa_login_time') || Date.now());
+    sessionStorage.setItem('ifsa_login_time', loginTime);
+    const DURATION = 8 * 60 * 60 * 1000; // 8 hours in ms
+
+    timerInterval = setInterval(() => {
+        const elapsed = Date.now() - loginTime;
+        const remaining = Math.max(0, DURATION - elapsed);
+
+        if (remaining === 0) {
+            clearInterval(timerInterval);
+            alert('Your session has expired. Please log in again.');
+            logout();
+            return;
+        }
+
+        const h = Math.floor(remaining / 3600000);
+        const m = Math.floor((remaining % 3600000) / 60000);
+        const s = Math.floor((remaining % 60000) / 1000);
+        document.getElementById('timer-val').textContent =
+            `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }, 1000);
+}
+
+// ── Auto-login if valid token exists ─────────────────────────
+(async function init() {
+    const token = getToken();
+    if (!token) return;
+
+    // Verify token is still valid with the server
+    try {
+        const res = await fetch(`${API}/admin/verify`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
             showDash();
-        } else document.getElementById('login-error').classList.remove('hidden');
+        } else {
+            clearToken();
+        }
+    } catch (e) {
+        // Server unreachable — clear token to force fresh login
+        clearToken();
     }
-    function showDash() {
-        document.getElementById('login-section').classList.add('hidden');
-        document.getElementById('dashboard').classList.remove('hidden');
-        // Load all sections
-        loadSlideshow(); 
-        loadGallery(); 
-        loadDocs(); 
-        loadSchedule(); 
-        loadAnnouncements();
-        loadAdminLocations();
-        loadInstructors(); // Load Instructors
-    }
-    function logout() { localStorage.removeItem('admin_ok'); location.reload(); }
+})();
 
-    // --- HELPER: IMAGE COMPRESSION ---
-    async function compressImage(file) {
-        if (!file.type.startsWith('image/')) return file;
-        return new Promise((resolve) => {
-            const reader = new FileReader(); reader.readAsDataURL(file);
-            reader.onload = (e) => {
-                const img = new Image(); img.src = e.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    const scale = 1200 / Math.max(img.width, 1200);
-                    canvas.width = img.width * scale; canvas.height = img.height * scale;
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    canvas.toBlob(blob => resolve(new File([blob], file.name, {type:'image/jpeg'})), 'image/jpeg', 0.7);
-                };
+// ── LOGIN ─────────────────────────────────────────────────────
+async function checkLogin() {
+    const pass     = document.getElementById('password-input').value;
+    const btn      = document.getElementById('login-btn');
+    const btnText  = document.getElementById('login-btn-text');
+    const errEl    = document.getElementById('login-error');
+    const warnEl   = document.getElementById('login-warning');
+
+    errEl.classList.add('hidden');
+    warnEl.classList.add('hidden');
+    btn.disabled = true;
+    btnText.textContent = 'Verifying...';
+
+    try {
+        const res = await fetch(`${API}/admin/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: pass })
+        });
+
+        const data = await res.json();
+
+        if (res.status === 429) {
+            // Rate limited
+            warnEl.textContent = data.error || 'Too many attempts. Wait 15 minutes.';
+            warnEl.classList.remove('hidden');
+        } else if (!res.ok) {
+            errEl.textContent = data.error || 'Incorrect password.';
+            errEl.classList.remove('hidden');
+            document.getElementById('password-input').value = '';
+            document.getElementById('password-input').focus();
+        } else {
+            // Success — store token and show dashboard
+            setToken(data.token);
+            sessionStorage.setItem('ifsa_login_time', Date.now());
+            showDash();
+        }
+    } catch (e) {
+        errEl.textContent = 'Cannot connect to server. Is it running?';
+        errEl.classList.remove('hidden');
+    }
+
+    btn.disabled = false;
+    btnText.textContent = 'Login';
+}
+
+function showDash() {
+    document.getElementById('login-section').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    startSessionTimer();
+    loadSlideshow();
+    loadGallery();
+    loadDocs();
+    loadSchedule();
+    loadAnnouncements();
+    loadAdminLocations();
+    loadInstructors();
+    loadHeroVideo();
+    loadProgramImages();
+    loadBookings();
+    loadAdminTimetable();
+    loadAdminTestimonials();
+    loadActivityLog();
+}
+
+function logout() {
+    clearToken();
+    clearInterval(timerInterval);
+    location.reload();
+}
+
+
+// ── Hero Video — responsive desktop + mobile ─────────────────
+function showHeroStatus(msg, ok) {
+    var el = document.getElementById('hero-video-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'text-sm rounded-lg px-3 py-2 mt-2 ' + (ok ? 'bg-green-900/40 text-green-400' : 'bg-red-900/40 text-red-400');
+    el.classList.remove('hidden');
+    setTimeout(function(){ el.classList.add('hidden'); }, 4000);
+}
+
+function setHeroSlotPreview(slot, src) {
+    var preview = document.getElementById('hero-' + slot + '-preview');
+    var empty   = document.getElementById('hero-' + slot + '-empty');
+    var player  = document.getElementById('hero-' + slot + '-player');
+    var label   = document.getElementById('hero-' + slot + '-label');
+    if (!preview) return;
+    if (src) {
+        player.src = src;
+        if (label) label.textContent = src.split('/').pop();
+        preview.classList.remove('hidden');
+        empty.classList.add('hidden');
+    } else {
+        preview.classList.add('hidden');
+        empty.classList.remove('hidden');
+    }
+}
+
+async function loadHeroVideo() {
+    try {
+        // Try new dual-video endpoint
+        var res = await fetch(API + '/hero-videos');
+        if (res.ok) {
+            var data = await res.json();
+            setHeroSlotPreview('desktop', data.desktop || null);
+            setHeroSlotPreview('mobile',  data.mobile  || null);
+            return;
+        }
+    } catch(_) {}
+    // Fallback: legacy single-video endpoint
+    try {
+        var res2 = await fetch(API + '/hero-video');
+        if (res2.ok) {
+            var d = await res2.json();
+            if (d && d.url) { setHeroSlotPreview('desktop', d.url); setHeroSlotPreview('mobile', null); }
+        }
+    } catch(_) {}
+}
+
+async function uploadHeroVideoSlot(input, slot) {
+    if (!input.files || !input.files[0]) return;
+    var formData = new FormData();
+    formData.append(slot === 'desktop' ? 'desktopVideo' : 'mobileVideo', input.files[0]);
+    showHeroStatus('Uploading ' + slot + ' video…', true);
+    try {
+        var res = await authFetch(API + '/hero-videos', { method: 'POST', body: formData });
+        var data = await res.json();
+        if (data.success) {
+            setHeroSlotPreview(slot, data.heroVideos[slot] || null);
+            showHeroStatus(slot.charAt(0).toUpperCase() + slot.slice(1) + ' video updated ✓', true);
+        } else throw new Error(data.error || 'Upload failed');
+    } catch(e) { showHeroStatus('Error: ' + e.message, false); }
+    input.value = '';
+}
+
+async function deleteHeroVideoSlot(slot) {
+    if (!confirm('Remove the ' + slot + ' hero video?')) return;
+    try {
+        var res = await authFetch(API + '/hero-videos/' + slot, { method: 'DELETE' });
+        var d = await res.json();
+        if (d.success) { setHeroSlotPreview(slot, null); showHeroStatus(slot + ' video removed', true); }
+    } catch(_) {}
+}
+
+// Keep legacy deleteHeroVideo alias just in case
+function deleteHeroVideo() { deleteHeroVideoSlot('desktop'); }
+function uploadHeroVideo() {}  // replaced by slot version
+
+// ── Program Card Images ───────────────────────────────────────
+var ADMIN_PROGRAMS = [
+    { id: 'kids-karate',    label: 'Kids Karate',    track: 'Track 01' },
+    { id: 'adult-karate',   label: 'Adult Karate',   track: 'Track 02' },
+    { id: 'karate-fitness', label: 'Karate Fitness', track: 'Track 03' }
+];
+
+function showProgStatus(msg, ok) {
+    var el = document.getElementById('program-img-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'text-sm rounded-lg px-3 py-2 mt-3 ' + (ok ? 'bg-green-900/40 text-green-400' : 'bg-red-900/40 text-red-400');
+    el.classList.remove('hidden');
+    setTimeout(function(){ el.classList.add('hidden'); }, 4000);
+}
+
+async function loadProgramImages() {
+    var images = {};
+    try {
+        var res = await fetch(API + '/program-images');
+        if (res.ok) images = await res.json();
+    } catch(_) {}
+    renderProgramAdminCards(images);
+}
+
+function renderProgramAdminCards(images) {
+    var grid = document.getElementById('program-image-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    ADMIN_PROGRAMS.forEach(function(p) {
+        var src = images[p.id] || '';
+        var card = document.createElement('div');
+        card.className = 'rounded-xl border border-white/10 bg-gray-900 overflow-hidden flex flex-col';
+        var imgArea = src
+            ? '<img src="' + src + '" alt="' + p.label + '" class="w-full h-full object-cover">'
+            : '<div class="w-full h-full flex flex-col items-center justify-center gap-2"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(251,191,36,0.25)" stroke-width="1.2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span style="font-size:9px;color:#6b7280;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;">No image</span></div>';
+        card.innerHTML =
+            '<div class="relative w-full bg-gray-800 overflow-hidden" style="aspect-ratio:4/3;">'
+            + '<span class="absolute top-2 left-2 text-xs font-bold tracking-widest text-yellow-400 uppercase bg-black/50 px-2 py-0.5 rounded">' + p.track + '</span>'
+            + imgArea + '</div>'
+            + '<div class="p-4 flex flex-col gap-2 flex-1">'
+            + '<p class="text-white font-bold text-sm">' + p.label + '</p>'
+            + '<label class="flex items-center gap-2 cursor-pointer bg-yellow-400 hover:bg-amber-300 text-black font-bold text-xs px-3 py-2 rounded-lg w-fit transition">'
+            + '↑ ' + (src ? 'Replace' : 'Upload') + ' Image'
+            + '<input type="file" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="uploadProgramImage(this,\'' + p.id + '\')">'
+            + '</label>'
+            + (src ? '<button onclick="deleteProgramImage(\'' + p.id + '\')" class="text-xs text-red-400 hover:text-red-300 font-semibold text-left">Remove image</button>' : '')
+            + '</div>';
+        grid.appendChild(card);
+    });
+}
+
+async function uploadProgramImage(input, id) {
+    if (!input.files || !input.files[0]) return;
+    var formData = new FormData();
+    formData.append('image', input.files[0]);
+    showProgStatus('Uploading…', true);
+    try {
+        var res = await authFetch(API + '/program-images/' + id, { method: 'POST', body: formData });
+        var data = await res.json();
+        if (data.success) { showProgStatus('Image updated ✓', true); loadProgramImages(); }
+        else throw new Error(data.error || 'Upload failed');
+    } catch(e) { showProgStatus('Error: ' + e.message, false); }
+    input.value = '';
+}
+
+async function deleteProgramImage(id) {
+    if (!confirm('Remove this program image?')) return;
+    try {
+        await authFetch(API + '/program-images/' + id, { method: 'DELETE' });
+        showProgStatus('Image removed', true);
+        loadProgramImages();
+    } catch(_) {}
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  IMAGE COMPRESSION (unchanged from original)
+// ════════════════════════════════════════════════════════════
+async function compressImage(file) {
+    if (!file.type.startsWith('image/')) return file;
+    return new Promise((resolve) => {
+        const reader = new FileReader(); reader.readAsDataURL(file);
+        reader.onload = (e) => {
+            const img = new Image(); img.src = e.target.result;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const scale = 1200 / Math.max(img.width, 1200);
+                canvas.width = img.width * scale; canvas.height = img.height * scale;
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                canvas.toBlob(blob => resolve(new File([blob], file.name, { type: 'image/jpeg' })), 'image/jpeg', 0.7);
             };
+        };
+    });
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  1. SLIDESHOW
+// ════════════════════════════════════════════════════════════
+async function uploadSlideshow() {
+    const files = document.getElementById('slide-input').files;
+    if (!files.length) return;
+    const btn = document.getElementById('btn-slide');
+    btn.textContent = 'Wait...'; btn.disabled = true;
+    const data = new FormData();
+    for (let f of files) data.append('images', await compressImage(f));
+    await authFetch(`${API}/slideshow/upload`, { method: 'POST', body: data });
+    document.getElementById('slide-input').value = '';
+    btn.textContent = 'Upload'; btn.disabled = false;
+    loadSlideshow();
+}
+
+async function loadSlideshow() {
+    const res  = await fetch(`${API}/slideshow/images`);
+    const urls = await res.json();
+    const grid = document.getElementById('slide-grid');
+    grid.innerHTML = urls.map(url => {
+        const name = safe(url.split('/').pop());
+        return `<div class="relative h-24 bg-black rounded overflow-hidden group border border-gray-600 cursor-grab active:cursor-grabbing" data-name="${name}">
+            <img src="${url}" class="w-full h-full object-cover pointer-events-none" loading="lazy">
+            <button onclick="delSlide('${name}')"
+                class="absolute inset-0 bg-red-600/80 text-white opacity-0 group-hover:opacity-100 font-bold">DELETE</button>
+        </div>`;
+    }).join('');
+
+    // Task 6.1 — initialise SortableJS drag-and-drop
+    if (typeof Sortable !== 'undefined') {
+        new Sortable(grid, {
+            animation: 150,
+            ghostClass: 'opacity-30',
+            onEnd: () => {
+                // Show Save Order button whenever order changes
+                document.getElementById('btn-save-order').classList.remove('hidden');
+            }
         });
     }
+    document.getElementById('btn-save-order').classList.add('hidden');
+}
 
-    // --- 1. SLIDESHOW ---
-    async function uploadSlideshow() {
-        const files = document.getElementById('slide-input').files;
-        if(!files.length) return;
-        document.getElementById('btn-slide').innerText="Wait..."; document.getElementById('btn-slide').disabled=true;
-        const data = new FormData(); for(let f of files) data.append('images', await compressImage(f));
-        await fetch(`${API}/slideshow/upload`, {method:'POST', body:data});
-        document.getElementById('slide-input').value=''; document.getElementById('btn-slide').innerText="Upload"; document.getElementById('btn-slide').disabled=false; loadSlideshow();
+async function saveSlideOrder() {
+    const grid  = document.getElementById('slide-grid');
+    const items = [...grid.querySelectorAll('[data-name]')];
+    const order = items.map(el => el.getAttribute('data-name'));
+    const btn   = document.getElementById('btn-save-order');
+    btn.textContent = 'Saving…'; btn.disabled = true;
+    try {
+        const res = await authFetch(`${API}/slideshow/reorder`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+            body: JSON.stringify({ order })
+        });
+        if (!res.ok) throw new Error('Save failed');
+        btn.textContent = '✅ Saved!';
+        setTimeout(() => { btn.classList.add('hidden'); btn.disabled = false; btn.textContent = '💾 Save Order'; }, 1500);
+    } catch (e) {
+        alert('Could not save order: ' + e.message);
+        btn.textContent = '💾 Save Order'; btn.disabled = false;
     }
-    async function loadSlideshow() {
-        const res = await fetch(`${API}/slideshow/images`); const urls = await res.json();
-        document.getElementById('slide-grid').innerHTML = urls.map(url => `<div class="relative h-24 bg-black rounded overflow-hidden group border border-gray-600"><img src="${url}" class="w-full h-full object-cover"><button onclick="delSlide('${url.split('/').pop()}')" class="absolute inset-0 bg-red-600/80 text-white opacity-0 group-hover:opacity-100 font-bold">DELETE</button></div>`).join('');
-    }
-    async function delSlide(n) { if(confirm("Delete?")) { await fetch(`${API}/slideshow/images/${n}`, {method:'DELETE'}); loadSlideshow(); }}
+}
 
-    // --- 2. GALLERY ---
-    async function uploadGallery() {
-        const files = document.getElementById('gallery-input').files;
-        if(!files.length) return;
-        document.getElementById('btn-gallery').innerText="Wait..."; document.getElementById('btn-gallery').disabled=true;
-        const data = new FormData(); for(let f of files) data.append('images', await compressImage(f));
-        data.append('month', document.getElementById('gal-month').value); data.append('year', document.getElementById('gal-year').value);
-        await fetch(`${API}/gallery/upload`, {method:'POST', body:data});
-        document.getElementById('gallery-input').value=''; document.getElementById('btn-gallery').innerText="Upload"; document.getElementById('btn-gallery').disabled=false; loadGallery();
+async function delSlide(n) {
+    if (confirm('Delete this slide?')) {
+        await authFetch(`${API}/slideshow/images/${encodeURIComponent(n)}`, { method: 'DELETE' });
+        loadSlideshow();
     }
-    async function loadGallery() {
-        const res = await fetch(`${API}/gallery/images`); const items = await res.json();
-        document.getElementById('gallery-grid').innerHTML = items.map(i => `<div class="relative bg-black rounded overflow-hidden group border border-gray-600"><div class="h-24 w-full bg-gray-800 flex items-center justify-center">${i.url.match(/\.mp4|\.webm/i) ? '<span class="text-xs text-gray-400">VIDEO</span>' : `<img src="${i.url}" class="w-full h-full object-cover">`}</div><div class="text-[10px] text-center bg-gray-800 p-1 text-gray-400">${i.month} ${i.year}</div><button onclick="delGallery('${i.filename}')" class="absolute top-0 right-0 bg-red-600 text-white px-2 text-xs opacity-0 group-hover:opacity-100">X</button></div>`).join('');
-    }
-    async function delGallery(n) { if(confirm("Delete?")) { await fetch(`${API}/gallery/images/${n}`, {method:'DELETE'}); loadGallery(); }}
+}
 
-    // --- 3. DOCUMENTS ---
-    async function uploadDoc() {
-        const f = document.getElementById('doc-input').files[0]; if(!f) return;
-        const data = new FormData(); data.append('file', f); data.append('title', document.getElementById('doc-title').value);
-        await fetch(`${API}/documents/upload`, {method:'POST', body:data});
-        document.getElementById('doc-input').value=''; document.getElementById('doc-title').value=''; loadDocs();
-    }
-    async function loadDocs() {
-        const res = await fetch(`${API}/documents/list`); const items = await res.json();
-        document.getElementById('doc-list').innerHTML = items.map(i => `<div class="flex justify-between bg-gray-700 p-2 rounded text-sm text-gray-300 hover:bg-gray-600 transition"><span class="truncate w-3/4">${i.title}</span><button onclick="delDoc('${i.filename}')" class="text-red-400 hover:text-white font-bold">Del</button></div>`).join('');
-    }
-    async function delDoc(n) { if(confirm("Delete?")) { await fetch(`${API}/documents/${n}`, {method:'DELETE'}); loadDocs(); }}
 
-    // --- 4. SCHEDULE ---
-    async function addEvent() {
-        const d = document.getElementById('sched-date').value; const t = document.getElementById('sched-title').value; const y = document.getElementById('sched-type').value;
-        if(!d || !t) return;
-        await fetch(`${API}/schedule/add`, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({date:d, title:t, type:y})});
-        document.getElementById('sched-title').value=''; loadSchedule();
-    }
-    async function loadSchedule() {
-        const res = await fetch(`${API}/schedule/list`); const items = await res.json();
-        document.getElementById('sched-list').innerHTML = items.map(e => `<div class="flex justify-between bg-gray-700 p-2 rounded text-sm text-gray-300"><span>${e.date} - ${e.title}</span><button onclick="delEvent(${e.id})" class="text-red-400 font-bold">X</button></div>`).join('');
-    }
-    async function delEvent(id) { if(confirm("Delete?")) { await fetch(`${API}/schedule/${id}`, {method:'DELETE'}); loadSchedule(); }}
+// ════════════════════════════════════════════════════════════
+//  2. GALLERY
+// ════════════════════════════════════════════════════════════
+async function uploadGallery() {
+    const files = document.getElementById('gallery-input').files;
+    if (!files.length) return;
+    const btn = document.getElementById('btn-gallery');
+    btn.textContent = 'Wait...'; btn.disabled = true;
+    const data = new FormData();
+    for (let f of files) data.append('images', await compressImage(f));
+    data.append('month',   document.getElementById('gal-month').value);
+    data.append('year',    document.getElementById('gal-year').value);
+    data.append('altText', document.getElementById('gal-alt').value);  // Task 6.5
+    await authFetch(`${API}/gallery/upload`, { method: 'POST', body: data });
+    document.getElementById('gallery-input').value = '';
+    document.getElementById('gal-alt').value = '';
+    btn.textContent = 'Upload'; btn.disabled = false;
+    loadGallery();
+}
 
-    // --- 5. ANNOUNCEMENTS ---
-    async function addAnnouncement() {
-        const msg = document.getElementById('announce-msg').value; if(!msg) return;
-        await fetch(`${API}/announcement/add`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ message: msg }) });
-        document.getElementById('announce-msg').value = ''; loadAnnouncements();
-    }
-    async function loadAnnouncements() {
-        const res = await fetch(`${API}/announcement/list`); const data = await res.json();
-        document.getElementById('announce-list').innerHTML = data.length === 0 ? '<p class="text-gray-500 italic text-sm p-2">No active notices.</p>' : data.map(item => `<div class="flex justify-between items-center bg-gray-700 p-2 rounded border border-gray-600 hover:bg-gray-600 transition"><div class="text-sm text-gray-200 truncate w-3/4">${item.message}</div><button onclick="delAnnouncement(${item.id})" class="text-red-400 hover:text-white px-2 font-bold text-sm bg-gray-800 rounded border border-gray-700 hover:bg-red-600 hover:border-red-600 transition">Delete</button></div>`).join('');
-    }
-    async function delAnnouncement(id) { if(confirm("Delete notice?")) { await fetch(`${API}/announcement/${id}`, {method:'DELETE'}); loadAnnouncements(); }}
+async function loadGallery() {
+    const res   = await fetch(`${API}/gallery/images`);
+    const items = await res.json();
+    const grid  = document.getElementById('gallery-grid');
 
-    // --- 6. LOCATIONS ---
-    async function loadAdminLocations() {
-        try {
-            const res = await fetch(`${API}/locations`); const locations = await res.json();
-            const list = document.getElementById('locationsList'); list.innerHTML = '';
-            if (locations.length === 0) { list.innerHTML = '<p class="text-gray-500 italic">No locations found.</p>'; return; }
-            locations.forEach(loc => {
-                list.innerHTML += `<div class="flex justify-between items-center bg-gray-900 p-4 rounded-lg border border-gray-700"><div><h4 class="text-brand-accent font-bold">${loc.name}</h4><p class="text-xs text-gray-400">${loc.label}</p></div><button onclick="deleteLocation('${loc.id}')" class="bg-red-900/50 hover:bg-red-600 text-red-200 hover:text-white px-3 py-1 rounded text-xs border border-red-800 transition">Remove 🗑️</button></div>`;
-            });
-        } catch (e) { console.error(e); }
+    grid.innerHTML = items.map(i => {
+        const fname = safe(i.filename);
+        const month = safe(i.month);
+        const year  = safe(i.year);
+        const alt   = safe(i.alt || '');
+        const isVid = i.url.match(/\.mp4|\.webm/i);
+        return `<div class="relative bg-black rounded overflow-hidden group border border-gray-600 gallery-item" data-name="${fname}">
+            <!-- Task 6.4 — checkbox for bulk select -->
+            <label class="absolute top-1 left-1 z-10 cursor-pointer" onclick="event.stopPropagation()">
+                <input type="checkbox" class="gallery-cb sr-only" onchange="updateBulkCount()">
+                <span class="block w-4 h-4 rounded border-2 border-gray-400 bg-gray-900/70 group-hover:border-white transition gallery-cb-ui flex items-center justify-center">
+                    <svg class="w-2.5 h-2.5 text-white hidden check-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                </span>
+            </label>
+            <div class="h-24 w-full bg-gray-800 flex items-center justify-center">
+                ${isVid ? '<span class="text-xs text-gray-400">VIDEO</span>'
+                        : `<img src="${i.url}" class="w-full h-full object-cover" loading="lazy" alt="${alt}">`}
+            </div>
+            <div class="text-[10px] text-center bg-gray-800 p-1 text-gray-400">${month} ${year}${alt ? ` · ${alt.slice(0,20)}` : ''}</div>
+            <button onclick="delGallery('${fname}')"
+                class="absolute top-0 right-0 bg-red-600 text-white px-2 text-xs opacity-0 group-hover:opacity-100">✕</button>
+        </div>`;
+    }).join('');
+
+    // Sync checkbox visual state on change
+    grid.querySelectorAll('.gallery-cb').forEach(cb => {
+        cb.addEventListener('change', function () {
+            const ui  = this.closest('label').querySelector('.gallery-cb-ui');
+            const ico = ui.querySelector('.check-icon');
+            if (this.checked) {
+                ui.classList.add('bg-green-600', 'border-green-400');
+                ico.classList.remove('hidden');
+            } else {
+                ui.classList.remove('bg-green-600', 'border-green-400');
+                ico.classList.add('hidden');
+            }
+        });
+    });
+}
+
+// Task 6.4 — update bulk delete button count
+function updateBulkCount() {
+    const checked = document.querySelectorAll('.gallery-cb:checked').length;
+    const btn     = document.getElementById('btn-bulk-delete');
+    const countEl = document.getElementById('bulk-count');
+    countEl.textContent = checked;
+    if (checked > 0) { btn.classList.remove('hidden'); }
+    else             { btn.classList.add('hidden'); }
+}
+
+// Task 6.4 — bulk delete confirmed gallery images
+async function bulkDeleteGallery() {
+    const checked = [...document.querySelectorAll('.gallery-cb:checked')];
+    if (!checked.length) return;
+    if (!confirm(`Delete ${checked.length} selected image(s)? This cannot be undone.`)) return;
+
+    const btn = document.getElementById('btn-bulk-delete');
+    btn.textContent = 'Deleting…'; btn.disabled = true;
+
+    const names = checked.map(cb => cb.closest('.gallery-item').getAttribute('data-name'));
+    await Promise.all(names.map(name =>
+        authFetch(`${API}/gallery/images/${encodeURIComponent(name)}`, { method: 'DELETE' })
+    ));
+
+    btn.textContent = '🗑 Delete Selected (0)'; btn.disabled = false;
+    loadGallery();
+}
+
+async function delGallery(n) {
+    if (confirm('Delete this image?')) {
+        await authFetch(`${API}/gallery/images/${encodeURIComponent(n)}`, { method: 'DELETE' });
+        loadGallery();
     }
-    async function deleteLocation(id) { if (confirm("Remove location?")) { await fetch(`${API}/locations/${id}`, { method: 'DELETE' }); loadAdminLocations(); }}
-    document.getElementById('addLocationForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const newLoc = {
-            id: Date.now().toString(), name: document.getElementById('locName').value, label: document.getElementById('locLabel').value, mapUrl: document.getElementById('locMap').value,
-            pricing: { beginner: { price: "₹" + document.getElementById('locBegPrice').value, features: document.getElementById('locBegFeat').value.split(',') }, advanced: { price: "₹" + document.getElementById('locAdvPrice').value, features: document.getElementById('locAdvFeat').value.split(',') } }
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  3. DOCUMENTS
+// ════════════════════════════════════════════════════════════
+async function uploadDoc() {
+    const f = document.getElementById('doc-input').files[0];
+    if (!f) return;
+    const data = new FormData();
+    data.append('file', f);
+    data.append('title', document.getElementById('doc-title').value);
+    await authFetch(`${API}/documents/upload`, { method: 'POST', body: data });
+    document.getElementById('doc-input').value = '';
+    document.getElementById('doc-title').value = '';
+    loadDocs();
+}
+
+async function loadDocs() {
+    const res = await fetch(`${API}/documents/list`);
+    const items = await res.json();
+    document.getElementById('doc-list').innerHTML = items.map(i => {
+        const fname = safe(i.filename);
+        const title = safe(i.title);
+        return `<div class="flex justify-between bg-gray-700 p-2 rounded text-sm text-gray-300 hover:bg-gray-600 transition">
+            <span class="truncate w-3/4">${title}</span>
+            <button onclick="delDoc('${fname}')" class="text-red-400 hover:text-white font-bold">Del</button>
+        </div>`;
+    }).join('');
+}
+
+async function delDoc(n) {
+    if (confirm('Delete this document?')) {
+        await authFetch(`${API}/documents/${encodeURIComponent(n)}`, { method: 'DELETE' });
+        loadDocs();
+    }
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  4. SCHEDULE
+// ════════════════════════════════════════════════════════════
+async function addEvent() {
+    const d = document.getElementById('sched-date').value;
+    const t = document.getElementById('sched-title').value;
+    const y = document.getElementById('sched-type').value;
+    if (!d || !t) return;
+    await authFetch(`${API}/schedule/add`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+        body: JSON.stringify({ date: d, title: t, type: y })
+    });
+    document.getElementById('sched-title').value = '';
+    loadSchedule();
+}
+
+async function loadSchedule() {
+    const res = await fetch(`${API}/schedule/list`);
+    const items = await res.json();
+    document.getElementById('sched-list').innerHTML = items.map(e => {
+        const title = safe(e.title);
+        const date  = safe(e.date);
+        return `<div class="flex justify-between bg-gray-700 p-2 rounded text-sm text-gray-300">
+            <span>${date} - ${title}</span>
+            <button onclick="delEvent(${e.id})" class="text-red-400 font-bold">X</button>
+        </div>`;
+    }).join('');
+}
+
+async function delEvent(id) {
+    if (confirm('Delete this event?')) {
+        await authFetch(`${API}/schedule/${id}`, { method: 'DELETE' });
+        loadSchedule();
+    }
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  5. ANNOUNCEMENTS
+// ════════════════════════════════════════════════════════════
+async function addAnnouncement() {
+    const msg     = document.getElementById('announce-msg').value;
+    const expiry  = document.getElementById('announce-expiry').value; // Task 6.2
+    if (!msg.trim()) return;
+    await authFetch(`${API}/announcement/add`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+        body: JSON.stringify({ message: msg, expires_on: expiry || null })
+    });
+    document.getElementById('announce-msg').value  = '';
+    document.getElementById('announce-expiry').value = '';
+    loadAnnouncements();
+}
+
+async function loadAnnouncements() {
+    const res = await fetch(`${API}/announcement/list`);
+    const data = await res.json();
+    if (data.length === 0) {
+        document.getElementById('announce-list').innerHTML = '<p class="text-gray-500 italic text-sm p-2">No active notices.</p>';
+        return;
+    }
+    document.getElementById('announce-list').innerHTML = data.map(item => {
+        const msg    = safe(item.message);
+        const expiry = item.expires_on ? new Date(item.expires_on).toLocaleDateString('en-IN') : null;
+        return `<div class="flex justify-between items-center bg-gray-700 p-2 rounded border border-gray-600 hover:bg-gray-600 transition gap-2">
+            <div class="flex-1 min-w-0">
+                <div class="text-sm text-gray-200 truncate">${msg}</div>
+                ${expiry ? `<div class="text-xs text-amber-500 mt-0.5">⏳ Expires: ${expiry}</div>` : '<div class="text-xs text-gray-600 mt-0.5">No expiry</div>'}
+            </div>
+            <button onclick="delAnnouncement(${item.id})"
+                class="text-red-400 hover:text-white px-2 font-bold text-sm bg-gray-800 rounded border border-gray-700 hover:bg-red-600 hover:border-red-600 transition shrink-0">Delete</button>
+        </div>`;
+    }).join('');
+}
+
+async function delAnnouncement(id) {
+    if (confirm('Delete this notice?')) {
+        await authFetch(`${API}/announcement/${id}`, { method: 'DELETE' });
+        loadAnnouncements();
+    }
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  6. LOCATIONS
+// ════════════════════════════════════════════════════════════
+async function loadAdminLocations() {
+    try {
+        const res = await fetch(`${API}/locations`);
+        const locations = await res.json();
+        const list = document.getElementById('locationsList');
+        list.innerHTML = '';
+        if (locations.length === 0) {
+            list.innerHTML = '<p class="text-gray-500 italic">No locations found.</p>';
+            return;
+        }
+        locations.forEach(loc => {
+            const name  = safe(loc.name);
+            const label = safe(loc.label);
+            const id    = safe(loc.id);
+            list.innerHTML += `<div class="flex justify-between items-center bg-gray-900 p-4 rounded-lg border border-gray-700">
+                <div><h4 class="text-amber-400 font-bold">${name}</h4><p class="text-xs text-gray-400">${label}</p></div>
+                <button onclick="deleteLocation('${id}')"
+                    class="bg-red-900/50 hover:bg-red-600 text-red-200 hover:text-white px-3 py-1 rounded text-xs border border-red-800 transition">Remove 🗑️</button>
+            </div>`;
+        });
+    } catch (e) { console.error(e); }
+}
+
+async function deleteLocation(id) {
+    if (confirm('Remove this location?')) {
+        await authFetch(`${API}/locations/${encodeURIComponent(id)}`, { method: 'DELETE' });
+        loadAdminLocations();
+    }
+}
+
+document.getElementById('addLocationForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const newLoc = {
+        id: Date.now().toString(),
+        name:  document.getElementById('locName').value,
+        label: document.getElementById('locLabel').value,
+        mapUrl: document.getElementById('locMap').value,
+        pricing: {
+            beginner: {
+                price: '₹' + document.getElementById('locBegPrice').value,
+                features: document.getElementById('locBegFeat').value.split(',')
+            },
+            advanced: {
+                price: '₹' + document.getElementById('locAdvPrice').value,
+                features: document.getElementById('locAdvFeat').value.split(',')
+            }
+        }
+    };
+    await authFetch(`${API}/locations`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+        body: JSON.stringify(newLoc)
+    });
+    e.target.reset();
+    alert('Location Added!');
+    loadAdminLocations();
+});
+
+
+// ════════════════════════════════════════════════════════════
+//  7. INSTRUCTORS
+// ════════════════════════════════════════════════════════════
+async function loadInstructors() {
+    try {
+        const res = await fetch(`${API}/instructors`);
+        const list = await res.json();
+        const container = document.getElementById('instructorList');
+        container.innerHTML = '';
+        if (list.length === 0) {
+            container.innerHTML = '<p class="text-gray-500">No instructors found.</p>';
+            return;
+        }
+        list.forEach(inst => {
+            const imgPath = inst.frontImage ? `${SERVER_URL}${inst.frontImage}` : 'https://placehold.co/50';
+            const name = safe(inst.name);
+            const role = safe(inst.role);
+            const id   = safe(inst.id);
+            container.innerHTML += `
+                <div class="flex items-center justify-between bg-gray-900 p-3 rounded border border-gray-700">
+                    <div class="flex items-center gap-3">
+                        <img src="${imgPath}" class="w-12 h-12 rounded-full object-cover border border-gray-500" loading="lazy">
+                        <div><h4 class="text-white font-bold text-sm">${name}</h4><p class="text-xs text-gray-400">${role}</p></div>
+                    </div>
+                    <button onclick="deleteInstructor('${id}')"
+                        class="bg-red-900/40 hover:bg-red-600 text-red-300 hover:text-white px-3 py-1 rounded text-xs border border-red-800 transition">Remove 🗑️</button>
+                </div>`;
+        });
+    } catch (e) {
+        console.error('Error loading instructors:', e);
+        document.getElementById('instructorList').innerHTML = '<p class="text-red-500">Error loading instructors.</p>';
+    }
+}
+
+document.getElementById('instructorForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('name',        document.getElementById('instName').value);
+    formData.append('role',        document.getElementById('instRole').value);
+    formData.append('rank',        document.getElementById('instRank').value);
+    formData.append('description', document.getElementById('instDesc').value);
+    formData.append('frontImage',  document.getElementById('instFront').files[0]);
+    formData.append('backImage',   document.getElementById('instBack').files[0]);
+
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.textContent = 'Uploading...'; btn.disabled = true;
+
+    await authFetch(`${API}/instructors`, { method: 'POST', body: formData });
+
+    alert('Instructor Added!');
+    e.target.reset();
+    btn.textContent = '+ Add Instructor'; btn.disabled = false;
+    loadInstructors();
+});
+
+async function deleteInstructor(id) {
+    if (confirm('Remove this instructor?')) {
+        await authFetch(`${API}/instructors/${encodeURIComponent(id)}`, { method: 'DELETE' });
+        loadInstructors();
+    }
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  8. TRIAL BOOKINGS
+// ════════════════════════════════════════════════════════════
+async function loadBookings() {
+    try {
+        const res = await authFetch(`${API}/bookings/list`);
+        const bookings = await res.json();
+        const list = document.getElementById('booking-list');
+        const count = document.getElementById('booking-count');
+        if (count) count.textContent = `${bookings.length} total`;
+        if (!bookings.length) {
+            list.innerHTML = '<p class="text-gray-500 italic text-sm p-2">No bookings yet.</p>';
+            return;
+        }
+        list.innerHTML = bookings.map(b => {
+            const name   = safe(b.name);
+            const phone  = safe(b.phone);
+            const age    = safe(b.age || '—');
+            const branch = safe(b.branch || '—');
+            const session= safe(b.session || '—');
+            const status = safe(b.status || 'Pending');
+            const date   = safe(b.createdAt || '');
+            const id     = safe(b.id);
+            const statusColor = status === 'Enrolled' ? 'text-green-400' : status === 'Contacted' ? 'text-amber-400' : 'text-cyan-400';
+            return `<div class="bg-gray-700/50 p-3 rounded border border-gray-600 flex flex-col md:flex-row md:items-center gap-2">
+                <div class="flex-1">
+                    <div class="font-bold text-white text-sm">${name} <span class="text-gray-400 font-normal">· ${phone}</span></div>
+                    <div class="text-xs text-gray-400 mt-0.5">Age: ${age} · Branch: ${branch} · Session: ${session} · ${date}</div>
+                </div>
+                <div class="flex items-center gap-2 shrink-0">
+                    <select onchange="updateBookingStatus('${id}', this.value)"
+                        class="bg-gray-800 text-white text-xs p-1 rounded border border-gray-600 cursor-pointer">
+                        <option ${status==='Pending'?'selected':''}>Pending</option>
+                        <option ${status==='Contacted'?'selected':''}>Contacted</option>
+                        <option ${status==='Enrolled'?'selected':''}>Enrolled</option>
+                    </select>
+                    <span class="text-xs font-bold ${statusColor}">${status}</span>
+                    <button onclick="deleteBooking('${id}')"
+                        class="bg-red-900/40 hover:bg-red-600 text-red-300 hover:text-white px-2 py-1 rounded text-xs border border-red-800 transition">✕</button>
+                </div>
+            </div>`;
+        }).join('');
+    } catch(e) {
+        document.getElementById('booking-list').innerHTML = '<p class="text-red-400 text-sm p-2">Failed to load bookings.</p>';
+    }
+}
+
+async function updateBookingStatus(id, status) {
+    await authFetch(`${API}/bookings/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+        body: JSON.stringify({ status })
+    });
+    loadBookings();
+}
+
+async function deleteBooking(id) {
+    if (confirm('Delete this booking?')) {
+        await authFetch(`${API}/bookings/${id}`, { method: 'DELETE' });
+        loadBookings();
+    }
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  9. TESTIMONIALS
+// ════════════════════════════════════════════════════════════
+async function loadAdminTestimonials() {
+    try {
+        const res = await fetch(`${API}/testimonials`);
+        const list = await res.json();
+        const el = document.getElementById('testimonial-admin-list');
+        if (!list.length) { el.innerHTML = '<p class="text-gray-500 text-sm">No testimonials yet.</p>'; return; }
+        el.innerHTML = list.map(t => {
+            const name  = safe(t.name);
+            const belt  = safe(t.belt);
+            const quote = safe(t.quote);
+            const id    = safe(t.id);
+            return `<div class="flex items-start gap-3 bg-gray-700/50 p-3 rounded border border-gray-600">
+                <div class="w-10 h-10 rounded-full bg-gray-600 overflow-hidden flex-shrink-0 border border-gray-500">
+                    ${t.photo ? `<img src="${t.photo}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center text-white font-bold">${name[0]||'?'}</div>`}
+                </div>
+                <div class="flex-1">
+                    <div class="font-bold text-white text-sm">${name} <span class="text-teal-400 text-xs ml-1">${belt}</span></div>
+                    <div class="text-xs text-gray-400 italic mt-0.5">"${quote}"</div>
+                </div>
+                <button onclick="deleteTestimonial('${id}')"
+                    class="bg-red-900/40 hover:bg-red-600 text-red-300 hover:text-white px-2 py-1 rounded text-xs border border-red-800 transition shrink-0">✕</button>
+            </div>`;
+        }).join('');
+    } catch(e) { console.error(e); }
+}
+
+document.getElementById('testimonialForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('name',  document.getElementById('tName').value);
+    formData.append('belt',  document.getElementById('tBelt').value);
+    formData.append('quote', document.getElementById('tQuote').value);
+    const photo = document.getElementById('tPhoto').files[0];
+    if (photo) formData.append('photo', photo);
+    await authFetch(`${API}/testimonials`, { method: 'POST', body: formData });
+    e.target.reset();
+    loadAdminTestimonials();
+});
+
+async function deleteTestimonial(id) {
+    if (confirm('Delete this testimonial?')) {
+        await authFetch(`${API}/testimonials/${id}`, { method: 'DELETE' });
+        loadAdminTestimonials();
+    }
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  10. TIMETABLE
+// ════════════════════════════════════════════════════════════
+async function loadAdminTimetable() {
+    try {
+        const res = await fetch(`${API}/timetable`);
+        const data = await res.json();
+        const el = document.getElementById('timetable-admin-list');
+        if (!data.length) { el.innerHTML = '<p class="text-gray-500 text-sm">No slots saved yet.</p>'; return; }
+        el.innerHTML = data.map(t => {
+            const day   = safe(t.day);
+            const slot  = safe(t.slot);
+            const batch = safe(t.batch);
+            const time  = safe(t.time || '');
+            const inst  = safe(t.instructor || '');
+            const id    = safe(t.id);
+            return `<div class="flex items-center justify-between bg-gray-700/50 p-3 rounded border border-gray-600">
+                <div>
+                    <span class="font-bold text-indigo-300 text-sm">${day} · ${slot}</span>
+                    <div class="text-xs text-gray-300 mt-0.5">${batch}${time?' — '+time:''}${inst?' · '+inst:''}</div>
+                </div>
+                <button onclick="deleteTimetableSlot('${id}')"
+                    class="bg-red-900/40 hover:bg-red-600 text-red-300 hover:text-white px-2 py-1 rounded text-xs border border-red-800 transition">✕</button>
+            </div>`;
+        }).join('');
+    } catch(e) { console.error(e); }
+}
+
+document.getElementById('timetableForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await authFetch(`${API}/timetable`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
+        body: JSON.stringify({
+            day:        document.getElementById('ttDay').value,
+            slot:       document.getElementById('ttSlot').value,
+            batch:      document.getElementById('ttBatch').value,
+            time:       document.getElementById('ttTime').value,
+            instructor: document.getElementById('ttInstructor').value
+        })
+    });
+    e.target.reset();
+    loadAdminTimetable();
+});
+
+async function deleteTimetableSlot(id) {
+    if (confirm('Delete this slot?')) {
+        await authFetch(`${API}/timetable/${id}`, { method: 'DELETE' });
+        loadAdminTimetable();
+    }
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  11. ACTIVITY LOG  (Task 6.3)
+// ════════════════════════════════════════════════════════════
+async function loadActivityLog() {
+    try {
+        const res  = await authFetch(`${API}/admin/log`);
+        const log  = await res.json();
+        const el   = document.getElementById('activity-log-list');
+        if (!log.length) {
+            el.innerHTML = '<p class="text-gray-600 italic p-2">No activity recorded yet.</p>';
+            return;
+        }
+
+        const actionColors = {
+            UPLOAD_SLIDESHOW:    'text-blue-400',
+            DELETE_SLIDESHOW:    'text-blue-300',
+            REORDER_SLIDESHOW:   'text-blue-200',
+            UPLOAD_GALLERY:      'text-green-400',
+            DELETE_GALLERY:      'text-green-300',
+            UPLOAD_DOCUMENT:     'text-red-400',
+            DELETE_DOCUMENT:     'text-red-300',
+            ADD_ANNOUNCEMENT:    'text-amber-400',
+            DELETE_ANNOUNCEMENT: 'text-amber-300',
         };
-        await fetch(`${API}/locations`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(newLoc) });
-        e.target.reset(); alert("Location Added!"); loadAdminLocations();
-    });
 
-    // --- 7. INSTRUCTORS (FIXED) ---
-    async function loadInstructors() {
-        try {
-            const res = await fetch(`${API}/instructors`);
-            const list = await res.json();
-            const container = document.getElementById('instructorList');
-            container.innerHTML = ''; // Clear loading text
-
-            if(list.length === 0) { container.innerHTML = '<p class="text-gray-500">No instructors found.</p>'; return; }
-
-            list.forEach(inst => {
-                const imgPath = inst.frontImage ? `${SERVER_URL}${inst.frontImage}` : 'https://placehold.co/50';
-                container.innerHTML += `
-                    <div class="flex items-center justify-between bg-gray-900 p-3 rounded border border-gray-700">
-                        <div class="flex items-center gap-3">
-                            <img src="${imgPath}" class="w-12 h-12 rounded-full object-cover border border-gray-500">
-                            <div><h4 class="text-white font-bold text-sm">${inst.name}</h4><p class="text-xs text-gray-400">${inst.role}</p></div>
-                        </div>
-                        <button onclick="deleteInstructor('${inst.id}')" class="bg-red-900/40 hover:bg-red-600 text-red-300 hover:text-white px-3 py-1 rounded text-xs border border-red-800 transition">Remove 🗑️</button>
-                    </div>`;
-            });
-        } catch (e) { console.error("Error loading instructors:", e); document.getElementById('instructorList').innerHTML = '<p class="text-red-500">Error.</p>'; }
+        el.innerHTML = log.map(entry => {
+            const ts     = new Date(entry.timestamp).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' });
+            const action = safe(entry.action);
+            const item   = safe(entry.item || '—');
+            const ip     = safe(entry.ip || '');
+            const color  = actionColors[entry.action] || 'text-gray-300';
+            return `<div class="flex items-start gap-2 bg-gray-900/60 p-2 rounded border border-gray-700/50 hover:bg-gray-900 transition">
+                <span class="text-gray-600 shrink-0 w-28">${ts}</span>
+                <span class="${color} font-bold shrink-0 w-44">${action}</span>
+                <span class="text-gray-300 truncate flex-1">${item}</span>
+                <span class="text-gray-700 shrink-0 text-[10px] hidden md:block">${ip}</span>
+            </div>`;
+        }).join('');
+    } catch(e) {
+        document.getElementById('activity-log-list').innerHTML = '<p class="text-red-500 text-xs p-2">Could not load activity log.</p>';
     }
+}
 
-    document.getElementById('instructorForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append('name', document.getElementById('instName').value);
-        formData.append('role', document.getElementById('instRole').value);
-        formData.append('rank', document.getElementById('instRank').value);
-        formData.append('description', document.getElementById('instDesc').value);
-        formData.append('frontImage', document.getElementById('instFront').files[0]);
-        formData.append('backImage', document.getElementById('instBack').files[0]);
-
-        const btn = e.target.querySelector('button'); btn.innerText = "Uploading..."; btn.disabled = true;
-        await fetch(`${API}/instructors`, { method: 'POST', body: formData });
-        alert("Instructor Added!"); e.target.reset(); btn.innerText = "+ Add Instructor"; btn.disabled = false; loadInstructors();
-    });
-
-    async function deleteInstructor(id) {
-        if(confirm("Remove instructor?")) { await fetch(`${API}/instructors/${id}`, { method: 'DELETE' }); loadInstructors(); }
-    }
 </script>
+
 </body>
 </html>

@@ -18,14 +18,14 @@
     <meta property="og:site_name" content="IFSA - Indian Fit Sports Academy">
     <meta property="og:title" content="IFSA – Karate Classes in Mumbai | Kids & Adults">
     <meta property="og:description" content="Expert karate training in Mumbai since 2008. Affiliated to WKF, AKF, ISKO & KIO. 500+ students trained. Book your free trial class now!">
-    <meta property="og:image" content="https://ifsaacademy.in/public/image%201.png">
+    <meta property="og:image" content="https://ifsaacademy.in/public/image 1.png">
     <meta property="og:url" content="https://ifsaacademy.in/">
 
     <!-- ── Twitter Card ──────────────────────────────────────── -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="IFSA – Karate Classes in Mumbai">
     <meta name="twitter:description" content="Expert karate training in Mumbai since 2008. Book your free trial class now!">
-    <meta name="twitter:image" content="https://ifsaacademy.in/public/image%201.png">
+    <meta name="twitter:image" content="https://ifsaacademy.in/public/image 1.png">
 
     <!-- ── JSON-LD Structured Data (Task 2.2) ───────────────── -->
     <script type="application/ld+json">
@@ -35,8 +35,8 @@
       "name": "IFSA - Indian Fit Sports Academy",
       "description": "Expert karate training in Mumbai for kids and adults since 2008. Affiliated to WKF, AKF, ISKO and KIO.",
       "url": "https://ifsaacademy.in",
-      "logo": "https://ifsaacademy.in/public/image%201.png",
-      "image": "https://ifsaacademy.in/public/image%201.png",
+      "logo": "https://ifsaacademy.in/public/image 1.png",
+      "image": "https://ifsaacademy.in/public/image 1.png",
       "telephone": "+919004383448",
       "email": "info@ifsaacademy.in",
       "foundingDate": "2008",
@@ -100,7 +100,6 @@
     <link rel="stylesheet" href="STYLE.css">
 </head>
 <body class="bg-brand-dark text-brand-text">
-<div id="scroll-progress" role="progressbar" aria-hidden="true"></div>
 
 <!-- Custom amber cursor dot -->
 <div class="custom-cursor" id="cursor"></div>
@@ -113,6 +112,7 @@
     <div class="relative animate-fade-up w-32 h-32 rounded-full border-4 border-brand-accent shadow-2xl overflow-hidden flex items-center justify-center bg-black animate-pulse-slow logo-glow-ring">
         <img src="public/image 1.png" alt="Loading..." class="w-full h-full object-cover scale-125 animate-pulse-slow">
     </div>
+    <p class="preloader-brand-text absolute mt-48 text-brand-accent text-xs font-bold tracking-[0.75em] uppercase">IFSA</p>
 </div>
 
 <div id="main-content" class="main-content-hidden">
@@ -158,7 +158,7 @@
                     <span class="text-sm font-medium">Docs</span>
                 </a>
                 <a href="admin.html" class="text-brand-accent border border-brand-accent px-3 py-1.5 rounded hover:bg-brand-accent hover:text-black transition text-sm font-bold">Admin</a>
-                <a href="pricing.html" class="btn-shimmer magnetic-btn bg-brand-accent text-black px-5 py-2 rounded-lg font-bold hover:bg-amber-400 transition shadow-[0_0_16px_rgba(251,191,36,0.3)] hover:shadow-[0_0_24px_rgba(251,191,36,0.55)]">Join Now</a>
+                <a href="pricing.html" class="btn-shimmer bg-brand-accent text-black px-5 py-2 rounded-lg font-bold hover:bg-amber-400 transition shadow-[0_0_16px_rgba(251,191,36,0.3)] hover:shadow-[0_0_24px_rgba(251,191,36,0.55)]">Join Now</a>
                 <!-- 4.6 Theme Toggle -->
                 <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
                     <!-- Sun (shown in dark mode) -->
@@ -199,10 +199,9 @@
         <!-- ═══════════════════════════════════════════ HERO ═════ -->
         <section id="home" class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-black">
 
-            <!-- Responsive Hero Video Background: desktop + mobile, swapped by JS -->
-            <video id="hero-video-bg" autoplay muted loop playsinline aria-hidden="true"
-                   class="absolute inset-0 w-full h-full object-cover z-0" style="display:none;pointer-events:none;"></video>
-            <div id="hero-video-overlay" style="display:none;position:absolute;inset:0;background:linear-gradient(135deg,rgba(15,23,42,0.80) 0%,rgba(15,23,42,0.50) 60%,rgba(15,23,42,0.72) 100%);z-index:1;pointer-events:none;"></div>
+            <!-- 4.3 Hero Video Background (shown only if admin has uploaded one) -->
+            <video id="hero-video-bg" autoplay muted loop playsinline aria-hidden="true" style="display:none;"></video>
+            <div id="hero-video-overlay" style="display:none;"></div>
 
             <!-- Particle canvas -->
             <canvas id="hero-particles" class="absolute inset-0 z-0 pointer-events-none" aria-hidden="true"></canvas>
@@ -216,41 +215,9 @@
                 <img src="public/image 1.png" alt="" class="w-[600px] h-[600px] object-contain opacity-[0.04] scale-[1.8]">
             </div>
 
-            <!-- Mobile Logo Bar -->
-            <section class="md:hidden w-full bg-brand-dark border-b border-gray-800 py-5 relative z-20">
-                <div class="container mx-auto px-2">
-                    <div class="flex justify-evenly items-start">
-                        <div class="flex flex-col items-center w-16">
-                            <div class="w-12 h-12 rounded-full border border-white/20 p-0.5 bg-white/5 backdrop-blur-sm mb-1">
-                                <img src="public/image 5.png" class="w-full h-full object-contain rounded-full" loading="lazy" width="48" height="48">
-                            </div>
-                            <span class="text-[10px] text-gray-400 font-bold tracking-widest text-center">ISKO</span>
-                        </div>
-                        <div class="flex flex-col items-center w-16">
-                            <div class="w-12 h-12 rounded-full border border-white/20 p-0.5 bg-white/5 backdrop-blur-sm mb-1">
-                                <img src="public/Image 4.png" class="w-full h-full object-contain rounded-full" loading="lazy" width="48" height="48">
-                            </div>
-                            <span class="text-[10px] text-gray-400 font-bold tracking-widest text-center">AKF</span>
-                        </div>
-                        <div class="flex flex-col items-center w-16">
-                            <div class="w-12 h-12 rounded-full border border-white/20 p-0.5 bg-white/5 backdrop-blur-sm mb-1">
-                                <img src="public/image 2.png" class="w-full h-full object-contain rounded-full" loading="lazy" width="48" height="48">
-                            </div>
-                            <span class="text-[10px] text-gray-400 font-bold tracking-widest text-center">KIO</span>
-                        </div>
-                        <div class="flex flex-col items-center w-16">
-                            <div class="w-12 h-12 rounded-full border border-white/20 p-0.5 bg-white/5 backdrop-blur-sm mb-1">
-                                <img src="public/image 3.png" class="w-full h-full object-contain rounded-full" loading="lazy" width="48" height="48">
-                            </div>
-                            <span class="text-[10px] text-gray-400 font-bold tracking-widest text-center">WKF</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             <div class="container mx-auto px-4 z-10 relative flex-1 flex items-center">
                 <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto gap-8 md:gap-4 w-full">
-                    
+
                     <!-- LEFT LOGOS (Desktop Only) -->
                     <div class="hidden md:flex flex-col gap-8 order-1 w-1/6 justify-start">
                         <div class="text-center group"><div class="w-24 h-24 rounded-full border-2 border-white/20 p-1 mx-auto bg-white/5 backdrop-blur-sm transition transform group-hover:scale-110 group-hover:border-brand-accent/40"><img src="public/image 5.png" class="w-full h-full object-contain rounded-full"></div><span class="text-xs text-gray-400 mt-2 block font-semibold tracking-widest">ISKO</span></div>
@@ -258,34 +225,52 @@
                     </div>
 
                     <!-- CENTER CONTENT -->
-                    <div class="text-center order-1 md:order-2 flex-grow md:w-4/6 relative py-8">
-                        
-                        <!-- Main Logo -->
-                        <div class="relative inline-block mb-8">
+                    <div class="text-center order-1 md:order-2 flex-grow md:w-4/6 relative py-6 md:py-8">
+
+                        <!-- Main Logo — smaller on mobile -->
+                        <div class="relative inline-block mb-4 md:mb-8">
                             <div class="absolute inset-0 bg-brand-accent/20 blur-2xl rounded-full"></div>
-                            <div class="logo-glow-ring absolute inset-[-12px] rounded-full pointer-events-none z-0"></div>
-                            <div class="relative w-40 h-40 md:w-48 md:h-48 mx-auto rounded-full border-4 border-brand-accent shadow-2xl overflow-hidden bg-black z-10 flex items-center justify-center">
+                            <div class="logo-glow-ring absolute inset-[-8px] md:inset-[-12px] rounded-full pointer-events-none z-0"></div>
+                            <div class="relative w-24 h-24 md:w-48 md:h-48 mx-auto rounded-full border-[3px] md:border-4 border-brand-accent shadow-2xl overflow-hidden bg-black z-10 flex items-center justify-center">
                                 <img src="public/image 1.png" class="w-full h-full object-cover scale-125">
                             </div>
                         </div>
-                        
-                        <!-- Oversized Hero Heading -->
-                        <h1 class="font-black text-white uppercase leading-[0.9] tracking-tighter mb-6" style="font-size:clamp(2.8rem,9vw,8.5rem);">
-                            INDIAN FIT-SPORTS <br>
+
+                        <!-- Hero Heading — tighter on mobile -->
+                        <h1 class="font-black text-white uppercase leading-[0.9] tracking-tighter mb-4 md:mb-6"
+                            style="font-size:clamp(2rem,8vw,8.5rem);">
+                            INDIAN FIT-SPORTS<br>
                             <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-yellow-200">ACADEMY</span>
                         </h1>
-                        
-                        <div class="h-px w-24 bg-brand-accent mx-auto my-6 rounded-full"></div>
-                        
-                        <p class="text-brand-muted text-sm md:text-base italic mb-2 font-light">(Affiliated to)</p>
+
+                        <div class="h-px w-16 md:w-24 bg-brand-accent mx-auto my-3 md:my-6 rounded-full"></div>
+
+                        <!-- Affiliation logos — horizontal pill strip on mobile -->
+                        <div class="flex md:hidden items-center justify-center gap-3 mb-3">
+                            <div class="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-3 py-1.5">
+                                <img src="public/image 5.png" class="w-5 h-5 object-contain rounded-full" loading="lazy"><span class="text-[10px] text-gray-400 font-bold tracking-wider">ISKO</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-3 py-1.5">
+                                <img src="public/Image 4.png" class="w-5 h-5 object-contain rounded-full" loading="lazy"><span class="text-[10px] text-gray-400 font-bold tracking-wider">AKF</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-3 py-1.5">
+                                <img src="public/image 2.png" class="w-5 h-5 object-contain rounded-full" loading="lazy"><span class="text-[10px] text-gray-400 font-bold tracking-wider">KIO</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 bg-white/5 border border-white/10 rounded-full px-3 py-1.5">
+                                <img src="public/image 3.png" class="w-5 h-5 object-contain rounded-full" loading="lazy"><span class="text-[10px] text-gray-400 font-bold tracking-wider">WKF</span>
+                            </div>
+                        </div>
+
+                        <p class="text-brand-muted text-xs md:text-base italic mb-1 md:mb-2 font-light">(Affiliated to)</p>
                         <!-- Typewriter -->
-                        <h2 id="hero-typewriter" class="text-lg md:text-2xl font-bold text-white/90 tracking-widest mb-10 min-h-[3rem]"></h2>
-                        
-                        <div class="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md mx-auto">
-                            <a href="pricing.html" class="btn-shimmer w-full sm:w-auto bg-brand-accent text-black px-8 py-4 rounded-lg text-lg font-bold hover:bg-amber-400 transition shadow-[0_0_20px_rgba(251,191,36,0.3)] hover:shadow-[0_0_30px_rgba(251,191,36,0.6)] transform hover:-translate-y-1">
-                                Book Free Trial
+                        <h2 id="hero-typewriter" class="text-sm md:text-2xl font-bold text-white/90 tracking-widest mb-6 md:mb-10 min-h-[2rem] md:min-h-[3rem] px-2"></h2>
+
+                        <!-- CTA Buttons — side by side on mobile too -->
+                        <div class="flex flex-row gap-3 justify-center w-full max-w-sm mx-auto px-2">
+                            <a href="pricing.html" class="btn-shimmer flex-1 bg-brand-accent text-black px-4 py-3 md:px-8 md:py-4 rounded-lg text-sm md:text-lg font-bold hover:bg-amber-400 transition shadow-[0_0_20px_rgba(251,191,36,0.3)] hover:shadow-[0_0_30px_rgba(251,191,36,0.6)] transform hover:-translate-y-1">
+                                Book Intro Session
                             </a>
-                            <a href="calender.html" class="btn-shimmer w-full sm:w-auto bg-transparent border border-white/30 text-white px-8 py-4 rounded-lg text-lg font-bold hover:bg-white/10 hover:border-white transition">
+                            <a href="calender.html" class="btn-shimmer flex-1 bg-transparent border border-white/30 text-white px-4 py-3 md:px-8 md:py-4 rounded-lg text-sm md:text-lg font-bold hover:bg-white/10 hover:border-white transition">
                                 View Calendar
                             </a>
                         </div>
@@ -303,22 +288,22 @@
             <div class="relative z-10 w-full border-t border-white/10 bg-black/40 backdrop-blur-sm py-4">
                 <div class="container mx-auto px-6 flex flex-wrap justify-center items-center gap-0">
                     <div class="flex items-center px-6 py-2">
-                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2" data-counter="15" data-suffix="+">0+</span>
+                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2">15+</span>
                         <span class="text-gray-400 text-xs md:text-sm uppercase tracking-widest">Years</span>
                     </div>
                     <div class="w-px h-8 bg-brand-accent/40 hidden sm:block"></div>
                     <div class="flex items-center px-6 py-2">
-                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2" data-counter="500" data-suffix="+">0+</span>
+                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2">500+</span>
                         <span class="text-gray-400 text-xs md:text-sm uppercase tracking-widest">Students</span>
                     </div>
                     <div class="w-px h-8 bg-brand-accent/40 hidden sm:block"></div>
                     <div class="flex items-center px-6 py-2">
-                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2" data-counter="50" data-suffix="+">0+</span>
+                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2">50+</span>
                         <span class="text-gray-400 text-xs md:text-sm uppercase tracking-widest">Black Belts</span>
                     </div>
                     <div class="w-px h-8 bg-brand-accent/40 hidden sm:block"></div>
                     <div class="flex items-center px-6 py-2">
-                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2" data-counter="3" data-suffix="">0</span>
+                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2">3</span>
                         <span class="text-gray-400 text-xs md:text-sm uppercase tracking-widest">Locations</span>
                     </div>
                 </div>
@@ -442,79 +427,111 @@
             </div>
         </section>
 
-
-
-
         <!-- ════════════════════════ PROGRAMS (DOJO TRACKS) ═════ -->
         <section id="programs" class="py-20 md:py-28 bg-brand-light/50 relative overflow-hidden">
+            <!-- 4.5 Silhouette decoration -->
+            <div class="absolute top-6 right-8 pointer-events-none select-none" aria-hidden="true">
+                <svg class="karate-silhouette" width="160" height="200" viewBox="0 0 80 110">
+                    <!-- High kick pose -->
+                    <circle cx="40" cy="10" r="8"/>
+                    <rect x="30" y="21" width="20" height="26" rx="4"/>
+                    <line x1="30" y1="30" x2="12" y2="44" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="50" y1="30" x2="68" y2="44" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+                    <line x1="36" y1="47" x2="30" y2="80" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/>
+                    <line x1="44" y1="47" x2="62" y2="30" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/>
+                    <line x1="62" y1="30" x2="76" y2="18" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+                </svg>
+            </div>
             <div class="container mx-auto px-6">
                 <div class="text-center max-w-3xl mx-auto mb-16">
                     <p class="text-xs text-brand-accent uppercase tracking-[0.3em] mb-2 font-bold">| TRAINING</p>
                     <h2 class="text-3xl md:text-4xl font-black mb-4 text-white">Dojo Tracks</h2>
                     <p class="text-lg text-brand-muted">From focused martial arts to high-energy fitness.</p>
                 </div>
-                <!-- Cards injected by JS — images loaded from server, no SVG silhouettes -->
-                <div id="programs-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                    <!-- Track 01 - Kids Karate -->
+                    <div class="reveal-up stagger-1 relative group bg-brand-light rounded-xl overflow-visible shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(251,191,36,0.25)] hover:border-l-4 hover:border-brand-accent diagonal-lines">
+                        <div class="rounded-xl overflow-hidden">
+                            <div class="absolute top-3 left-4 z-10">
+                                <span class="text-[10px] text-brand-accent font-bold tracking-[0.3em] uppercase">TRACK 01</span>
+                            </div>
+                            <div class="card-number">01</div>
+                            <div class="relative h-48 bg-gradient-to-br from-gray-900 via-gray-800 to-brand-dark flex items-center justify-center overflow-visible">
+                                <!-- Silhouette overflows right edge -->
+                                <svg class="absolute -right-4 bottom-0 w-36 h-36 text-brand-accent/20 transition-transform duration-500 group-hover:scale-110 group-hover:text-brand-accent/35 z-10" viewBox="0 0 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="32" cy="10" r="6"/>
+                                    <path d="M22 24c0-5.5 4.5-10 10-10s10 4.5 10 10v8l6 12h-6l-2-6H24l-2 6h-6l6-12V24z"/>
+                                    <path d="M20 44l-4 12h8l2-6h12l2 6h8l-4-12H20z"/>
+                                </svg>
+                                <div class="absolute inset-0 bg-brand-accent/90 flex items-center justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                                    <a href="pricing.html" class="text-black font-black text-lg tracking-wider uppercase">Learn More →</a>
+                                </div>
+                            </div>
+                            <div class="p-6 relative z-10">
+                                <h3 class="text-2xl font-bold text-white mb-3">Kids Karate</h3>
+                                <p class="text-brand-muted mb-5">Focus, fun, and respect for ages 3–18.</p>
+                                <a href="pricing.html" class="font-medium text-brand-accent hover:text-amber-300 transition duration-300">Enroll Now →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Track 02 - Adult Karate -->
+                    <div class="reveal-up stagger-2 relative group bg-brand-light rounded-xl overflow-visible shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(251,191,36,0.25)] hover:border-l-4 hover:border-brand-accent diagonal-lines">
+                        <div class="rounded-xl overflow-hidden">
+                            <div class="absolute top-3 left-4 z-10">
+                                <span class="text-[10px] text-brand-accent font-bold tracking-[0.3em] uppercase">TRACK 02</span>
+                            </div>
+                            <div class="card-number">02</div>
+                            <div class="relative h-48 bg-gradient-to-br from-gray-900 via-gray-800 to-brand-dark flex items-center justify-center overflow-visible">
+                                <svg class="absolute -right-4 bottom-0 w-36 h-36 text-brand-accent/20 transition-transform duration-500 group-hover:scale-110 group-hover:text-brand-accent/35 z-10" viewBox="0 0 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="32" cy="9" r="6"/>
+                                    <path d="M16 28c0-8.8 7.2-16 16-16s16 7.2 16 16H16z"/>
+                                    <rect x="28" y="28" width="8" height="18" rx="2"/>
+                                    <path d="M16 46h32l-4 10H20l-4-10z"/>
+                                    <!-- Punch arm -->
+                                    <path d="M28 34l-14-6 2-4 14 8z"/>
+                                </svg>
+                                <div class="absolute inset-0 bg-brand-accent/90 flex items-center justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                                    <a href="pricing.html" class="text-black font-black text-lg tracking-wider uppercase">Learn More →</a>
+                                </div>
+                            </div>
+                            <div class="p-6 relative z-10">
+                                <h3 class="text-2xl font-bold text-white mb-3">Adult Karate</h3>
+                                <p class="text-brand-muted mb-5">Master self-defense and technique.</p>
+                                <a href="pricing.html" class="font-medium text-brand-accent hover:text-amber-300 transition duration-300">Enroll Now →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Track 03 - Fitness -->
+                    <div class="reveal-up stagger-3 relative group bg-brand-light rounded-xl overflow-visible shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(251,191,36,0.25)] hover:border-l-4 hover:border-brand-accent diagonal-lines">
+                        <div class="rounded-xl overflow-hidden">
+                            <div class="absolute top-3 left-4 z-10">
+                                <span class="text-[10px] text-brand-accent font-bold tracking-[0.3em] uppercase">TRACK 03</span>
+                            </div>
+                            <div class="card-number">03</div>
+                            <div class="relative h-48 bg-gradient-to-br from-gray-900 via-gray-800 to-brand-dark flex items-center justify-center overflow-visible">
+                                <svg class="absolute -right-4 bottom-0 w-36 h-36 text-brand-accent/20 transition-transform duration-500 group-hover:scale-110 group-hover:text-brand-accent/35 z-10" viewBox="0 0 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="32" cy="9" r="6"/>
+                                    <path d="M24 20h16l2 14H22l2-14z"/>
+                                    <path d="M22 34l-8 4 2 4 8-3v18H28V40h8v17h4V39l8 3 2-4-8-4H22z"/>
+                                </svg>
+                                <div class="absolute inset-0 bg-brand-accent/90 flex items-center justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                                    <a href="pricing.html" class="text-black font-black text-lg tracking-wider uppercase">Learn More →</a>
+                                </div>
+                            </div>
+                            <div class="p-6 relative z-10">
+                                <h3 class="text-2xl font-bold text-white mb-3">Fitness Classes</h3>
+                                <p class="text-brand-muted mb-5">High-energy group fitness &amp; training.</p>
+                                <a href="pricing.html" class="font-medium text-brand-accent hover:text-amber-300 transition duration-300">Enroll Now →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </section>
-
-        <script>
-        /* Program Cards: admin-uploadable images, SVG icons removed */
-        (function () {
-            var PROGRAMS = [
-                { id: 'kids-karate',    track: 'TRACK 01', title: 'Kids Karate',    desc: 'Focus, fun, and respect for ages 3–18.',                href: 'pricing.html' },
-                { id: 'adult-karate',   track: 'TRACK 02', title: 'Adult Karate',   desc: 'Master self-defense and technique.',                   href: 'pricing.html' },
-                { id: 'karate-fitness', track: 'TRACK 03', title: 'Karate Fitness', desc: 'Kata-based conditioning, flexibility & strength.',      href: 'pricing.html' }
-            ];
-
-            async function loadProgramCards() {
-                var images = {};
-                try {
-                    var base = (typeof SERVER_URL !== 'undefined' ? SERVER_URL : '');
-                    var res = await fetch(base + '/api/program-images');
-                    if (res.ok) images = await res.json();
-                } catch (_) {}
-
-                var grid = document.getElementById('programs-grid');
-                if (!grid) return;
-                grid.innerHTML = '';
-
-                PROGRAMS.forEach(function (p, i) {
-                    var imgSrc = images[p.id] || '';
-                    var card = document.createElement('div');
-                    card.className = 'reveal-up stagger-' + (i+1) + ' relative group bg-brand-light rounded-xl overflow-hidden shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(251,191,36,0.25)] hover:border-l-4 hover:border-brand-accent diagonal-lines flex flex-col';
-
-                    var imgBlock = imgSrc
-                        ? '<img src="' + imgSrc + '" alt="' + p.title + '" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" loading="lazy">'
-                        : '<div class="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-gray-900 via-gray-800 to-brand-dark select-none"><svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="rgba(251,191,36,0.2)" stroke-width="1.2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg><span style="font-size:10px;color:#4b5563;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;">No image yet</span></div>';
-
-                    card.innerHTML =
-                        '<div class="relative overflow-hidden" style="aspect-ratio:4/3;">'
-                        + '<span class="absolute top-3 left-4 z-10 text-[10px] text-brand-accent font-bold tracking-[0.3em] uppercase">' + p.track + '</span>'
-                        + imgBlock
-                        + '<div class="absolute inset-0 bg-brand-accent/90 flex items-center justify-center translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-20">'
-                        + '<a href="' + p.href + '" class="text-black font-black text-lg tracking-wider uppercase">Learn More →</a></div>'
-                        + '</div>'
-                        + '<div class="p-6 flex flex-col flex-1">'
-                        + '<h3 class="text-2xl font-bold text-white mb-3">' + p.title + '</h3>'
-                        + '<p class="text-brand-muted mb-5 flex-1">' + p.desc + '</p>'
-                        + '<a href="' + p.href + '" class="font-medium text-brand-accent hover:text-amber-300 transition duration-300">Enroll Now →</a>'
-                        + '</div>';
-
-                    grid.appendChild(card);
-                });
-
-                if (typeof IntersectionObserver !== 'undefined') {
-                    var obs = new IntersectionObserver(function (entries) {
-                        entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('revealed'); obs.unobserve(e.target); } });
-                    }, { threshold: 0.1 });
-                    grid.querySelectorAll('.reveal-up').forEach(function (el) { obs.observe(el); });
-                }
-            }
-
-            loadProgramCards();
-        })();
-        </script>
 
         <!-- ════════════════════════ INSTRUCTORS ════════════════ -->
         <section id="instructors" class="py-20 bg-brand-dark relative z-0">
@@ -727,7 +744,7 @@
             <div class="container mx-auto px-6 max-w-2xl">
                 <div class="text-center mb-10">
                     <p class="text-xs text-brand-accent uppercase tracking-[0.3em] mb-2 font-bold">| FREE TRIAL</p>
-                    <h2 class="text-3xl md:text-4xl font-black text-white">Book Your Free Trial</h2>
+                    <h2 class="text-3xl md:text-4xl font-black text-white">Book Your Trial Class</h2>
                     <p class="text-brand-muted mt-3">Fill in your details — we'll call you within 24 hours.</p>
                 </div>
                 <div class="bg-gray-800/60 backdrop-blur-sm border border-gray-700 rounded-2xl p-8 shadow-2xl">
@@ -742,8 +759,7 @@
                         </div>
                         <div>
                             <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Age</label>
-                            <input type="number" id="ib-age" placeholder="e.g. 12" min="4" max="80" class="w-full bg-gray-900 text-white p-3 rounded-lg border border-gray-700 focus:border-brand-accent outline-none transition">
-                            <p class="text-xs text-gray-600 mt-1">We welcome students aged 4 to 80.</p>
+                            <input type="number" id="ib-age" placeholder="e.g. 12" class="w-full bg-gray-900 text-white p-3 rounded-lg border border-gray-700 focus:border-brand-accent outline-none transition">
                         </div>
                         <div>
                             <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Preferred Time</label>
@@ -810,15 +826,15 @@
                     <ul class="space-y-3 text-sm text-brand-muted">
                         <li class="flex items-start gap-3">
                             <svg class="w-5 h-5 text-brand-accent mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            <span>Mumbai, Maharashtra, India</span>
+                            <span>123 Karate Street, Mumbai</span>
                         </li>
                         <li class="flex items-center gap-3">
                             <svg class="w-5 h-5 text-brand-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                            <a href="tel:+919004383448" class="hover:text-brand-accent transition">+91 90043 83448</a>
+                            <span>+91 90043 83448</span>
                         </li>
                         <li class="flex items-center gap-3">
                             <svg class="w-5 h-5 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.008-.57-.008-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                            <a href="https://wa.me/919004383448" target="_blank" rel="noopener" class="hover:text-brand-accent transition">+91 90043 83448</a>
+                            <span>+91 98765 43210</span>
                         </li>
                     </ul>
                 </div>
@@ -826,13 +842,13 @@
                 <div>
                     <h5 class="text-lg font-semibold text-white mb-4">Follow Us</h5>
                     <div class="flex space-x-3">
-                        <a href="https://www.facebook.com/ifsaacademy" target="_blank" rel="noopener" class="social-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#1877F2] hover:text-white transition duration-300">
+                        <a href="#" class="social-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#1877F2] hover:text-white transition duration-300">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                         </a>
-                        <a href="https://www.instagram.com/ifsaacademy" target="_blank" rel="noopener" class="social-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-pink-600 hover:text-white transition duration-300">
+                        <a href="#" class="social-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-pink-600 hover:text-white transition duration-300">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669-4.771 4.919-4.919 1.266-.057 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"/></svg>
                         </a>
-                        <a href="https://www.youtube.com/@ifsaacademy" target="_blank" rel="noopener" class="social-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-red-600 hover:text-white transition duration-300">
+                        <a href="#" class="social-icon w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-red-600 hover:text-white transition duration-300">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
                         </a>
                     </div>
@@ -846,18 +862,8 @@
 
 </div>
 
-<!-- WhatsApp Floating Button -->
-<a href="https://wa.me/919004383448?text=Hi%20IFSA!%20I%27d%20like%20to%20enquire%20about%20joining%20your%20karate%20classes."
-   target="_blank" rel="noopener" class="whatsapp-fab" aria-label="Chat on WhatsApp">
-    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="white" width="28" height="28">
-        <path d="M16 0C7.164 0 0 7.163 0 16c0 2.822.737 5.469 2.027 7.773L0 32l8.489-2.002A15.93 15.93 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 01-6.77-1.848l-.484-.287-5.037 1.188 1.237-4.896-.316-.502A13.266 13.266 0 012.667 16C2.667 8.636 8.637 2.667 16 2.667S29.333 8.636 29.333 16 23.363 29.333 16 29.333zm7.27-9.927c-.398-.199-2.354-1.162-2.72-1.294-.365-.133-.631-.199-.897.199-.265.398-1.029 1.294-1.261 1.56-.232.265-.465.298-.863.1-.398-.199-1.681-.619-3.202-1.977-1.183-1.056-1.982-2.36-2.214-2.758-.232-.398-.025-.613.175-.811.179-.178.398-.465.597-.697.199-.232.265-.398.398-.664.133-.265.066-.497-.033-.696-.1-.199-.897-2.162-1.229-2.96-.324-.776-.653-.671-.897-.683l-.764-.013c-.265 0-.696.1-1.061.497-.365.398-1.394 1.362-1.394 3.322s1.427 3.854 1.626 4.12c.199.265 2.808 4.286 6.802 5.814.951.366 1.693.585 2.272.749.954.271 1.822.233 2.509.141.765-.113 2.354-.962 2.686-1.891.332-.929.332-1.726.232-1.891-.099-.166-.365-.265-.763-.464z"/>
-    </svg>
-</a>
+<!-- WhatsApp FAB -->
 
-<!-- Back to top button -->
-<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top" style="display:none;position:fixed;bottom:90px;right:24px;z-index:9990;width:44px;height:44px;border-radius:50%;background:rgba(15,23,42,0.9);border:1.5px solid #fbbf24;color:#fbbf24;font-size:1.2rem;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.4);transition:opacity 0.3s,transform 0.3s;">
-    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg>
-</button>
 
 <script>
 const SERVER_URL = '';
@@ -875,15 +881,12 @@ window.addEventListener('load', () => {
     }
     // ── PWA Service Worker registration (Task 3.7) ──────────
     if ('serviceWorker' in navigator) {
-        // Only register if sw.js actually exists (avoids 404 → Cache 206 error cascade)
-        fetch('/sw.js', { method: 'HEAD' }).then(r => {
-            if (r.ok) navigator.serviceWorker.register('/sw.js').catch(() => {});
-        }).catch(() => {});
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
     }
 
     // Typewriter after preloader
     setTimeout(() => {
-        typeWriter(document.getElementById('hero-typewriter'), "ICHIBAN SHITO-RYU KARATE-DO ORGANIZATION INDIA", 45);
+        typeWriter(document.getElementById('hero-typewriter'), 'ICHIBAN SHITO-RYU KARATE-DO ORGANIZATION INDIA', 45);
     }, 1500);
 });
 
@@ -894,15 +897,6 @@ function toggleMobileMenu() {
         menu.classList.toggle('flex');
     }
 }
-// Close mobile menu when tapping outside
-document.addEventListener('click', function(e) {
-    const menu = document.getElementById('mobile-menu');
-    const header = document.getElementById('site-header');
-    if (menu && !menu.classList.contains('hidden') && header && !header.contains(e.target)) {
-        menu.classList.add('hidden');
-        menu.classList.remove('flex');
-    }
-});
 
 // ── TYPEWRITER ──────────────────────────────────────────
 function typeWriter(element, text, speed = 60) {
@@ -1271,13 +1265,8 @@ async function loadTestimonials() {
             document.getElementById('t-prev').classList.remove('hidden');
             document.getElementById('t-next').classList.remove('hidden');
         }
-        // Auto-advance every 5s — pauses on hover
-        let tInterval = setInterval(() => testimonialSlide(1), 5000);
-        const container = document.getElementById('testimonials-container');
-        if (container) {
-            container.addEventListener('mouseenter', () => clearInterval(tInterval));
-            container.addEventListener('mouseleave', () => { tInterval = setInterval(() => testimonialSlide(1), 5000); });
-        }
+        // Auto-advance every 5s
+        setInterval(() => testimonialSlide(1), 5000);
     } catch {
         track.innerHTML = '<p class="text-gray-500 text-center w-full">Could not load testimonials.</p>';
     }
@@ -1311,13 +1300,6 @@ async function submitIndexBooking() {
     const status = document.getElementById('ib-status');
     const btn   = document.getElementById('ib-btn');
     if (!name || !phone) { status.textContent = '⚠️ Please enter your name and phone.'; status.className='text-center mt-4 text-red-400 text-sm block'; return; }
-    // Validate Indian phone number — must be 10 digits (after stripping spaces/dashes/+91)
-    const digits = phone.replace(/[\s\-\+]/g, '').replace(/^91/, '');
-    if (!/^\d{10}$/.test(digits)) {
-        status.textContent = '⚠️ Please enter a valid 10-digit phone number.';
-        status.className = 'text-center mt-4 text-red-400 text-sm block';
-        return;
-    }
     btn.textContent = 'Submitting...'; btn.disabled = true;
     try {
         const res = await fetch(`${SERVER_URL}/api/bookings/add`, {
@@ -1361,6 +1343,14 @@ async function submitIndexBooking() {
 .nav-icon-link { padding: 4px 2px; }
 </style>
 
+<!-- WhatsApp Floating Button (Task 3.1) -->
+<a href="https://wa.me/919004383448?text=Hi%20IFSA!%20I%27d%20like%20to%20enquire%20about%20joining%20your%20karate%20classes."
+   target="_blank" rel="noopener" class="whatsapp-fab" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="white" width="28" height="28">
+        <path d="M16 0C7.164 0 0 7.163 0 16c0 2.822.737 5.469 2.027 7.773L0 32l8.489-2.002A15.93 15.93 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 01-6.77-1.848l-.484-.287-5.037 1.188 1.237-4.896-.316-.502A13.266 13.266 0 012.667 16C2.667 8.636 8.637 2.667 16 2.667S29.333 8.636 29.333 16 23.363 29.333 16 29.333zm7.27-9.927c-.398-.199-2.354-1.162-2.72-1.294-.365-.133-.631-.199-.897.199-.265.398-1.029 1.294-1.261 1.56-.232.265-.465.298-.863.1-.398-.199-1.681-.619-3.202-1.977-1.183-1.056-1.982-2.36-2.214-2.758-.232-.398-.025-.613.175-.811.179-.178.398-.465.597-.697.199-.232.265-.398.398-.664.133-.265.066-.497-.033-.696-.1-.199-.897-2.162-1.229-2.96-.324-.776-.653-.671-.897-.683l-.764-.013c-.265 0-.696.1-1.061.497-.365.398-1.394 1.362-1.394 3.322s1.427 3.854 1.626 4.12c.199.265 2.808 4.286 6.802 5.814.951.366 1.693.585 2.272.749.954.271 1.822.233 2.509.141.765-.113 2.354-.962 2.686-1.891.332-.929.332-1.726.232-1.891-.099-.166-.365-.265-.763-.464z"/>
+    </svg>
+</a>
+
 <script>
 // ═══════════════════════════════════════════════════════
 //  PHASE 4 — Design & Visual Polish (Tasks 4.1–4.6)
@@ -1401,34 +1391,17 @@ function toggleTheme() {
 
 // ── 4.1  Flip Card Mobile Tap Toggle ────────────────────
 (function() {
-    var touchStartX = 0, touchStartY = 0;
-    var didScroll = false;
-
-    // Record where finger went down
-    document.addEventListener('touchstart', function(e) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-        didScroll = false;
-    }, { passive: true });
-
-    // If finger moved significantly, it's a scroll — not a tap
-    document.addEventListener('touchmove', function() {
-        didScroll = true;
-    }, { passive: true });
-
-    // On finger-up: flip the card only if it wasn't a scroll
-    document.addEventListener('touchend', function(e) {
-        if (didScroll) return;
-        var card = e.target.closest('.flip-card-container');
+    // Only activate tap behavior on touch devices
+    if (!window.matchMedia('(hover: none)').matches) return;
+    document.addEventListener('click', (e) => {
+        const card = e.target.closest('.flip-card-container');
         if (!card) return;
-        // Close any other open card
-        document.querySelectorAll('.flip-card-container.tapped').forEach(function(c) {
+        // Untap any other open card
+        document.querySelectorAll('.flip-card-container.tapped').forEach(c => {
             if (c !== card) c.classList.remove('tapped');
         });
         card.classList.toggle('tapped');
-        // Prevent the ghost click that fires ~300ms later
-        e.preventDefault();
-    }, { passive: false });
+    });
 })();
 
 // ── 4.2  Belt Timeline IntersectionObserver ──────────────
@@ -1446,176 +1419,24 @@ function toggleTheme() {
     nodes.forEach(node => observer.observe(node));
 })();
 
-// ── 4.3  Hero Video Background — responsive desktop + mobile ─
-(async function () {
-    var vid     = document.getElementById('hero-video-bg');
-    var overlay = document.getElementById('hero-video-overlay');
-    if (!vid) return;
-    var heroData = {};
-
+// ── 4.3  Hero Video Background ───────────────────────────
+(async function() {
     try {
-        // Try new dual-video endpoint first
-        var res = await fetch((SERVER_URL || '') + '/api/hero-videos');
-        if (res.ok) {
-            heroData = await res.json(); // { desktop, mobile }
-        } else {
-            // Fallback: legacy single-video endpoint
-            var res2 = await fetch((SERVER_URL || '') + '/api/hero-video');
-            if (res2.ok) {
-                var d = await res2.json();
-                if (d && d.url) heroData = { desktop: d.url, mobile: d.url };
-            }
+        const res = await fetch(`${SERVER_URL}/api/hero-video`);
+        if (!res.ok) return;
+        const data = await res.json();
+        if (data && data.url) {
+            const vid = document.getElementById('hero-video-bg');
+            const overlay = document.getElementById('hero-video-overlay');
+            if (!vid) return;
+            vid.src = data.url;
+            vid.style.display = 'block';
+            if (overlay) overlay.style.display = 'block';
+            // Hide the particle canvas and glow since video takes over
         }
-    } catch (e) {}
-
-    function applyHeroVideo() {
-        var isMobile = window.matchMedia('(max-width: 767px)').matches;
-        var src = isMobile
-            ? (heroData.mobile  || heroData.desktop || '')
-            : (heroData.desktop || heroData.mobile  || '');
-        if (!src) { vid.style.display = 'none'; if (overlay) overlay.style.display = 'none'; return; }
-        if (vid.dataset.activeSrc !== src) {
-            vid.innerHTML = '<source src="' + src + '" type="' + (src.endsWith('.webm') ? 'video/webm' : 'video/mp4') + '">';
-            vid.dataset.activeSrc = src;
-            vid.load();
-            vid.play().catch(function(){});
-        }
-        vid.style.display = 'block';
-        if (overlay) overlay.style.display = 'block';
-    }
-
-    if (heroData.desktop || heroData.mobile) {
-        applyHeroVideo();
-        var rTimer;
-        window.addEventListener('resize', function () {
-            clearTimeout(rTimer);
-            rTimer = setTimeout(applyHeroVideo, 300);
-        });
-    }
+    } catch(e) { /* No hero video set — use slideshow as normal */ }
 })();
 </script>
 
-
-<!-- ═══════════════════════════════════════════════════════════
-     PHASE 5 — ANIMATION & INTERACTION UPGRADES (Tasks 5.1 · 5.4 · 5.5)
-     ═══════════════════════════════════════════════════════════ -->
-<script>
-(function () {
-    'use strict';
-
-    /* ── 5.4  Scroll Progress Indicator ─────────────────────── */
-    var bar = document.getElementById('scroll-progress');
-    var btt = document.getElementById('back-to-top');
-    if (bar) {
-        function updateProgress() {
-            var scrollTop = window.scrollY || document.documentElement.scrollTop;
-            var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            bar.style.width = (docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0) + '%';
-            if (btt) {
-                if (scrollTop > 400) { btt.style.display = 'flex'; } else { btt.style.display = 'none'; }
-            }
-        }
-        window.addEventListener('scroll', updateProgress, { passive: true });
-        updateProgress();
-    }
-
-    /* ── 5.1  Page Transition (View Transitions API) ────────── */
-    if (document.startViewTransition) {
-        var _origin = location.origin;
-        document.addEventListener('click', function (e) {
-            var el = e.target;
-            while (el && el.tagName !== 'A') el = el.parentElement;
-            if (!el) return;
-            var href = el.getAttribute('href');
-            if (!href || el.target === '_blank' || el.hasAttribute('download')) return;
-            if (href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('https://wa.me')) return;
-            var url;
-            try { url = new URL(href, location.href); } catch (_) { return; }
-            if (url.origin !== _origin) return;
-            e.preventDefault();
-            document.startViewTransition(function () { location.href = url.href; });
-        }, true);
-    }
-
-
-    /* ── 5.3  Magnetic Button Effect (desktop only) ─────────── */
-    if (!window.matchMedia('(pointer: coarse)').matches) {
-        document.querySelectorAll('.magnetic-btn').forEach(function (btn) {
-            btn.addEventListener('mousemove', function (e) {
-                var rect = btn.getBoundingClientRect();
-                var dx = (e.clientX - rect.left - rect.width  / 2) * 0.22;
-                var dy = (e.clientY - rect.top  - rect.height / 2) * 0.22;
-                btn.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
-            });
-            btn.addEventListener('mouseleave', function () { btn.style.transform = ''; });
-        });
-    }
-
-    /* ── 5.5  Ripple Effect on .btn-shimmer ─────────────────── */
-    document.addEventListener('click', function (e) {
-        var btn = e.target.closest('.btn-shimmer');
-        if (!btn) return;
-        var rect = btn.getBoundingClientRect();
-        var ripple = document.createElement('span');
-        ripple.className = 'btn-ripple-el';
-        ripple.style.left = (e.clientX - rect.left) + 'px';
-        ripple.style.top  = (e.clientY - rect.top) + 'px';
-        btn.appendChild(ripple);
-        ripple.addEventListener('animationend', function () { ripple.remove(); });
-    });
-})();
-</script>
-
-<!-- ═══════════════════════════════════════════════════════════
-     PHASE 5 — INDEX-ONLY: Tasks 5.2 (Stat Counters) · 5.3 (Magnetic Buttons)
-     ═══════════════════════════════════════════════════════════ -->
-<script>
-(function () {
-    'use strict';
-
-    /* ── 5.2  Animated Stat Counters ────────────────────────── */
-    var statEls = document.querySelectorAll('[data-counter]');
-    if (statEls.length) {
-        var counterObserver = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (!entry.isIntersecting) return;
-                counterObserver.unobserve(entry.target);
-                var el     = entry.target;
-                var target = parseInt(el.getAttribute('data-counter'), 10);
-                var suffix = el.getAttribute('data-suffix') || '';
-                var dur    = 1600; // ms
-                var start  = null;
-                function step(ts) {
-                    if (!start) start = ts;
-                    var progress = Math.min((ts - start) / dur, 1);
-                    // easeOutQuart
-                    var ease = 1 - Math.pow(1 - progress, 4);
-                    el.textContent = Math.floor(ease * target) + (progress >= 1 ? suffix : '');
-                    if (progress < 1) requestAnimationFrame(step);
-                }
-                requestAnimationFrame(step);
-            });
-        }, { threshold: 0.5 });
-        statEls.forEach(function (el) { counterObserver.observe(el); });
-    }
-
-    /* ── 5.3  Magnetic Button Effect (desktop only) ─────────── */
-    if (window.matchMedia('(pointer: coarse)').matches) return;
-    var magnets = document.querySelectorAll('.magnetic-btn');
-    magnets.forEach(function (btn) {
-        btn.addEventListener('mousemove', function (e) {
-            var rect   = btn.getBoundingClientRect();
-            var cx     = rect.left + rect.width  / 2;
-            var cy     = rect.top  + rect.height / 2;
-            var dx     = (e.clientX - cx) * 0.22;
-            var dy     = (e.clientY - cy) * 0.22;
-            btn.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
-        });
-        btn.addEventListener('mouseleave', function () {
-            btn.style.transform = '';
-        });
-    });
-})();
-</script>
 </body>
 </html>

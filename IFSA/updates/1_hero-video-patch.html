@@ -1,0 +1,92 @@
+<!--
+  ════════════════════════════════════════════════════════════
+  PATCH 1 — RESPONSIVE HERO VIDEO (mobile + desktop sources)
+  ════════════════════════════════════════════════════════════
+  In INDEX.html, find your existing <video> tag in the hero
+  section and REPLACE it with this block.
+
+  • Admin sets the video URLs via the admin panel (Patch 4).
+  • JS swaps the <source> based on screen width on load + resize.
+  • Falls back to a static background if no video is uploaded.
+  ════════════════════════════════════════════════════════════
+-->
+
+<!-- HERO SECTION — paste this where your current hero video is -->
+<section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+  <!-- ── Responsive Video Background ───────────────────── -->
+  <video
+    id="hero-video"
+    class="absolute inset-0 w-full h-full object-cover z-0"
+    autoplay muted loop playsinline
+    preload="metadata"
+    aria-hidden="true">
+    <!--
+      IMPORTANT: src is injected by JS below.
+      Admin uploads desktop + mobile videos via the admin panel.
+      The <source> tags are written dynamically.
+    -->
+  </video>
+
+  <!-- Dark overlay -->
+  <div class="absolute inset-0 z-10"
+       style="background:linear-gradient(135deg,rgba(15,23,42,0.82) 0%,rgba(15,23,42,0.55) 60%,rgba(15,23,42,0.75) 100%);">
+  </div>
+
+  <!-- Hero content sits above the overlay -->
+  <div class="relative z-20 container mx-auto px-6 text-center">
+    <!-- ↓ keep your existing hero text/buttons here unchanged ↓ -->
+  </div>
+
+</section>
+
+<!-- ── Script: swap video source based on viewport ──────── -->
+<script>
+(function () {
+  'use strict';
+
+  /* Video URLs are fetched from the server and stored in
+     window.IFSA_HERO so the admin panel can update them.     */
+  const SERVER_URL = 'http://localhost:3000';
+  const video = document.getElementById('hero-video');
+  if (!video) return;
+
+  async function loadHeroVideos() {
+    try {
+      const res  = await fetch(`${SERVER_URL}/api/hero-videos`);
+      const data = await res.json();           // { desktop: '...', mobile: '...' }
+      window.IFSA_HERO = data;
+      applyVideo();
+    } catch (_) {
+      /* If server is unreachable, video stays hidden — fine. */
+    }
+  }
+
+  function applyVideo() {
+    if (!window.IFSA_HERO) return;
+    const isMobile = window.matchMedia('(max-width: 767px)').matches;
+    const src = isMobile
+      ? (window.IFSA_HERO.mobile  || window.IFSA_HERO.desktop || '')
+      : (window.IFSA_HERO.desktop || '');
+
+    if (!src) { video.style.display = 'none'; return; }
+
+    /* Only reload the video if the source actually changed     */
+    if (video.dataset.activeSrc !== src) {
+      video.innerHTML = `<source src="${src}" type="${src.endsWith('.webm') ? 'video/webm' : 'video/mp4'}">`;
+      video.dataset.activeSrc = src;
+      video.load();
+      video.play().catch(() => {});
+    }
+  }
+
+  /* Swap on orientation / resize (debounced 300 ms)           */
+  let resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(applyVideo, 300);
+  });
+
+  loadHeroVideos();
+})();
+</script>

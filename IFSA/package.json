@@ -1,19 +1,25 @@
 {
-  "name": "websites",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "ifsa-server",
+  "version": "2.0.0",
+  "description": "IFSA Karate School Website Server — Phase 1 Security Hardened",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "change-password": "node change-password.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
-    "cors": "^2.8.5",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
     "exceljs": "^4.4.0",
-    "express": "^5.1.0",
-    "multer": "^2.0.2"
+    "express": "^4.22.2",
+    "express-rate-limit": "^7.5.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.1.1",
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

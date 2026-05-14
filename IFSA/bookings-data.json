@@ -1,0 +1,28 @@
+[
+  {
+    "id": "1778757797220",
+    "name": "d q",
+    "phone": "+91 8591661047",
+    "email": "",
+    "branch": "",
+    "course": "Trial Class",
+    "session": "Weekend Batch",
+    "age": "20",
+    "message": "",
+    "status": "Pending",
+    "createdAt": "14/5/2026"
+  },
+  {
+    "id": "1778750550470",
+    "name": "Siddhesh Gangurde",
+    "phone": "+918591660147",
+    "email": "siddheshgangurde69@gmail.com",
+    "branch": "Ghansoli City",
+    "course": "Advanced (₹1200)",
+    "session": "Morning (6:00 AM - 8:00 AM)",
+    "age": "",
+    "message": "",
+    "status": "Pending",
+    "createdAt": "14/5/2026"
+  }
+]

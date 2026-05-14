@@ -1,0 +1,10 @@
+# IFSA Website — robots.txt
+# Task 2.7: Allow all crawlers on public pages, block admin
+
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /uploads/
+
+# Sitemap location — submit this URL to Google Search Console
+Sitemap: https://ifsaacademy.in/sitemap.xml

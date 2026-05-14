@@ -1,0 +1,126 @@
+<!--
+  ════════════════════════════════════════════════════════════
+  PATCH 3 — "CONFIRM YOUR SPOT" FORM  (adds Age field)
+  ════════════════════════════════════════════════════════════
+  Find your existing enrollment / confirm-spot form in
+  INDEX.html and ADD the Age field shown below.
+  The field goes right after the "Name" input and before
+  "Phone" (or wherever feels natural in your current layout).
+  ════════════════════════════════════════════════════════════
+-->
+
+<!-- ── FULL REPLACEMENT FORM ──────────────────────────────
+     If you prefer, swap out your entire form block with this.
+     ──────────────────────────────────────────────────────── -->
+<form id="enroll-form" class="space-y-4" onsubmit="submitEnrollForm(event)">
+
+  <!-- Name -->
+  <div>
+    <label for="enroll-name" class="block text-sm font-semibold text-gray-300 mb-1">Full Name <span class="text-brand-accent">*</span></label>
+    <input
+      id="enroll-name"
+      name="name"
+      type="text"
+      required
+      placeholder="e.g. Rahul Sharma"
+      class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition">
+  </div>
+
+  <!-- ── NEW: Age field ────────────────────────────────── -->
+  <div>
+    <label for="enroll-age" class="block text-sm font-semibold text-gray-300 mb-1">Age <span class="text-brand-accent">*</span></label>
+    <input
+      id="enroll-age"
+      name="age"
+      type="number"
+      required
+      min="4"
+      max="80"
+      placeholder="e.g. 12"
+      class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition">
+    <p class="text-xs text-gray-500 mt-1">We accept students from 4 to 80 years old.</p>
+  </div>
+  <!-- ──────────────────────────────────────────────────── -->
+
+  <!-- Phone -->
+  <div>
+    <label for="enroll-phone" class="block text-sm font-semibold text-gray-300 mb-1">Phone Number <span class="text-brand-accent">*</span></label>
+    <input
+      id="enroll-phone"
+      name="phone"
+      type="tel"
+      required
+      placeholder="+91 98765 43210"
+      class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition">
+  </div>
+
+  <!-- Program -->
+  <div>
+    <label for="enroll-program" class="block text-sm font-semibold text-gray-300 mb-1">Interested Program <span class="text-brand-accent">*</span></label>
+    <select
+      id="enroll-program"
+      name="program"
+      required
+      class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent transition appearance-none">
+      <option value="" disabled selected>Select a program…</option>
+      <option value="kids-karate">Kids Karate</option>
+      <option value="adult-karate">Adult Karate</option>
+      <option value="karate-fitness">Karate Fitness</option>
+    </select>
+  </div>
+
+  <!-- Submit -->
+  <button
+    type="submit"
+    class="btn-shimmer w-full bg-brand-accent text-black font-black py-4 rounded-lg text-base hover:bg-amber-300 transition-all duration-200 shadow-lg hover:shadow-yellow-400/30 mt-2">
+    Confirm My Spot →
+  </button>
+
+</form>
+
+<script>
+async function submitEnrollForm(e) {
+  e.preventDefault();
+  const SERVER_URL = 'http://localhost:3000';
+  const btn = e.target.querySelector('button[type="submit"]');
+  const orig = btn.textContent;
+  btn.textContent = 'Submitting…';
+  btn.disabled = true;
+
+  const payload = {
+    name:    document.getElementById('enroll-name').value.trim(),
+    age:     document.getElementById('enroll-age').value,        // ← new
+    phone:   document.getElementById('enroll-phone').value.trim(),
+    program: document.getElementById('enroll-program').value,
+    date:    new Date().toISOString()
+  };
+
+  try {
+    const res = await fetch(`${SERVER_URL}/api/enroll`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      btn.textContent = '✓ Spot Confirmed!';
+      btn.classList.replace('bg-brand-accent', 'bg-green-500');
+      e.target.reset();
+      setTimeout(() => {
+        btn.textContent = orig;
+        btn.classList.replace('bg-green-500', 'bg-brand-accent');
+        btn.disabled = false;
+      }, 3500);
+    } else {
+      throw new Error('Server error');
+    }
+  } catch (_) {
+    btn.textContent = 'Failed — Try Again';
+    btn.classList.replace('bg-brand-accent', 'bg-red-500');
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.classList.replace('bg-red-500', 'bg-brand-accent');
+      btn.disabled = false;
+    }, 3000);
+  }
+}
+</script>
