@@ -1,0 +1,19 @@
+[
+  {
+    "id": "student_1778915148801",
+    "name": "Siddhesh Gangurde",
+    "email": "siddheshgangurde69@gmail.com",
+    "phone": "08591660147",
+    "passwordHash": "$2b$12$/JarFqJt/upVhS2rvPC9jurKWTvy3zv5f8jWs0CzMXDZKg13Wp82O",
+    "requiresPasswordChange": false,
+    "batchId": "advanced",
+    "locationId": "ghansoli",
+    "beltLevel": "Yellow Belt",
+    "enrolledDate": "2026-05-16",
+    "status": "active",
+    "attendance": [],
+    "payments": [],
+    "gradingHistory": [],
+    "createdAt": "2026-05-16T07:05:49.787Z"
+  }
+]

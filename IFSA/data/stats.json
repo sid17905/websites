@@ -1,0 +1,22 @@
+{
+  "years": {
+    "value": 1,
+    "suffix": "+",
+    "label": "Years"
+  },
+  "students": {
+    "value": 150,
+    "suffix": "+",
+    "label": "Students"
+  },
+  "blackBelts": {
+    "value": 10,
+    "suffix": "+",
+    "label": "Black Belts"
+  },
+  "locations": {
+    "value": 3,
+    "suffix": "",
+    "label": "Locations"
+  }
+}

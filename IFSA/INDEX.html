@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>if(localStorage.getItem("ifsa-theme")==="light")document.documentElement.classList.add("light");</script>
+    <script src="theme.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IFSA - Karate Classes in Mumbai | Indian Fit Sports Academy</title>
@@ -157,7 +157,15 @@
                     <svg class="w-4 h-4 mb-0.5 opacity-50 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     <span class="text-sm font-medium">Docs</span>
                 </a>
+                <a href="grading.html" class="nav-icon-link flex flex-col items-center text-brand-text hover:text-brand-accent transition group">
+                    <svg class="w-4 h-4 mb-0.5 opacity-50 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                    <span class="text-sm font-medium">Grading</span>
+                </a>
                 <a href="admin.html" class="text-brand-accent border border-brand-accent px-3 py-1.5 rounded hover:bg-brand-accent hover:text-black transition text-sm font-bold">Admin</a>
+                <a href="login.html" id="nav-student-login" class="text-brand-muted border border-gray-600 px-3 py-1.5 rounded hover:border-brand-accent hover:text-brand-accent transition text-sm font-semibold flex items-center gap-1.5">
+                    <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    Portal
+                </a>
                 <a href="pricing.html" class="btn-shimmer magnetic-btn bg-brand-accent text-black px-5 py-2 rounded-lg font-bold hover:bg-amber-400 transition shadow-[0_0_16px_rgba(251,191,36,0.3)] hover:shadow-[0_0_24px_rgba(251,191,36,0.55)]">Join Now</a>
                 <!-- 4.6 Theme Toggle -->
                 <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
@@ -187,7 +195,9 @@
             <a href="gallery.html" onclick="toggleMobileMenu()" class="block py-4 px-6 text-white hover:bg-gray-800 border-t border-gray-800">Gallery</a>
             <a href="calender.html" onclick="toggleMobileMenu()" class="block py-4 px-6 text-white hover:bg-gray-800 border-t border-gray-800">Schedule</a>
             <a href="documents.html" onclick="toggleMobileMenu()" class="block py-4 px-6 text-white hover:bg-gray-800 border-t border-gray-800">Documents</a>
+            <a href="grading.html" onclick="toggleMobileMenu()" class="block py-4 px-6 text-white hover:bg-gray-800 border-t border-gray-800">Grading</a>
             <div class="p-4 bg-gray-900 border-t border-gray-800 flex gap-3">
+                <a href="login.html" onclick="toggleMobileMenu()" class="flex-1 text-center py-3 border border-gray-600 text-gray-300 font-bold rounded hover:border-brand-accent hover:text-brand-accent transition">Portal</a>
                 <a href="admin.html" onclick="toggleMobileMenu()" class="flex-1 text-center py-3 border border-brand-accent text-brand-accent font-bold rounded">Admin</a>
                 <a href="pricing.html" onclick="toggleMobileMenu()" class="flex-1 text-center py-3 bg-brand-accent text-black font-bold rounded">Join Now</a>
             </div>
@@ -303,23 +313,23 @@
             <div class="relative z-10 w-full border-t border-white/10 bg-black/40 backdrop-blur-sm py-4">
                 <div class="container mx-auto px-6 flex flex-wrap justify-center items-center gap-0">
                     <div class="flex items-center px-6 py-2">
-                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2" data-counter="15" data-suffix="+">0+</span>
-                        <span class="text-gray-400 text-xs md:text-sm uppercase tracking-widest">Years</span>
+                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2" data-counter="15" data-suffix="+" data-stat-key="years">0+</span>
+                        <span class="text-gray-400 text-xs md:text-sm uppercase tracking-widest" data-stat-label="years">Years</span>
                     </div>
                     <div class="w-px h-8 bg-brand-accent/40 hidden sm:block"></div>
                     <div class="flex items-center px-6 py-2">
-                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2" data-counter="500" data-suffix="+">0+</span>
-                        <span class="text-gray-400 text-xs md:text-sm uppercase tracking-widest">Students</span>
+                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2" data-counter="500" data-suffix="+" data-stat-key="students">0+</span>
+                        <span class="text-gray-400 text-xs md:text-sm uppercase tracking-widest" data-stat-label="students">Students</span>
                     </div>
                     <div class="w-px h-8 bg-brand-accent/40 hidden sm:block"></div>
                     <div class="flex items-center px-6 py-2">
-                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2" data-counter="50" data-suffix="+">0+</span>
-                        <span class="text-gray-400 text-xs md:text-sm uppercase tracking-widest">Black Belts</span>
+                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2" data-counter="50" data-suffix="+" data-stat-key="blackBelts">0+</span>
+                        <span class="text-gray-400 text-xs md:text-sm uppercase tracking-widest" data-stat-label="blackBelts">Black Belts</span>
                     </div>
                     <div class="w-px h-8 bg-brand-accent/40 hidden sm:block"></div>
                     <div class="flex items-center px-6 py-2">
-                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2" data-counter="3" data-suffix="">0</span>
-                        <span class="text-gray-400 text-xs md:text-sm uppercase tracking-widest">Locations</span>
+                        <span class="text-brand-accent font-black text-xl md:text-2xl mr-2" data-counter="3" data-suffix="" data-stat-key="locations">0</span>
+                        <span class="text-gray-400 text-xs md:text-sm uppercase tracking-widest" data-stat-label="locations">Locations</span>
                     </div>
                 </div>
             </div>
@@ -530,7 +540,46 @@
             </div>
         </section>
 
-        <!-- ════════════════════════ BELT PROGRESSION (4.2) ══════ -->
+        <!-- ════════════════════════ ACHIEVEMENTS WALL (Phase C) ════ -->
+        <section id="achievements" class="py-20 md:py-28 bg-brand-light/30 border-t border-gray-800 relative overflow-hidden">
+            <div class="absolute inset-0 pointer-events-none select-none flex items-center justify-center overflow-hidden" aria-hidden="true">
+                <span class="font-black text-white leading-none" style="font-size:14rem;opacity:0.03;">🏆</span>
+            </div>
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-12">
+                    <p class="text-xs text-brand-accent uppercase tracking-[0.3em] mb-2 font-bold">| OUR PRIDE</p>
+                    <h2 class="text-3xl md:text-4xl font-black text-white">Achievements Wall</h2>
+                    <p class="text-brand-muted mt-3 max-w-xl mx-auto">Championships, certifications, and milestones earned on the mat.</p>
+                </div>
+
+                <!-- 3-Card Pinterest Carousel -->
+                <div id="ach-carousel-3"
+                     class="relative select-none"
+                     style="height:460px;"
+                     aria-label="Achievements carousel">
+
+                    <!-- Card track — three slots -->
+                    <div id="ach-track" class="absolute inset-0 flex items-center justify-center gap-0" style="perspective:1200px;">
+                        <!-- prev card -->
+                        <div id="ach-card-prev" class="ach-card-wrap ach-card-side" aria-hidden="true"></div>
+                        <!-- center card -->
+                        <div id="ach-card-center" class="ach-card-wrap ach-card-center" role="group" aria-roledescription="slide"></div>
+                        <!-- next card -->
+                        <div id="ach-card-next" class="ach-card-wrap ach-card-side" aria-hidden="true"></div>
+                    </div>
+
+                    <!-- Prev / Next arrows -->
+                    <button id="ach-prev" onclick="achPrev()" aria-label="Previous achievement"
+                        class="absolute left-0 md:left-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-brand-accent hover:text-black hover:border-brand-accent transition hidden text-xl font-bold">‹</button>
+                    <button id="ach-next" onclick="achNext()" aria-label="Next achievement"
+                        class="absolute right-0 md:right-2 top-1/2 -translate-y-1/2 z-30 w-10 h-10 bg-black/60 border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-brand-accent hover:text-black hover:border-brand-accent transition hidden text-xl font-bold">›</button>
+                </div>
+
+                <!-- Dot indicators -->
+                <div id="ach-dots" class="flex justify-center gap-2 mt-5"></div>
+            </div>
+        </section>
+
         <section id="belt-progression" class="py-20 bg-brand-light/30 border-t border-gray-800 relative overflow-hidden">
             <!-- 4.5 Karate silhouette decoration -->
             <div class="absolute right-0 bottom-0 pointer-events-none select-none" aria-hidden="true">
@@ -620,6 +669,11 @@
 
                 <!-- Total time note -->
                 <p class="text-center text-brand-muted text-sm mt-8 italic">Minimum 5–6 years of dedicated training to reach Black Belt.</p>
+                <div class="text-center mt-8">
+                    <a href="grading.html" class="btn-shimmer inline-flex items-center gap-2 bg-gradient-to-r from-brand-accent to-amber-600 text-black px-8 py-3 rounded-xl font-bold text-lg hover:scale-105 transition transform shadow-[0_0_20px_rgba(251,191,36,0.35)]">
+                        View Full Syllabus →
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -722,6 +776,41 @@
             </div>
         </section>
 
+        <!-- ════════════ GOOGLE REVIEWS (Phase C) ═══════════════ -->
+        <section id="google-reviews" class="py-20 md:py-28 bg-brand-light/20 border-t border-gray-800">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-10">
+                    <p class="text-xs text-brand-accent uppercase tracking-[0.3em] mb-2 font-bold">| GOOGLE REVIEWS</p>
+                    <h2 class="text-3xl md:text-4xl font-black text-white">What Mumbai Says</h2>
+                    <!-- Branch tabs (hidden until JS populates them) -->
+                    <div id="gr-branch-tabs" class="flex flex-wrap justify-center gap-2 mt-5 hidden"></div>
+                    <!-- Rating badge -->
+                    <div id="gr-badge" class="inline-flex items-center gap-2 mt-4 bg-gray-800 border border-gray-700 rounded-full px-6 py-3 shadow-lg hidden">
+                        <span class="text-2xl leading-none">⭐</span>
+                        <span id="gr-rating" class="text-2xl font-black text-brand-accent">4.9</span>
+                        <span class="text-gray-400 text-sm font-medium">·</span>
+                        <span id="gr-count" class="text-gray-300 text-sm font-medium">120+ Reviews on Google</span>
+                    </div>
+                </div>
+                <!-- Review cards -->
+                <div id="gr-cards" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <p class="text-gray-500 text-center col-span-full animate-pulse">Loading reviews…</p>
+                </div>
+                <!-- Buttons -->
+                <div id="gr-btns" class="flex flex-wrap justify-center gap-4 hidden">
+                    <a id="gr-read-btn" href="#" target="_blank" rel="noopener"
+                        class="flex items-center gap-2 bg-gray-800 border border-gray-700 text-white px-6 py-3 rounded-xl font-semibold hover:bg-gray-700 transition">
+                        <svg class="w-5 h-5 text-brand-accent" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                        Read all reviews on Google
+                    </a>
+                    <a id="gr-leave-btn" href="#" target="_blank" rel="noopener"
+                        class="btn-shimmer flex items-center gap-2 bg-gradient-to-r from-brand-accent to-amber-600 text-black px-6 py-3 rounded-xl font-bold hover:scale-105 transition transform shadow-[0_0_16px_rgba(251,191,36,0.3)]">
+                        ✍️ Leave a Review
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <!-- ════════════ QUICK BOOKING FORM (Task 3.2) ══════════ -->
         <section id="book-trial" class="py-20 md:py-28 bg-brand-light/20">
             <div class="container mx-auto px-6 max-w-2xl">
@@ -744,6 +833,12 @@
                             <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Age</label>
                             <input type="number" id="ib-age" placeholder="e.g. 12" min="4" max="80" class="w-full bg-gray-900 text-white p-3 rounded-lg border border-gray-700 focus:border-brand-accent outline-none transition">
                             <p class="text-xs text-gray-600 mt-1">We welcome students aged 4 to 80.</p>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Branch / Location</label>
+                            <select id="ib-branch" class="w-full bg-gray-900 text-white p-3 rounded-lg border border-gray-700 focus:border-brand-accent outline-none transition">
+                                <option value="">Any Branch</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Preferred Time</label>
@@ -840,6 +935,10 @@
             </div>
             <div class="text-center text-gray-500 mt-12 border-t border-gray-700/50 pt-8">
                 &copy; <span id="current-year"></span> IFSA. All Rights Reserved.
+                <span class="mx-2 text-gray-700">·</span>
+                <a href="sitemap.html" class="hover:text-brand-accent transition">Sitemap</a>
+                <span class="mx-2 text-gray-700">·</span>
+                <a href="privacy.html" class="hover:text-brand-accent transition">Privacy Policy</a>
             </div>
         </div>
     </footer>
@@ -880,6 +979,24 @@ window.addEventListener('load', () => {
             if (r.ok) navigator.serviceWorker.register('/sw.js').catch(() => {});
         }).catch(() => {});
     }
+
+    // ── Phase 3: Smart Portal nav link ──────────────────────
+    // If student is already logged in, show "My Portal" linking to portal.html
+    (async () => {
+        try {
+            const res = await fetch('/api/student/me', { credentials: 'include' });
+            if (res.ok) {
+                const s = await res.json();
+                const link = document.getElementById('nav-student-login');
+                if (link) {
+                    link.href      = '/portal.html';
+                    link.innerHTML = `<svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg> My Portal`;
+                    link.style.borderColor = 'var(--accent-color)';
+                    link.style.color       = 'var(--accent-color)';
+                }
+            }
+        } catch (_) {}
+    })();
 
     // Typewriter after preloader
     setTimeout(() => {
@@ -1120,6 +1237,77 @@ async function loadHomeUpdates() {
 loadHomeUpdates();
 loadAllData();
 
+// ── Populate branch selector in booking form ─────────────────
+// Also loads timetable data so sessions can be filtered by branch
+let _bookingTimetableData = [];
+let _bookingLocations     = [];
+
+(async function populateBranchSelect() {
+    try {
+        const [locRes, ttRes] = await Promise.all([
+            fetch(`${SERVER_URL}/api/locations`),
+            fetch(`${SERVER_URL}/api/timetable`)
+        ]);
+        _bookingLocations    = locRes.ok ? await locRes.json() : [];
+        _bookingTimetableData = ttRes.ok  ? await ttRes.json()  : [];
+
+        const sel = document.getElementById('ib-branch');
+        if (!sel || !_bookingLocations.length) return;
+        _bookingLocations.forEach(loc => {
+            const opt = document.createElement('option');
+            opt.value = loc.id || loc.name;
+            opt.textContent = loc.name + (loc.label ? ' — ' + loc.label : '');
+            opt.dataset.name = loc.name;
+            sel.appendChild(opt);
+        });
+
+        // When branch changes, filter session dropdown to that branch's slots
+        sel.addEventListener('change', () => updateSessionOptions(sel.value));
+    } catch(_) {}
+})();
+
+function updateSessionOptions(selectedLocId) {
+    const sessionSel = document.getElementById('ib-session');
+    if (!sessionSel) return;
+
+    if (!selectedLocId) {
+        // No branch selected — show generic options
+        sessionSel.innerHTML = `
+            <option value="">Any Time</option>
+            <option>Morning (6:00–8:00 AM)</option>
+            <option>Evening (5:00–7:00 PM)</option>
+            <option>Weekend Batch</option>`;
+        return;
+    }
+
+    // Find the location name for the selected id
+    const locObj = _bookingLocations.find(l => (l.id || l.name) === selectedLocId);
+    const locName = locObj ? locObj.name : selectedLocId;
+
+    // Filter timetable entries that belong to this branch
+    const branchEntries = _bookingTimetableData.filter(e =>
+        e.locationId === selectedLocId || e.locationName === locName
+    );
+
+    // Build unique slot options from actual timetable entries
+    const uniqueSlots = [...new Set(branchEntries.map(e => {
+        // Prefer the time display string, fall back to slot name
+        return (e.time || e.slot || '').trim();
+    }).filter(Boolean))];
+
+    if (!uniqueSlots.length) {
+        // Branch has no entries yet — show defaults
+        sessionSel.innerHTML = `
+            <option value="">Any Time</option>
+            <option>Morning (6:00–8:00 AM)</option>
+            <option>Evening (5:00–7:00 PM)</option>`;
+        return;
+    }
+
+    sessionSel.innerHTML = '<option value="">Select a time slot</option>' +
+        uniqueSlots.map(s => `<option value="${s}">${s}</option>`).join('');
+}
+
 // ── 5. CUSTOM CURSOR ────────────────────────────────────
 (function() {
     const cursor = document.getElementById('cursor');
@@ -1228,26 +1416,94 @@ loadAllData();
     const body = document.getElementById('timetable-body');
     if (!body) return;
     const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const slots = ['Morning (6–8 AM)','Evening (5–7 PM)'];
     try {
-        const res = await fetch(`${SERVER_URL}/api/timetable`);
-        const data = await res.json();
-        body.innerHTML = slots.map(slot => {
-            const cells = days.map(day => {
-                const entry = data.find(e => e.day === day && e.slot === slot);
-                return entry
-                    ? `<td class="px-4 py-3 timetable-cell border border-gray-700/30">
-                           <div class="font-bold text-white text-xs">${entry.batch}</div>
-                           <div class="text-[10px] text-brand-accent">${entry.time}</div>
-                           ${entry.instructor ? `<div class="text-[10px] text-gray-500">${entry.instructor}</div>` : ''}
-                       </td>`
-                    : `<td class="px-4 py-3 timetable-cell border border-gray-700/30 text-gray-700 text-xs text-center">—</td>`;
+        // Fetch slots, timetable data, and locations in parallel
+        const [slotsRes, dataRes, locsRes] = await Promise.all([
+            fetch(`${SERVER_URL}/api/timetable-slots`),
+            fetch(`${SERVER_URL}/api/timetable`),
+            fetch(`${SERVER_URL}/api/locations`)
+        ]);
+        const slots     = slotsRes.ok ? await slotsRes.json() : [];
+        const data      = dataRes.ok  ? await dataRes.json()  : [];
+        const locations = locsRes.ok  ? await locsRes.json()  : [];
+
+        // Fallback to default slots if none configured
+        const activeSlots = slots.length ? slots : ['Morning (6–8 AM)', 'Evening (5–7 PM)'];
+
+        if (!data.length && !slots.length) {
+            body.innerHTML = '<tr><td colspan="7" class="text-center text-gray-500 py-6">Timetable not set yet — WhatsApp us for schedule.</td></tr>';
+            return;
+        }
+
+        // Build ordered list of location groups:
+        // 1. Named locations that have at least one timetable entry, in locations[] order
+        // 2. A catch-all group for entries with no locationId (backward-compat)
+        const namedGroups = locations
+            .filter(loc => data.some(e => e.locationId === (loc.id || loc.name) || e.locationName === loc.name))
+            .map(loc => ({
+                id:    loc.id   || loc.name,
+                name:  loc.name || loc.id,
+                label: loc.label || ''
+            }));
+
+        const unassignedEntries = data.filter(e => !e.locationId && !e.locationName);
+        const hasUnassigned     = unassignedEntries.length > 0;
+        const hasMultipleGroups = namedGroups.length > 1 || (namedGroups.length > 0 && hasUnassigned);
+
+        // Helper: render slot rows for a subset of entries
+        function renderSlotRows(entries, bgClass) {
+            return activeSlots.map(slot => {
+                const cells = days.map(day => {
+                    const entry = entries.find(e => e.day === day && e.slot === slot);
+                    return entry
+                        ? `<td class="px-4 py-3 timetable-cell border border-gray-700/30">
+                               <div class="font-bold text-white text-xs">${entry.batch}</div>
+                               <div class="text-[10px] text-brand-accent">${entry.time}</div>
+                               ${entry.instructor ? `<div class="text-[10px] text-gray-500">${entry.instructor}</div>` : ''}
+                           </td>`
+                        : `<td class="px-4 py-3 timetable-cell border border-gray-700/30 text-gray-700 text-xs text-center">—</td>`;
+                }).join('');
+                return `<tr class="hover:bg-gray-800/30 transition ${bgClass}">
+                    <td class="px-4 py-3 font-bold text-brand-accent text-xs whitespace-nowrap border border-gray-700/30 bg-gray-800/50">${slot}</td>
+                    ${cells}
+                </tr>`;
             }).join('');
-            return `<tr class="hover:bg-gray-800/30 transition">
-                <td class="px-4 py-3 font-bold text-brand-accent text-xs whitespace-nowrap border border-gray-700/30 bg-gray-800/50">${slot}</td>
-                ${cells}
-            </tr>`;
-        }).join('');
+        }
+
+        let html = '';
+
+        if (!hasMultipleGroups && namedGroups.length === 0) {
+            // Legacy single-pool: no location-aware entries at all
+            html = renderSlotRows(data, '');
+        } else {
+            // Render one group per named location
+            namedGroups.forEach((loc, idx) => {
+                const groupEntries = data.filter(e =>
+                    e.locationId === loc.id || e.locationName === loc.name
+                );
+                // Location header row spanning all 7 columns
+                const bgAccent = idx % 2 === 0 ? 'bg-indigo-950/60' : 'bg-amber-950/40';
+                html += `<tr class="${bgAccent} border-t-2 border-indigo-700/50">
+                    <td colspan="7" class="px-4 py-2">
+                        <span class="text-xs font-black uppercase tracking-widest text-indigo-300">📍 ${loc.name}</span>
+                        ${loc.label ? `<span class="ml-2 text-[10px] text-gray-500">${loc.label}</span>` : ''}
+                    </td>
+                </tr>`;
+                html += renderSlotRows(groupEntries, idx % 2 === 0 ? '' : 'bg-amber-950/10');
+            });
+
+            // Catch-all group for legacy/unassigned entries
+            if (hasUnassigned) {
+                html += `<tr class="bg-gray-800/60 border-t-2 border-gray-600/50">
+                    <td colspan="7" class="px-4 py-2">
+                        <span class="text-xs font-black uppercase tracking-widest text-gray-400">📍 General / All Branches</span>
+                    </td>
+                </tr>`;
+                html += renderSlotRows(unassignedEntries, '');
+            }
+        }
+
+        body.innerHTML = html;
     } catch {
         body.innerHTML = '<tr><td colspan="7" class="text-center text-gray-500 py-6">Timetable unavailable — WhatsApp us for schedule.</td></tr>';
     }
@@ -1285,16 +1541,17 @@ async function loadTestimonials() {
 function renderTestimonials() {
     const track = document.getElementById('testimonials-track');
     const dots  = document.getElementById('testimonial-dots');
-    track.innerHTML = tData.map((t, i) => `
-        <div class="testimonial-card flex-shrink-0 w-full bg-gray-800 border border-gray-700 rounded-2xl p-8 text-center ${i !== tIdx ? 'inactive' : ''}">
+    if (!track || !tData.length) return;
+    const t = tData[tIdx];
+    track.innerHTML = `
+        <div class="testimonial-card w-full bg-gray-800 border border-gray-700 rounded-2xl p-8 text-center mx-auto max-w-2xl">
             <div class="w-16 h-16 rounded-full mx-auto mb-4 overflow-hidden border-2 border-brand-accent bg-gray-700">
                 ${t.photo ? `<img src="${SERVER_URL}${t.photo}" class="w-full h-full object-cover" loading="lazy" alt="${t.name}">` : '<div class="w-full h-full flex items-center justify-center text-2xl text-brand-accent font-black">' + t.name[0] + '</div>'}
             </div>
             <p class="text-brand-muted italic mb-5 leading-relaxed">"${t.quote}"</p>
             <div class="font-bold text-white">${t.name}</div>
             <div class="text-xs text-brand-accent mt-1">${t.belt}</div>
-        </div>
-    `).join('');
+        </div>`;
     if (dots) dots.innerHTML = tData.map((_, i) => `<button onclick="goTestimonial(${i})" class="w-2 h-2 rounded-full transition ${i===tIdx?'bg-brand-accent':'bg-gray-600'}"></button>`).join('');
 }
 function testimonialSlide(dir) {
@@ -1303,6 +1560,209 @@ function testimonialSlide(dir) {
 }
 function goTestimonial(i) { tIdx = i; renderTestimonials(); }
 loadTestimonials();
+
+// ── PLAN 2 FIX 3: ACHIEVEMENTS CAROUSEL — 3-CARD PINTEREST STYLE ──
+(function() {
+    'use strict';
+
+    const catColors = {
+        tournament:    'text-yellow-400 bg-yellow-400/10 border-yellow-400/30',
+        certification: 'text-blue-400   bg-blue-400/10   border-blue-400/30',
+        milestone:     'text-green-400  bg-green-400/10  border-green-400/30'
+    };
+
+    let achData = [], achIdx = 0, achTimer = null;
+
+    function buildCard(a) {
+        if (!a) return '';
+        const cc    = catColors[a.category] || catColors.tournament;
+        const hasBg = !!a.image;
+        return `<div class="ach-card-inner ach-img-bg rounded-2xl overflow-hidden shadow-2xl"
+                     style="${hasBg ? `background-image:url('${a.image}');` : 'background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);'}">
+            ${hasBg ? '<div class="ach-card-overlay"></div>' : ''}
+            ${!hasBg ? `<div class="ach-card-emoji" aria-hidden="true">${a.icon||'🏅'}</div>` : ''}
+            <div class="ach-badge-year">${a.year}</div>
+            <div class="ach-badge-cat"><span class="text-xs font-bold px-3 py-1 rounded-full border backdrop-blur-sm ${cc}">${a.category||'tournament'}</span></div>
+            <div class="ach-card-text">
+                ${!hasBg ? `<div class="text-3xl mb-2">${a.icon||'🏅'}</div>` : ''}
+                <h3 class="font-black text-white text-xl leading-tight mb-1">${a.title}</h3>
+                ${a.subtitle ? `<p class="text-gray-300 text-sm">${a.subtitle}</p>` : ''}
+            </div>
+        </div>`;
+    }
+
+    function renderAchCarousel() {
+        const n = achData.length;
+        if (!n) return;
+        const prevEl   = document.getElementById('ach-card-prev');
+        const centerEl = document.getElementById('ach-card-center');
+        const nextEl   = document.getElementById('ach-card-next');
+        if (!centerEl) return;
+        const prevIdx = (achIdx - 1 + n) % n;
+        const nextIdx = (achIdx + 1) % n;
+        if (prevEl)   prevEl.innerHTML   = buildCard(achData[prevIdx]);
+        if (centerEl) centerEl.innerHTML = buildCard(achData[achIdx]);
+        if (nextEl)   nextEl.innerHTML   = buildCard(achData[nextIdx]);
+        if (prevEl)   prevEl.onclick = () => { stopAchTimer(); achIdx = prevIdx; renderAchCarousel(); startAchTimer(); };
+        if (nextEl)   nextEl.onclick = () => { stopAchTimer(); achIdx = nextIdx; renderAchCarousel(); startAchTimer(); };
+        const dotsEl = document.getElementById('ach-dots');
+        if (dotsEl) {
+            dotsEl.innerHTML = achData.map((_, i) =>
+                `<button onclick="achGoTo(${i})" aria-label="Achievement ${i+1}"
+                    class="w-2.5 h-2.5 rounded-full transition-all duration-300 ${i===achIdx?'bg-brand-accent scale-125':'bg-gray-600 hover:bg-gray-400'}"></button>`
+            ).join('');
+        }
+        if (prevEl) prevEl.style.display = n < 2 ? 'none' : '';
+        if (nextEl) nextEl.style.display = n < 2 ? 'none' : '';
+    }
+
+    window.achNext  = function() { stopAchTimer(); achIdx = (achIdx + 1) % achData.length; renderAchCarousel(); startAchTimer(); };
+    window.achPrev  = function() { stopAchTimer(); achIdx = (achIdx - 1 + achData.length) % achData.length; renderAchCarousel(); startAchTimer(); };
+    window.achGoTo  = function(i) { stopAchTimer(); achIdx = i; renderAchCarousel(); startAchTimer(); };
+    window.achSlide = function(dir) { dir > 0 ? achNext() : achPrev(); };
+
+    function startAchTimer() {
+        if (achData.length < 2) return;
+        achTimer = setInterval(() => { achIdx = (achIdx + 1) % achData.length; renderAchCarousel(); }, 5000);
+    }
+    function stopAchTimer() { if (achTimer) { clearInterval(achTimer); achTimer = null; } }
+
+    async function loadAchievements() {
+        const centerEl = document.getElementById('ach-card-center');
+        if (!centerEl) return;
+        try {
+            const res = await fetch(`${SERVER_URL}/api/achievements`);
+            achData   = await res.json();
+        } catch (e) {
+            centerEl.innerHTML = '<div class="flex items-center justify-center h-full text-gray-500 p-8">Achievements unavailable.</div>';
+            return;
+        }
+        if (!achData.length) {
+            centerEl.innerHTML = '<div class="flex items-center justify-center h-full"><p class="text-gray-500 text-center py-8">No achievements listed yet.</p></div>';
+            return;
+        }
+        renderAchCarousel();
+        if (achData.length >= 2) {
+            document.getElementById('ach-prev').classList.remove('hidden');
+            document.getElementById('ach-next').classList.remove('hidden');
+            const track = document.getElementById('ach-carousel-3');
+            if (track) {
+                let touchStartX = 0;
+                track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+                track.addEventListener('touchend',   e => {
+                    const delta = e.changedTouches[0].clientX - touchStartX;
+                    if (delta < -50) achNext();
+                    else if (delta > 50) achPrev();
+                }, { passive: true });
+                track.addEventListener('mouseenter', stopAchTimer);
+                track.addEventListener('mouseleave', startAchTimer);
+            }
+            startAchTimer();
+        }
+    }
+
+    loadAchievements();
+})();
+
+
+// ── PHASE C: GOOGLE REVIEWS ───────────────────────────────────
+async function loadGoogleReviews() {
+    try {
+        const res  = await fetch(`${SERVER_URL}/api/google-reviews`);
+        const resp = await res.json();
+
+        // Server may return multi-branch { branches: { main: {...}, ... } }
+        // or legacy flat { rating, totalRatings, reviews, placeId }
+        let branchEntries = []; // [ { id, data } ]
+        if (resp && resp.branches) {
+            branchEntries = Object.entries(resp.branches).map(([id, data]) => ({ id, data }));
+        } else if (resp && (resp.rating || resp.reviews?.length)) {
+            branchEntries = [{ id: 'main', data: resp }];
+        }
+        if (!branchEntries.length) return;
+
+        const badge    = document.getElementById('gr-badge');
+        const ratingEl = document.getElementById('gr-rating');
+        const countEl  = document.getElementById('gr-count');
+        const cards    = document.getElementById('gr-cards');
+        const btns     = document.getElementById('gr-btns');
+        const tabsEl   = document.getElementById('gr-branch-tabs');
+
+        function renderBranch(entry) {
+            const b = entry.data;
+            // Rating badge
+            if (b.rating) {
+                ratingEl.textContent = b.rating;
+                countEl.textContent  = `${b.totalRatings}+ Reviews on Google`;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+            // Review cards
+            const reviews = (Array.isArray(b.reviews) ? b.reviews : [])
+                .filter(r => r.text && r.text.trim())
+                .slice(0, 3);
+            if (reviews.length) {
+                cards.innerHTML = reviews.map(r => {
+                    let displayDate = r.time || '';
+                    if (displayDate && /^\d{4}-\d{2}-\d{2}$/.test(displayDate)) {
+                        try { displayDate = new Date(displayDate).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' }); } catch(_) {}
+                    }
+                    return `
+                    <div class="bg-gray-800/60 border border-gray-700 rounded-2xl p-6 hover:border-brand-accent/40 transition">
+                        <div class="flex items-center gap-1 mb-3">${'⭐'.repeat(Math.min(5, r.rating || 5))}</div>
+                        <p class="text-gray-300 text-sm leading-relaxed mb-4">"${r.text}"</p>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-brand-accent/20 border border-brand-accent/40 flex items-center justify-center text-brand-accent font-bold text-sm">${(r.author || 'A')[0]}</div>
+                            <div><p class="text-white text-xs font-semibold">${r.author || 'Anonymous'}</p><p class="text-gray-500 text-xs">${displayDate}</p></div>
+                        </div>
+                    </div>`;
+                }).join('');
+            } else {
+                cards.innerHTML = '<p class="text-gray-500 text-center col-span-full">No reviews yet for this branch.</p>';
+            }
+            // Buttons with branch-specific placeId
+            const readBtn  = document.getElementById('gr-read-btn');
+            const leaveBtn = document.getElementById('gr-leave-btn');
+            if (b.placeId) {
+                if (readBtn)  readBtn.href  = `https://www.google.com/maps/place/?q=place_id:${b.placeId}`;
+                if (leaveBtn) leaveBtn.href = `https://search.google.com/local/writereview?placeid=${b.placeId}`;
+                btns.classList.remove('hidden');
+            } else {
+                btns.classList.add('hidden');
+            }
+        }
+
+        // Build branch tabs only if more than one branch
+        if (branchEntries.length > 1 && tabsEl) {
+            tabsEl.innerHTML = branchEntries.map((entry, i) => {
+                const label = entry.data.label || entry.id;
+                const active = i === 0 ? 'bg-brand-accent text-black font-bold' : 'bg-gray-800 text-gray-300 border border-gray-700 hover:border-brand-accent/50';
+                return `<button data-gr-tab="${entry.id}" class="gr-tab-btn px-5 py-2 rounded-full text-sm transition ${active}">${label}</button>`;
+            }).join('');
+            tabsEl.classList.remove('hidden');
+
+            tabsEl.addEventListener('click', e => {
+                const btn = e.target.closest('[data-gr-tab]');
+                if (!btn) return;
+                const targetId = btn.dataset.grTab;
+                // Update active styles
+                tabsEl.querySelectorAll('.gr-tab-btn').forEach(b => {
+                    b.className = b.dataset.grTab === targetId
+                        ? 'gr-tab-btn px-5 py-2 rounded-full text-sm transition bg-brand-accent text-black font-bold'
+                        : 'gr-tab-btn px-5 py-2 rounded-full text-sm transition bg-gray-800 text-gray-300 border border-gray-700 hover:border-brand-accent/50';
+                });
+                const entry = branchEntries.find(e => e.id === targetId);
+                if (entry) renderBranch(entry);
+            });
+        }
+
+        // Render first branch by default
+        renderBranch(branchEntries[0]);
+
+    } catch (e) { /* silent — section stays hidden */ }
+}
+loadGoogleReviews();
 
 // ── 11. INDEX BOOKING FORM (Task 3.2) ───────────────────
 async function submitIndexBooking() {
@@ -1323,7 +1783,7 @@ async function submitIndexBooking() {
         const res = await fetch(`${SERVER_URL}/api/bookings/add`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, phone, age: document.getElementById('ib-age').value, session: document.getElementById('ib-session').value, course: 'Trial Class' })
+            body: JSON.stringify({ name, phone, age: document.getElementById('ib-age').value, session: document.getElementById('ib-session').value, branch: document.getElementById('ib-branch').value, course: 'Trial Class' })
         });
         if (res.ok) {
             status.textContent = '✅ Booking received! We will call you within 24 hours.';
@@ -1359,6 +1819,152 @@ async function submitIndexBooking() {
     animation-play-state: paused;
 }
 .nav-icon-link { padding: 4px 2px; }
+
+/* ── Achievements Carousel: 3-card Pinterest style ─────── */
+@keyframes achPopUp {
+    from { transform: translateY(18px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+.ach-title { animation: achPopUp 0.5s 0.2s ease both; }
+.ach-sub   { animation: achPopUp 0.5s 0.35s ease both; }
+
+/* Wrapper slots */
+.ach-card-wrap {
+    flex-shrink: 0;
+    width: 260px;
+    height: 400px;
+    transition: transform 0.45s ease, filter 0.45s ease, opacity 0.45s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Center (active) card */
+.ach-card-center {
+    transform: scale(1.05);
+    filter: brightness(1);
+    opacity: 1;
+    z-index: 2;
+    cursor: default;
+}
+
+/* Side cards */
+.ach-card-side {
+    transform: scale(0.88);
+    filter: brightness(0.45);
+    opacity: 0.8;
+    z-index: 1;
+}
+.ach-card-side:hover {
+    filter: brightness(0.65);
+    opacity: 0.92;
+}
+
+/* Negative margin so cards overlap slightly */
+#ach-track {
+    gap: 0 !important;
+}
+.ach-card-wrap + .ach-card-wrap {
+    margin-left: -28px;
+}
+
+/* Inner card fills the wrapper */
+.ach-card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+/* Background image fill */
+.ach-img-bg {
+    background-size: cover;
+    background-position: center;
+}
+
+/* Dark gradient overlay over image */
+.ach-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.08) 0%,
+        rgba(0,0,0,0.18) 40%,
+        rgba(0,0,0,0.82) 80%,
+        rgba(0,0,0,0.93) 100%
+    );
+    border-radius: inherit;
+    z-index: 1;
+}
+
+/* Big emoji background for cards without image */
+.ach-card-emoji {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+    opacity: 0.12;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Year badge — top right */
+.ach-badge-year {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 3;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: rgba(251,191,36,0.9);
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(251,191,36,0.25);
+    padding: 3px 10px;
+    border-radius: 999px;
+}
+
+/* Category badge — top left */
+.ach-badge-cat {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 3;
+}
+
+/* Text block at bottom */
+.ach-card-text {
+    position: relative;
+    z-index: 2;
+    padding: 20px 18px 22px;
+}
+.ach-card-text h3 {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.25;
+    margin-bottom: 4px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+}
+.ach-card-text p {
+    font-size: 0.8rem;
+    color: rgba(200,200,200,0.85);
+    line-height: 1.4;
+}
+
+/* Mobile: shrink card sizes */
+@media (max-width: 640px) {
+    .ach-card-wrap { width: 200px; height: 320px; }
+    .ach-card-wrap + .ach-card-wrap { margin-left: -20px; }
+    #ach-carousel-3 { height: 360px !important; }
+}
 </style>
 
 <script>
@@ -1367,16 +1973,7 @@ async function submitIndexBooking() {
 // ═══════════════════════════════════════════════════════
 
 // ── 4.6  Dark / Light Mode Toggle ───────────────────────
-function toggleTheme() {
-    const isLight = document.documentElement.classList.toggle('light');
-    localStorage.setItem('ifsa-theme', isLight ? 'light' : 'dark');
-}
-// Restore preference on load
-(function() {
-    if (localStorage.getItem('ifsa-theme') === 'light') {
-        document.documentElement.classList.add('light');
-    }
-})();
+// toggleTheme() is provided globally by /theme.js (loaded in <head>)
 
 // ── 4.4  Parallax on Hero Section ───────────────────────
 (function() {
@@ -1497,6 +2094,35 @@ function toggleTheme() {
 
 
 <!-- ═══════════════════════════════════════════════════════════
+     FIX 5 — DYNAMIC HERO STATS (fetched from /api/stats)
+     Runs before the counter animation so data-counter values
+     are up to date when IntersectionObserver fires.
+     ═══════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+    'use strict';
+    fetch((typeof SERVER_URL !== 'undefined' ? SERVER_URL : '') + '/api/stats')
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (stats) {
+            if (!stats) return;
+            document.querySelectorAll('[data-stat-key]').forEach(function (el) {
+                var key = el.getAttribute('data-stat-key');
+                if (!stats[key]) return;
+                var val = stats[key];
+                el.setAttribute('data-counter', val.value);
+                el.setAttribute('data-suffix',  val.suffix !== undefined ? val.suffix : el.getAttribute('data-suffix'));
+                el.textContent = '0' + (val.suffix || '');
+            });
+            document.querySelectorAll('[data-stat-label]').forEach(function (el) {
+                var key = el.getAttribute('data-stat-label');
+                if (stats[key] && stats[key].label) el.textContent = stats[key].label;
+            });
+        })
+        .catch(function () { /* silent — hardcoded defaults remain */ });
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════
      PHASE 5 — ANIMATION & INTERACTION UPGRADES (Tasks 5.1 · 5.4 · 5.5)
      ═══════════════════════════════════════════════════════════ -->
 <script>
@@ -1615,6 +2241,126 @@ function toggleTheme() {
             btn.style.transform = '';
         });
     });
+})();
+</script>
+<script src="search-index.js"></script>
+<script src="search-ui.js"></script>
+<script src="cookie-consent.js"></script>
+
+<!-- ── Phase 4: Push Notification Subscribe Prompt ─────────── -->
+<div id="push-prompt" style="display:none;position:fixed;bottom:1.5rem;right:1.5rem;z-index:9000;
+    max-width:320px;background:var(--bg-secondary,#1e293b);border:1px solid rgba(245,158,11,.35);
+    border-radius:1rem;padding:1.25rem 1.25rem 1rem;box-shadow:0 12px 40px #0008;
+    animation:slideUpFade .4s ease both;" aria-live="polite">
+    <style>@keyframes slideUpFade{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}</style>
+    <div style="display:flex;align-items:flex-start;gap:.75rem;">
+        <div style="font-size:1.6rem;line-height:1;flex-shrink:0;margin-top:.1rem;">🔔</div>
+        <div style="flex:1;min-width:0;">
+            <p style="font-weight:700;font-size:.9rem;color:#f1f5f9;margin:0 0 .3rem;">Stay in the loop</p>
+            <p style="font-size:.78rem;color:#94a3b8;margin:0 0 .9rem;line-height:1.45;">
+                Get notified about grading dates, fee reminders, and class changes.
+            </p>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                <button id="push-allow-btn" onclick="subscribeToPush()"
+                    style="background:#f59e0b;color:#000;border:none;border-radius:.5rem;padding:.45rem .9rem;font-size:.78rem;font-weight:700;cursor:pointer;">
+                    Enable Notifications
+                </button>
+                <button onclick="dismissPushPrompt()"
+                    style="background:transparent;color:#64748b;border:1px solid #334155;border-radius:.5rem;padding:.45rem .7rem;font-size:.78rem;cursor:pointer;">
+                    Not now
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    'use strict';
+    const PROMPT_KEY     = 'ifsa_push_visit_count';
+    const SUBSCRIBED_KEY = 'ifsa_push_subscribed';
+    const DISMISSED_KEY  = 'ifsa_push_dismissed';
+
+    // Don't show if already subscribed or permanently dismissed
+    if (localStorage.getItem(SUBSCRIBED_KEY) || localStorage.getItem(DISMISSED_KEY)) return;
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+
+    // Increment visit count; show prompt on 2nd+ visit
+    const visits = parseInt(localStorage.getItem(PROMPT_KEY) || '0', 10) + 1;
+    localStorage.setItem(PROMPT_KEY, visits);
+
+    if (visits >= 2) {
+        // Show after 3s so the page feels settled
+        setTimeout(() => {
+            const el = document.getElementById('push-prompt');
+            if (el) el.style.display = 'block';
+        }, 3000);
+    }
+
+    window.dismissPushPrompt = function (permanent) {
+        const el = document.getElementById('push-prompt');
+        if (el) el.style.display = 'none';
+        if (permanent) localStorage.setItem(DISMISSED_KEY, '1');
+    };
+
+    window.subscribeToPush = async function () {
+        const btn = document.getElementById('push-allow-btn');
+        if (btn) btn.textContent = 'Enabling…';
+        try {
+            // 1. Get VAPID public key from server
+            const keyRes = await fetch('/api/push/vapid-public-key');
+            if (!keyRes.ok) throw new Error('Push not configured on server');
+            const { publicKey } = await keyRes.json();
+
+            // 2. Make sure SW is ready
+            const reg = await navigator.serviceWorker.ready;
+
+            // 3. Subscribe
+            const sub = await reg.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(publicKey)
+            });
+
+            // 4. Send sub to server
+            const saveRes = await fetch('/api/push/subscribe', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify(sub)
+            });
+            if (!saveRes.ok) throw new Error('Failed to save subscription');
+
+            localStorage.setItem(SUBSCRIBED_KEY, '1');
+            dismissPushPrompt();
+            showPushToast('✅ Notifications enabled!');
+        } catch (e) {
+            console.warn('[push] subscribe failed:', e.message);
+            if (btn) btn.textContent = 'Enable Notifications';
+            if (e.name === 'NotAllowedError') {
+                dismissPushPrompt(true); // Browser denied — don't ask again
+                showPushToast('Notifications blocked in browser settings.', true);
+            }
+        }
+    };
+
+    function showPushToast(msg, isError) {
+        const t = document.createElement('div');
+        t.textContent = msg;
+        t.style.cssText = `position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
+            padding:.65rem 1.4rem;border-radius:.75rem;font-size:.82rem;font-weight:600;
+            background:${isError?'#7f1d1d':'#14532d'};color:${isError?'#fca5a5':'#86efac'};
+            border:1px solid ${isError?'#991b1b':'#166534'};z-index:9999;
+            box-shadow:0 8px 30px #0005;transition:opacity .3s;`;
+        document.body.appendChild(t);
+        setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 3000);
+    }
+
+    // Convert base64 VAPID key to Uint8Array (required by pushManager.subscribe)
+    function urlBase64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64  = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+        const raw     = atob(base64);
+        return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+    }
 })();
 </script>
 </body>

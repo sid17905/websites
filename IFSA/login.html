@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login — IFSA</title>
+    <script src="/theme.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    (function () {
+        const saved = localStorage.getItem('ifsa_theme') || 'dark';
+        document.documentElement.classList.toggle('dark', saved === 'dark');
+        document.documentElement.classList.toggle('light', saved === 'light');
+    })();
+    </script>
+    <style>
+        /* ── Theme vars ── */
+        html.dark  { --bg: #111827; --card: #1f2937; --border: #374151; --text: #f9fafb; --sub: #9ca3af; --accent: #f59e0b; }
+        html.light { --bg: #f3f4f6; --card: #ffffff; --border: #d1d5db; --text: #111827; --sub: #6b7280; --accent: #d97706; }
+
+        body { background: var(--bg); color: var(--text); transition: background .3s, color .3s; }
+        .card { background: var(--card); border-color: var(--border); }
+        .inp  { background: var(--bg); border-color: var(--border); color: var(--text); }
+        .inp:focus { border-color: var(--accent); outline: none; }
+
+        @keyframes fadeIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+        .fade-in { animation: fadeIn .4s ease both; }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+            font-weight: 700;
+            transition: filter .2s;
+        }
+        .btn-primary:hover { filter: brightness(1.1); }
+        .btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+
+        /* Spinner */
+        .spinner { width:20px;height:20px;border:2px solid #0004;border-top-color:#000;border-radius:50%;animation:spin .6s linear infinite;display:inline-block; }
+        @keyframes spin { to { transform:rotate(360deg); } }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center px-4">
+
+    <!-- Theme toggle (top-right) -->
+    <button onclick="toggleTheme()" aria-label="Toggle theme"
+        class="fixed top-4 right-4 p-2 rounded-full border card border opacity-70 hover:opacity-100 transition">
+        <span class="theme-icon text-lg">☀️</span>
+    </button>
+
+    <!-- Card -->
+    <div class="card border rounded-2xl shadow-2xl w-full max-w-sm p-8 fade-in">
+
+        <!-- Logo area -->
+        <div class="flex flex-col items-center mb-8">
+            <div class="w-16 h-16 rounded-full flex items-center justify-center mb-3"
+                style="background:var(--accent)22;">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" style="color:var(--accent)" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold" style="color:var(--accent)">Student Portal</h1>
+            <p class="text-sm mt-1" style="color:var(--sub)">Indian Federation of Sports Arts</p>
+        </div>
+
+        <!-- Login form -->
+        <div id="login-form">
+            <div class="mb-4">
+                <label class="text-xs font-semibold uppercase tracking-wide mb-1 block" style="color:var(--sub)">Email</label>
+                <input type="email" id="email" placeholder="your@email.com" autocomplete="email"
+                    class="inp w-full px-4 py-3 rounded-lg border text-sm transition">
+            </div>
+            <div class="mb-6 relative">
+                <label class="text-xs font-semibold uppercase tracking-wide mb-1 block" style="color:var(--sub)">Password</label>
+                <input type="password" id="password" placeholder="••••••••" autocomplete="current-password"
+                    class="inp w-full px-4 py-3 rounded-lg border text-sm transition pr-12">
+                <button type="button" onclick="togglePass()" tabindex="-1"
+                    class="absolute right-3 bottom-3 text-xs" style="color:var(--sub)" id="pass-toggle">Show</button>
+            </div>
+
+            <button id="login-btn" onclick="doLogin()"
+                class="btn-primary w-full py-3 rounded-xl text-sm flex items-center justify-center gap-2">
+                <span id="btn-label">Login</span>
+            </button>
+
+            <p id="error-msg" class="text-red-400 text-sm mt-4 text-center hidden"></p>
+
+            <p class="text-xs text-center mt-6" style="color:var(--sub)">
+                Forgot your password?<br>
+                <span style="color:var(--accent)">Contact the admin to reset it.</span>
+            </p>
+        </div>
+
+        <!-- Password change form (shown on first login) -->
+        <div id="change-pw-form" class="hidden">
+            <div class="mb-2 p-3 rounded-lg text-sm text-amber-300 bg-amber-900/30 border border-amber-700/50">
+                ⚠️ Please set a new password before continuing.
+            </div>
+            <div class="mt-4 mb-4">
+                <label class="text-xs font-semibold uppercase tracking-wide mb-1 block" style="color:var(--sub)">New Password</label>
+                <input type="password" id="new-password" placeholder="Min. 6 characters"
+                    class="inp w-full px-4 py-3 rounded-lg border text-sm transition">
+            </div>
+            <div class="mb-6">
+                <label class="text-xs font-semibold uppercase tracking-wide mb-1 block" style="color:var(--sub)">Confirm Password</label>
+                <input type="password" id="confirm-password" placeholder="Repeat password"
+                    class="inp w-full px-4 py-3 rounded-lg border text-sm transition">
+            </div>
+            <button id="change-btn" onclick="doChangePassword()"
+                class="btn-primary w-full py-3 rounded-xl text-sm flex items-center justify-center gap-2">
+                <span id="change-label">Set Password & Continue</span>
+            </button>
+            <p id="change-error" class="text-red-400 text-sm mt-4 text-center hidden"></p>
+        </div>
+
+        <a href="index.html"
+            class="block text-center text-xs mt-6 transition hover:underline" style="color:var(--sub)">
+            ← Back to IFSA Website
+        </a>
+    </div>
+
+    <script>
+        // ── Helpers ─────────────────────────────────────────────
+        function setLoading(btnId, labelId, loading, text) {
+            const btn = document.getElementById(btnId);
+            const lbl = document.getElementById(labelId);
+            btn.disabled = loading;
+            lbl.innerHTML = loading
+                ? '<span class="spinner"></span>'
+                : text;
+        }
+        function showError(id, msg) {
+            const el = document.getElementById(id);
+            el.textContent = msg;
+            el.classList.remove('hidden');
+        }
+        function hideError(id) { document.getElementById(id).classList.add('hidden'); }
+
+        function togglePass() {
+            const inp = document.getElementById('password');
+            const btn = document.getElementById('pass-toggle');
+            if (inp.type === 'password') { inp.type = 'text'; btn.textContent = 'Hide'; }
+            else { inp.type = 'password'; btn.textContent = 'Show'; }
+        }
+
+        // Allow Enter key in inputs
+        ['email','password'].forEach(id => {
+            document.getElementById(id).addEventListener('keydown', e => {
+                if (e.key === 'Enter') doLogin();
+            });
+        });
+        ['new-password','confirm-password'].forEach(id => {
+            document.getElementById(id).addEventListener('keydown', e => {
+                if (e.key === 'Enter') doChangePassword();
+            });
+        });
+
+        // ── Login ────────────────────────────────────────────────
+        async function doLogin() {
+            hideError('error-msg');
+            const email    = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            if (!email || !password) { showError('error-msg', 'Please enter your email and password.'); return; }
+
+            setLoading('login-btn', 'btn-label', true);
+
+            try {
+                const res  = await fetch('/api/student/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+
+                if (!res.ok) { showError('error-msg', data.error || 'Login failed.'); return; }
+
+                if (data.student.requiresPasswordChange) {
+                    // Show forced password change
+                    document.getElementById('login-form').classList.add('hidden');
+                    document.getElementById('change-pw-form').classList.remove('hidden');
+                    window._loginStudent = data.student;
+                } else {
+                    window.location.href = '/portal.html';
+                }
+            } catch (_) {
+                showError('error-msg', 'Network error. Please try again.');
+            } finally {
+                setLoading('login-btn', 'btn-label', false, 'Login');
+            }
+        }
+
+        // ── Forced password change ────────────────────────────────
+        async function doChangePassword() {
+            hideError('change-error');
+            const np = document.getElementById('new-password').value;
+            const cp = document.getElementById('confirm-password').value;
+            if (np.length < 6) { showError('change-error', 'Password must be at least 6 characters.'); return; }
+            if (np !== cp)     { showError('change-error', 'Passwords do not match.'); return; }
+
+            setLoading('change-btn', 'change-label', true);
+
+            try {
+                const res  = await fetch('/api/student/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ newPassword: np })
+                });
+                const data = await res.json();
+                if (!res.ok) { showError('change-error', data.error || 'Failed to set password.'); return; }
+                window.location.href = '/portal.html';
+            } catch (_) {
+                showError('change-error', 'Network error. Please try again.');
+            } finally {
+                setLoading('change-btn', 'change-label', false, 'Set Password & Continue');
+            }
+        }
+
+        // Redirect if already logged in
+        (async () => {
+            try {
+                const res = await fetch('/api/student/me', { credentials: 'include' });
+                if (res.ok) window.location.href = '/portal.html';
+            } catch (_) {}
+        })();
+    </script>
+</body>
+</html>

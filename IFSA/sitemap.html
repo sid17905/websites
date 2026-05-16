@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitemap | IFSA Karate Mumbai</title>
+    <meta name="description" content="Full site map for IFSA Karate Academy Mumbai — find every page and section quickly.">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#fbbf24">
+    <script src="theme.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark:   'rgb(var(--bg-primary-rgb))',
+                            light:  'rgb(var(--bg-secondary-rgb))',
+                            accent: 'var(--accent-color)',
+                            text:   'var(--text-main)',
+                            muted:  'var(--text-muted)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="STYLE.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body class="bg-brand-dark text-brand-text font-sans min-h-screen flex flex-col">
+<div id="scroll-progress" role="progressbar" aria-hidden="true"></div>
+<div class="custom-cursor" id="cursor"></div>
+
+<!-- Navbar -->
+<header class="sticky top-0 z-50 backdrop-blur-xl" style="background:rgba(15,23,42,0.85);box-shadow:0 1px 0 0 rgba(251,191,36,0.25),0 4px 24px rgba(0,0,0,0.6);">
+    <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+        <a href="index.html" class="flex items-center space-x-2 group">
+            <div class="h-10 w-10 rounded-full border border-yellow-400 overflow-hidden flex items-center justify-center bg-black transition-all group-hover:scale-105">
+                <img src="public/image 1.png" alt="IFSA" class="w-full h-full object-cover rounded-full">
+            </div>
+            <span class="text-2xl font-bold text-white">IFSA</span>
+        </a>
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="text-sm text-brand-muted hover:text-brand-accent transition">← Home</a>
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
+                <svg class="sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="5" stroke-width="2"/><path stroke-width="2" stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                <svg class="moon-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="18" height="18"><path stroke-width="2" stroke-linecap="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="h-px w-full" style="background:linear-gradient(90deg,transparent,rgba(251,191,36,0.5) 30%,rgba(251,191,36,0.8) 50%,rgba(251,191,36,0.5) 70%,transparent);"></div>
+</header>
+
+<main class="flex-1 container mx-auto px-6 py-16 max-w-5xl">
+
+    <!-- Header -->
+    <div class="mb-12">
+        <p class="text-xs text-yellow-400 uppercase tracking-[0.4em] font-bold mb-3">| IFSA — Navigation</p>
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+                <h1 class="text-4xl md:text-5xl font-black text-white mb-3">Site Map</h1>
+                <div class="h-px w-24 mb-4" style="background:linear-gradient(90deg,#fbbf24,transparent);"></div>
+                <p class="text-brand-muted">Every page and section of IFSA Karate Mumbai, all in one place.</p>
+            </div>
+            <a href="sitemap.xml" class="text-sm text-yellow-400 border border-yellow-400/40 hover:border-yellow-400 px-4 py-2 rounded-lg transition flex items-center gap-2 self-start sm:self-auto">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M12 2l3 7h7l-5.5 4 2 7L12 17l-6.5 3 2-7L2 9h7z"/></svg>
+                sitemap.xml
+            </a>
+        </div>
+    </div>
+
+    <!-- Section 1: Main Pages -->
+    <section class="mb-14">
+        <h2 class="text-lg font-bold text-white mb-6 flex items-center gap-3">
+            <span class="h-px flex-1 bg-gray-700/60"></span>
+            <span>Main Pages</span>
+            <span class="h-px flex-1 bg-gray-700/60"></span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="static-pages">
+            <!-- Cards injected by JS -->
+        </div>
+    </section>
+
+    <!-- Section 2: Live Data -->
+    <section class="mb-14">
+        <h2 class="text-lg font-bold text-white mb-2 flex items-center gap-3">
+            <span class="h-px flex-1 bg-gray-700/60"></span>
+            <span>Live Content</span>
+            <span class="h-px flex-1 bg-gray-700/60"></span>
+        </h2>
+        <p class="text-brand-muted text-sm mb-6 text-center">Fetched from the server in real time.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Locations -->
+            <div class="rounded-xl border border-gray-700/60 p-5" style="background:rgba(30,41,59,0.5);">
+                <div class="flex items-center gap-2 mb-4">
+                    <svg width="18" height="18" fill="none" stroke="#fbbf24" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <h3 class="font-bold text-white">Locations</h3>
+                </div>
+                <div id="live-locations" class="space-y-2 text-sm text-brand-muted">
+                    <div class="animate-pulse h-4 bg-gray-700/60 rounded w-3/4"></div>
+                    <div class="animate-pulse h-4 bg-gray-700/60 rounded w-1/2"></div>
+                </div>
+            </div>
+
+            <!-- Documents -->
+            <div class="rounded-xl border border-gray-700/60 p-5" style="background:rgba(30,41,59,0.5);">
+                <div class="flex items-center gap-2 mb-4">
+                    <svg width="18" height="18" fill="none" stroke="#fbbf24" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <h3 class="font-bold text-white">Documents</h3>
+                </div>
+                <div id="live-documents" class="space-y-2 text-sm text-brand-muted">
+                    <div class="animate-pulse h-4 bg-gray-700/60 rounded w-3/4"></div>
+                    <div class="animate-pulse h-4 bg-gray-700/60 rounded w-2/3"></div>
+                    <div class="animate-pulse h-4 bg-gray-700/60 rounded w-1/2"></div>
+                </div>
+            </div>
+
+            <!-- Gallery -->
+            <div class="rounded-xl border border-gray-700/60 p-5" style="background:rgba(30,41,59,0.5);">
+                <div class="flex items-center gap-2 mb-4">
+                    <svg width="18" height="18" fill="none" stroke="#fbbf24" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke-linecap="round"/><circle cx="8.5" cy="8.5" r="1.5"/><path stroke-linecap="round" d="M21 15l-5-5L5 21"/></svg>
+                    <h3 class="font-bold text-white">Gallery</h3>
+                </div>
+                <div id="live-gallery" class="space-y-2 text-sm text-brand-muted">
+                    <div class="animate-pulse h-4 bg-gray-700/60 rounded w-3/4"></div>
+                    <div class="animate-pulse h-4 bg-gray-700/60 rounded w-1/2"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Last updated -->
+    <p class="text-center text-gray-600 text-sm" id="sitemap-updated"></p>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-brand-dark border-t border-gray-700/50 pt-10 pb-8">
+    <div class="container mx-auto px-6 text-center">
+        <p class="text-brand-muted">&copy; 2025 IFSA. All Rights Reserved. <span class="mx-2 opacity-40">·</span> <a href="sitemap.html" class="hover:text-brand-accent transition">Sitemap</a> <span class="mx-2 opacity-40">·</span> <a href="privacy.html" class="hover:text-brand-accent transition">Privacy Policy</a></p>
+    </div>
+</footer>
+
+<!-- WhatsApp FAB -->
+<a href="https://wa.me/919004383448?text=Hi%20IFSA!%20I%27d%20like%20to%20enquire%20about%20joining%20your%20karate%20classes."
+   target="_blank" rel="noopener" class="whatsapp-fab" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="white" width="28" height="28">
+        <path d="M16 0C7.164 0 0 7.163 0 16c0 2.822.737 5.469 2.027 7.773L0 32l8.489-2.002A15.93 15.93 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 01-6.77-1.848l-.484-.287-5.037 1.188 1.237-4.896-.316-.502A13.266 13.266 0 012.667 16C2.667 8.636 8.637 2.667 16 2.667S29.333 8.636 29.333 16 23.363 29.333 16 29.333zm7.27-9.927c-.398-.199-2.354-1.162-2.72-1.294-.365-.133-.631-.199-.897.199-.265.398-1.029 1.294-1.261 1.56-.232.265-.465.298-.863.1-.398-.199-1.681-.619-3.202-1.977-1.183-1.056-1.982-2.36-2.214-2.758-.232-.398-.025-.613.175-.811.179-.178.398-.465.597-.697.199-.232.265-.398.398-.664.133-.265.066-.497-.033-.696-.1-.199-.897-2.162-1.229-2.96-.324-.776-.653-.671-.897-.683l-.764-.013c-.265 0-.696.1-1.061.497-.365.398-1.394 1.362-1.394 3.322s1.427 3.854 1.626 4.12c.199.265 2.808 4.286 6.802 5.814.951.366 1.693.585 2.272.749.954.271 1.822.233 2.509.141.765-.113 2.354-.962 2.686-1.891.332-.929.332-1.726.232-1.891-.099-.166-.365-.265-.763-.464z"/>
+    </svg>
+</a>
+
+<script>
+// ── Static page cards ────────────────────────────────────────
+var PAGES = [
+    { label:'Home',      href:'index.html',     icon:'🏠', desc:'Welcome & overview' },
+    { label:'About',     href:'about.html',     icon:'👥', desc:'Our story & team' },
+    { label:'Gallery',   href:'gallery.html',   icon:'🖼️', desc:'Training photos' },
+    { label:'Schedule',  href:'calender.html',  icon:'📅', desc:'Class timetable' },
+    { label:'Pricing',   href:'pricing.html',   icon:'💰', desc:'Fees & enrolment' },
+    { label:'Documents', href:'documents.html', icon:'📄', desc:'Forms & circulars' },
+    { label:'Grading',   href:'grading.html',   icon:'🥋', desc:'Belt grading info' },
+    { label:'Payment',   href:'payment.html',   icon:'💳', desc:'Pay fees online' },
+];
+
+var container = document.getElementById('static-pages');
+PAGES.forEach(function(p) {
+    var card = document.createElement('a');
+    card.href = p.href;
+    card.className = 'group block rounded-xl border border-gray-700/60 p-4 hover:border-yellow-400/60 transition-all duration-200 hover:shadow-[0_0_20px_rgba(251,191,36,0.1)]';
+    card.style.background = 'rgba(30,41,59,0.5)';
+    card.innerHTML =
+        '<div class="flex items-center gap-3 mb-1">' +
+        '  <span style="font-size:1.4rem;">' + p.icon + '</span>' +
+        '  <span class="font-bold text-white group-hover:text-yellow-400 transition">' + p.label + '</span>' +
+        '</div>' +
+        '<p class="text-xs text-brand-muted ml-9">' + p.desc + '</p>';
+    container.appendChild(card);
+});
+
+// ── Live data sections ───────────────────────────────────────
+function renderList(containerId, items, fallback) {
+    var el = document.getElementById(containerId);
+    if (!el) return;
+    if (!items || !items.length) {
+        el.innerHTML = '<span class="text-gray-600 italic">' + fallback + '</span>';
+        return;
+    }
+    el.innerHTML = items.map(function(t) {
+        return '<div class="flex items-center gap-2"><span class="text-yellow-400">·</span><span>' + t + '</span></div>';
+    }).join('');
+}
+
+// Locations
+fetch('/api/locations')
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+        var names = (d.locations || d || []).map(function(l){ return l.name || l; });
+        renderList('live-locations', names, 'No locations found.');
+    })
+    .catch(function(){ renderList('live-locations', null, 'Could not load locations.'); });
+
+// Documents
+fetch('/api/documents/list')
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+        var docs = (d.documents || d || []).slice(0,5).map(function(doc){ return doc.name || doc.title || doc; });
+        renderList('live-documents', docs, 'No documents found.');
+    })
+    .catch(function(){ renderList('live-documents', null, 'Could not load documents.'); });
+
+// Gallery
+fetch('/api/gallery/images')
+    .then(function(r){ return r.json(); })
+    .then(function(d) {
+        var imgs = d.images || d || [];
+        // Group by month
+        var months = {};
+        imgs.forEach(function(img) {
+            var m = img.month || img.date || 'Uncategorized';
+            months[m] = (months[m] || 0) + 1;
+        });
+        var lines = Object.keys(months).slice(0,5).map(function(m){
+            return m + ' — ' + months[m] + ' photo' + (months[m]>1?'s':'');
+        });
+        renderList('live-gallery', lines.length ? lines : null, 'No gallery data found.');
+    })
+    .catch(function(){ renderList('live-gallery', null, 'Could not load gallery data.'); });
+
+// Last updated
+document.getElementById('sitemap-updated').textContent =
+    'Last updated: ' + new Date().toLocaleDateString('en-IN', { day:'numeric', month:'long', year:'numeric' });
+
+// Cursor
+(function() {
+    var cursor = document.getElementById('cursor');
+    if (!cursor || window.matchMedia('(pointer: coarse)').matches) {
+        if (cursor) cursor.style.display = 'none'; return;
+    }
+    document.addEventListener('mousemove', function(e) {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top  = e.clientY + 'px';
+    });
+})();
+
+// Scroll progress
+var bar = document.getElementById('scroll-progress');
+if (bar) {
+    window.addEventListener('scroll', function() {
+        var s = window.scrollY, d = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = (d>0 ? Math.min((s/d)*100,100) : 0)+'%';
+    }, { passive:true });
+}
+</script>
+<script src="cookie-consent.js"></script>
+</body>
+</html>

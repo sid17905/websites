@@ -1,112 +1,134 @@
 // ============================================================
-//  IFSA Service Worker — PWA Offline Support (Task 3.7)
-//  Strategy: Cache-first for static shell, network-first for API.
-//  On install: pre-cache the app shell.
-//  On fetch:
-//    - API calls  → network only (no cache)
-//    - HTML pages → network first, fall back to cache, then offline.html
-//    - Assets     → cache first, then network
+//  IFSA Service Worker — Phase 4 (Push Notifications)
+//  Adds push event listener + notificationclick handler
+//  on top of any existing PWA / offline caching logic.
 // ============================================================
 
-const CACHE_NAME    = 'ifsa-shell-v1';
-const OFFLINE_URL   = '/offline.html';
+const CACHE_NAME = 'ifsa-cache-v2';
 
-// Pages and assets to pre-cache on install
-const SHELL_ASSETS = [
-    '/',
-    '/index.html',
-    '/about.html',
-    '/gallery.html',
-    '/calender.html',
-    '/documents.html',
-    '/pricing.html',
-    '/404.html',
-    '/offline.html',
-    '/STYLE.css',
-    '/manifest.json',
-    '/public/image 1.png',
-];
-
-// ── Install: pre-cache the shell ────────────────────────────
-self.addEventListener('install', (event) => {
+// ── Install: pre-cache the offline shell ───────────────────
+self.addEventListener('install', event => {
+    self.skipWaiting();
     event.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(SHELL_ASSETS.map(url => new Request(url, { cache: 'reload' })))
-                .catch((err) => {
-                    // Individual failures shouldn't block install — log and continue
-                    console.warn('[SW] Pre-cache warning (some assets may not exist yet):', err);
-                });
-        }).then(() => self.skipWaiting())
+        caches.open(CACHE_NAME).then(cache =>
+            cache.addAll(['/', '/offline.html']).catch(() => {})
+        )
     );
 });
 
-// ── Activate: purge old caches ───────────────────────────────
-self.addEventListener('activate', (event) => {
+// ── Activate: clean up old caches ─────────────────────────
+self.addEventListener('activate', event => {
     event.waitUntil(
-        caches.keys().then((keyList) =>
+        caches.keys().then(keys =>
             Promise.all(
-                keyList
-                    .filter((key) => key !== CACHE_NAME)
-                    .map((key) => {
-                        console.log('[SW] Deleting old cache:', key);
-                        return caches.delete(key);
-                    })
+                keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))
             )
         ).then(() => self.clients.claim())
     );
 });
 
-// ── Fetch: routing logic ─────────────────────────────────────
-self.addEventListener('fetch', (event) => {
-    const { request } = event;
-    const url = new URL(request.url);
-
-    // Skip cross-origin requests (CDN, fonts, APIs)
-    if (url.origin !== location.origin) return;
-
-    // Skip API calls — always go to network
-    if (url.pathname.startsWith('/api/')) return;
-
-    // Skip non-GET requests
-    if (request.method !== 'GET') return;
-
-    // HTML navigation requests: network-first, fall back to cached page or offline.html
-    if (request.mode === 'navigate' || request.headers.get('accept')?.includes('text/html')) {
-        event.respondWith(
-            fetch(request)
-                .then((response) => {
-                    // Cache the fresh response
-                    const clone = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
-                    return response;
-                })
-                .catch(() =>
-                    caches.match(request)
-                        .then((cached) => cached || caches.match(OFFLINE_URL))
+// ── Fetch: network-first, fallback to cache / offline ─────
+self.addEventListener('fetch', event => {
+    if (event.request.method !== 'GET') return;
+    event.respondWith(
+        fetch(event.request)
+            .then(resp => {
+                // Only cache complete, successful responses — skip 206 Partial Content
+                // (range requests for video/audio), redirects, and errors
+                if (resp.status === 200 && resp.type !== 'opaque') {
+                    const clone = resp.clone();
+                    caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
+                }
+                return resp;
+            })
+            .catch(() =>
+                caches.match(event.request).then(cached =>
+                    cached || caches.match('/offline.html')
                 )
-        );
-        return;
+            )
+    );
+});
+
+
+// ── Phase 4: Push event ───────────────────────────────────
+self.addEventListener('push', event => {
+    let data = {};
+    try {
+        data = event.data ? event.data.json() : {};
+    } catch (e) {
+        data = { title: 'IFSA', body: event.data ? event.data.text() : 'New notification' };
     }
 
-    // Static assets (CSS, images, fonts): cache-first
-    event.respondWith(
-        caches.match(request).then((cached) => {
-            if (cached) return cached;
-            return fetch(request).then((response) => {
-                if (response.ok) {
-                    const clone = response.clone();
-                    caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
+    const title   = data.title   || 'IFSA';
+    const options = {
+        body:    data.body    || '',
+        icon:    data.icon    || '/icons/icon-192.png',
+        badge:   data.badge   || '/icons/badge-72.png',
+        image:   data.image   || undefined,
+        tag:     data.tag     || 'ifsa-push',
+        vibrate: [200, 100, 200],
+        requireInteraction: false,
+        data: {
+            url:       data.url       || '/',
+            timestamp: Date.now()
+        },
+        actions: data.actions || [
+            { action: 'open',    title: 'Open'    },
+            { action: 'dismiss', title: 'Dismiss' }
+        ]
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(title, options)
+    );
+});
+
+
+// ── Phase 4: Notification click ───────────────────────────
+self.addEventListener('notificationclick', event => {
+    event.notification.close();
+
+    if (event.action === 'dismiss') return;
+
+    const targetUrl = (event.notification.data && event.notification.data.url)
+        ? event.notification.data.url
+        : '/';
+
+    event.waitUntil(
+        self.clients.matchAll({ type: 'window', includeUncontrolled: true })
+            .then(clientList => {
+                // If there's already a window open on the same origin, focus it and navigate
+                for (const client of clientList) {
+                    if ('focus' in client) {
+                        client.focus();
+                        if ('navigate' in client) client.navigate(targetUrl);
+                        return;
+                    }
                 }
-                return response;
-            }).catch(() => {
-                // For images, return a transparent 1x1 GIF as fallback
-                if (request.destination === 'image') {
-                    return new Response(
-                        atob('R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'),
-                        { headers: { 'Content-Type': 'image/gif' } }
-                    );
+                // Otherwise open a new window
+                if (self.clients.openWindow) {
+                    return self.clients.openWindow(targetUrl);
                 }
-            });
-        })
+            })
+    );
+});
+
+
+// ── Phase 4: Push subscription change ─────────────────────
+// Re-subscribe automatically if the browser rotates the sub
+self.addEventListener('pushsubscriptionchange', event => {
+    event.waitUntil(
+        self.registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: event.oldSubscription
+                ? event.oldSubscription.options.applicationServerKey
+                : null
+        }).then(newSub =>
+            fetch('/api/push/subscribe', {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify(newSub)
+            })
+        ).catch(() => {})
     );
 });

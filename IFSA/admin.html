@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IFSA Admin</title>
+    <script src="theme.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- DOMPurify: sanitizes all server data before inserting into DOM (Task 1.4) -->
     <!-- SortableJS: drag-and-drop slideshow reordering (Task 6.1) -->
@@ -44,7 +45,7 @@
 
 
     <!-- ═══════════════════════════ MAIN DASHBOARD ════════════════════════ -->
-    <div id="dashboard" class="container mx-auto p-6 hidden max-w-6xl">
+    <div id="dashboard" class="container mx-auto px-3 py-4 sm:p-6 hidden max-w-6xl">
 
         <!-- Header -->
         <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-gray-700 pb-6 gap-4">
@@ -54,15 +55,21 @@
                     <span class="text-green-400 text-xs font-bold">🔒 Secured</span>
                 </p>
             </div>
-            <div class="flex gap-3 items-center">
-                <!-- Session timer -->
-                <span id="session-timer" class="text-xs text-gray-500 border border-gray-700 px-3 py-2 rounded">Session: <span id="timer-val">8:00:00</span></span>
+            <div class="flex flex-wrap gap-2 items-center justify-center md:justify-end">
+                <!-- Session timer — hidden on smallest screens to save space -->
+                <span id="session-timer" class="hidden sm:inline-flex text-xs text-gray-500 border border-gray-700 px-2 py-1.5 rounded">Session: <span id="timer-val" class="ml-1">8:00:00</span></span>
+                <!-- Logged-in admin name -->
+                <span id="admin-name-badge" class="hidden text-xs text-violet-300 border border-violet-800/50 bg-violet-900/20 px-2 py-1.5 rounded">👤 <span id="admin-name-val"></span></span>
                 <a href="index.html" target="_blank"
-                    class="flex items-center gap-2 bg-gray-700 hover:bg-gray-600 px-5 py-2 rounded text-white transition font-medium border border-gray-600">
+                    class="flex items-center gap-1.5 bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded text-white transition font-medium border border-gray-600 text-sm">
                     <span>View Website</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
                 </a>
-                <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-5 py-2 rounded text-white transition font-medium shadow-lg">Logout</button>
+                <button onclick="document.getElementById('announce-section').scrollIntoView({behavior:'smooth'})" class="bg-amber-600/80 hover:bg-amber-600 px-3 py-2 rounded text-white transition font-medium border border-amber-500/40 text-sm flex items-center gap-1">
+                    📢 <span class="hidden xs:inline">Broadcast</span>
+                </button>
+                <button onclick="logout()" class="bg-red-600 hover:bg-red-700 px-3 py-2 rounded text-white transition font-medium text-sm shadow-lg">Logout</button>
+                <button class="theme-toggle p-2" onclick="toggleTheme()" aria-label="Toggle dark/light mode"><svg class="sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><circle cx="12" cy="12" r="5" stroke-width="2"/><path stroke-width="2" stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg><svg class="moon-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16"><path stroke-width="2" stroke-linecap="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></button>
             </div>
         </div>
 
@@ -231,25 +238,166 @@
             <div id="sched-list" class="space-y-2 max-h-40 overflow-y-auto custom-scrollbar"></div>
         </div>
 
-        <!-- 5. ANNOUNCEMENTS SECTION -->
-        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg border-l-4 border-amber-500 mb-8">
-            <h2 class="text-xl font-bold mb-4 text-amber-400 flex items-center gap-2">
-                <span class="bg-amber-500/20 p-2 rounded-lg">5</span> Notice Board
-            </h2>
-            <div class="flex flex-col gap-4">
-                <div class="flex flex-col md:flex-row gap-3">
-                    <input type="text" id="announce-msg" placeholder="Type announcement here..."
-                        class="flex-1 bg-gray-900 text-white p-3 rounded border border-gray-600 focus:border-amber-500 outline-none">
-                    <div class="flex gap-2 items-center">
-                        <div class="flex flex-col">
-                            <label class="text-xs text-gray-500 mb-1">Expires on (optional)</label>
-                            <input type="date" id="announce-expiry"
-                                class="bg-gray-900 text-gray-300 p-2 rounded border border-gray-600 text-sm cursor-pointer">
+        <!-- 5. BROADCAST CENTER — Notice Board + Push Notifications + WhatsApp -->
+        <div id="announce-section" class="bg-gray-800 p-6 rounded-xl border border-amber-500/30 shadow-lg border-l-4 border-amber-500 mb-8">
+            <div class="flex items-center justify-between mb-1 flex-wrap gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="bg-amber-500/20 p-2 rounded-lg">5</span>
+                    <h2 class="text-xl font-bold text-amber-400">Broadcast Center</h2>
+                </div>
+                <div id="push-stats-badge" class="bg-gray-900 border border-gray-700 text-xs text-gray-400 px-3 py-1.5 rounded-lg">Loading subscribers…</div>
+            </div>
+            <p class="text-xs text-gray-500 mb-5">Compose once — post to the notice board, push to devices, and/or broadcast on WhatsApp.</p>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <!-- LEFT: Compose Form -->
+                <div class="bg-gray-900 rounded-xl border border-gray-700 p-5 space-y-4">
+
+                    <!-- Title (push) -->
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Title <span class="text-gray-600">(for push / WhatsApp)</span></label>
+                        <input type="text" id="announce-title" maxlength="80" placeholder="e.g. Grading this Saturday!"
+                            class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-amber-500 outline-none text-sm transition"
+                            oninput="updateBroadcastPreview()">
+                    </div>
+
+                    <!-- Message -->
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Message *</label>
+                        <textarea id="announce-msg" rows="3" maxlength="300" placeholder="Type your announcement here..."
+                            class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-amber-500 outline-none text-sm transition resize-none"
+                            oninput="updateBroadcastPreview()"></textarea>
+                        <p class="text-right text-xs text-gray-600 mt-0.5"><span id="announce-msg-count">0</span>/300</p>
+                    </div>
+
+                    <!-- Delivery Channels -->
+                    <div class="bg-gray-800 rounded-lg border border-gray-700 p-4">
+                        <p class="text-xs text-gray-400 uppercase tracking-wider mb-3 font-bold">Send Via</p>
+                        <div class="space-y-3">
+
+                            <!-- Notice Board -->
+                            <label class="flex items-start gap-3 cursor-pointer group">
+                                <input type="checkbox" id="ch-noticeboard" checked class="w-4 h-4 accent-amber-400 mt-0.5 flex-shrink-0" onchange="toggleBroadcastOptions()">
+                                <div class="flex-1">
+                                    <span class="text-sm text-white font-semibold group-hover:text-amber-300 transition">📌 Notice Board</span>
+                                    <div id="nb-options" class="mt-2 flex items-center gap-2 flex-wrap">
+                                        <label class="text-xs text-gray-500">Expires on</label>
+                                        <input type="date" id="announce-expiry"
+                                            class="bg-gray-700 text-gray-300 p-1.5 rounded border border-gray-600 text-xs cursor-pointer">
+                                        <span class="text-xs text-gray-600">(optional)</span>
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- Push Notification -->
+                            <label class="flex items-start gap-3 cursor-pointer group">
+                                <input type="checkbox" id="ch-push" class="w-4 h-4 accent-amber-400 mt-0.5 flex-shrink-0" onchange="toggleBroadcastOptions()">
+                                <div class="flex-1">
+                                    <span class="text-sm text-white font-semibold group-hover:text-amber-300 transition">🔔 Push Notification</span>
+                                    <div id="push-options" class="mt-2 space-y-2 hidden">
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <div>
+                                                <p class="text-xs text-gray-500 mb-1">Link to</p>
+                                                <select id="push-url-preset" onchange="applyPushUrlPreset()"
+                                                    class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1.5 text-xs text-white outline-none focus:border-amber-500">
+                                                    <option value="">— Page —</option>
+                                                    <option value="/">Home</option>
+                                                    <option value="/portal.html">Portal</option>
+                                                    <option value="/grading.html">Grading</option>
+                                                    <option value="/payment.html">Payment</option>
+                                                    <option value="/calender.html">Schedule</option>
+                                                    <option value="custom">Custom…</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <p class="text-xs text-gray-500 mb-1">Audience</p>
+                                                <select id="push-audience"
+                                                    class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1.5 text-xs text-white outline-none focus:border-amber-500">
+                                                    <option value="all">Everyone</option>
+                                                    <option value="students">Students Only</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <input type="url" id="push-url" placeholder="Custom URL…"
+                                            class="w-full bg-gray-700 border border-gray-600 rounded px-2 py-1.5 text-xs text-white outline-none focus:border-amber-500 hidden">
+                                    </div>
+                                </div>
+                            </label>
+
+                            <!-- WhatsApp Broadcast -->
+                            <label class="flex items-start gap-3 cursor-pointer group">
+                                <input type="checkbox" id="ch-whatsapp" class="w-4 h-4 accent-amber-400 mt-0.5 flex-shrink-0">
+                                <div>
+                                    <span class="text-sm text-white font-semibold group-hover:text-amber-300 transition">📱 WhatsApp Broadcast</span>
+                                    <p class="text-xs text-gray-500 mt-0.5">Sends to all active WhatsApp contacts</p>
+                                </div>
+                            </label>
                         </div>
-                        <button onclick="addAnnouncement()"
-                            class="bg-amber-600 px-6 py-3 rounded font-bold hover:bg-amber-700 text-white transition shadow-lg self-end">Add</button>
+                    </div>
+
+                    <!-- Send button -->
+                    <div class="flex gap-3">
+                        <button onclick="sendBroadcast()"
+                            class="flex-1 bg-amber-600 hover:bg-amber-700 py-2.5 rounded-lg text-sm font-bold text-white transition flex items-center justify-center gap-2 shadow-lg">
+                            <span>📢</span><span id="broadcast-send-text">Send</span>
+                        </button>
+                        <button onclick="clearBroadcastForm()"
+                            class="bg-gray-700 hover:bg-gray-600 px-4 py-2.5 rounded-lg text-sm font-bold text-white transition">Clear</button>
+                    </div>
+                    <p id="broadcast-result" class="text-sm hidden"></p>
+                </div>
+
+                <!-- RIGHT: Preview + Templates -->
+                <div class="space-y-4">
+                    <!-- Push Preview (shown when push checkbox checked) -->
+                    <div id="push-preview-box" class="bg-gray-900 rounded-xl border border-gray-700 p-4 hidden">
+                        <p class="text-xs text-gray-500 uppercase tracking-wider mb-3 font-bold">Push Preview</p>
+                        <div class="bg-gray-800 rounded-lg p-3 flex items-start gap-3 border border-gray-700">
+                            <div class="w-9 h-9 rounded-full bg-amber-500/20 flex items-center justify-center text-lg flex-shrink-0">🥋</div>
+                            <div class="min-w-0 flex-1">
+                                <p id="preview-title" class="text-sm font-bold text-white truncate">Notification Title</p>
+                                <p id="preview-body" class="text-xs text-gray-400 mt-0.5 leading-relaxed">Your message will appear here…</p>
+                                <p class="text-xs text-gray-600 mt-1">ifsakarate.com · now</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Templates -->
+                    <div class="bg-gray-900 rounded-xl border border-gray-700 p-4">
+                        <p class="text-xs text-gray-500 uppercase tracking-wider mb-3 font-bold">Quick Templates</p>
+                        <div class="space-y-2">
+                            <button onclick="applyBroadcastTemplate('grading')" class="w-full text-left bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-amber-500/40 px-3 py-2 rounded-lg transition">
+                                <p class="text-xs font-bold text-amber-400">🎽 Grading Reminder</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Grading this Saturday — confirm attendance</p>
+                            </button>
+                            <button onclick="applyBroadcastTemplate('fee')" class="w-full text-left bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-amber-500/40 px-3 py-2 rounded-lg transition">
+                                <p class="text-xs font-bold text-blue-400">💳 Fee Reminder</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Fee due reminder — pay before month end</p>
+                            </button>
+                            <button onclick="applyBroadcastTemplate('cancel')" class="w-full text-left bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-amber-500/40 px-3 py-2 rounded-lg transition">
+                                <p class="text-xs font-bold text-red-400">❌ Class Cancelled</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Today's class is cancelled</p>
+                            </button>
+                            <button onclick="applyBroadcastTemplate('document')" class="w-full text-left bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-amber-500/40 px-3 py-2 rounded-lg transition">
+                                <p class="text-xs font-bold text-green-400">📄 New Document</p>
+                                <p class="text-xs text-gray-400 mt-0.5">New document uploaded — check documents page</p>
+                            </button>
+                            <button onclick="applyBroadcastTemplate('welcome')" class="w-full text-left bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-amber-500/40 px-3 py-2 rounded-lg transition">
+                                <p class="text-xs font-bold text-purple-400">👋 Welcome</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Welcome to IFSA! Your portal is ready.</p>
+                            </button>
+                            <button onclick="applyBroadcastTemplate('event')" class="w-full text-left bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-amber-500/40 px-3 py-2 rounded-lg transition">
+                                <p class="text-xs font-bold text-cyan-400">📅 Upcoming Event</p>
+                                <p class="text-xs text-gray-400 mt-0.5">New event added — check calendar for details</p>
+                            </button>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            <!-- Active Notices List -->
+            <div>
+                <p class="text-xs text-gray-400 uppercase tracking-wider mb-2 font-bold">Active Notices</p>
                 <div class="bg-gray-900 rounded border border-gray-700 p-2 max-h-60 overflow-y-auto custom-scrollbar">
                     <div id="announce-list" class="space-y-2">
                         <p class="text-gray-500 italic text-sm p-2">Loading notices...</p>
@@ -382,6 +530,22 @@
             <h2 class="text-xl font-bold mb-4 text-indigo-400 flex items-center gap-2">
                 <span class="bg-indigo-400/20 p-2 rounded-lg">10</span> Weekly Timetable
             </h2>
+
+            <!-- Plan 2 Fix 1 — Manage Slots sub-panel -->
+            <div class="bg-gray-900 rounded-xl border border-indigo-800/40 p-4 mb-5">
+                <p class="text-xs text-indigo-300 uppercase tracking-widest font-bold mb-3">Manage Slots</p>
+                <div class="flex gap-2 mb-3">
+                    <input type="text" id="new-slot-input" placeholder="e.g. Afternoon (3–5 PM)"
+                        class="flex-1 bg-gray-800 text-white p-2 rounded border border-gray-600 focus:border-indigo-400 outline-none text-sm">
+                    <button onclick="addTimetableSlot()"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-2 rounded text-sm transition whitespace-nowrap">+ Add Slot</button>
+                </div>
+                <div id="slot-manager-list" class="space-y-1.5">
+                    <p class="text-gray-600 text-xs italic">Loading slots…</p>
+                </div>
+                <div id="slot-manager-status" class="hidden text-xs rounded px-2 py-1 mt-2"></div>
+            </div>
+
             <form id="timetableForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 bg-gray-900 p-4 rounded border border-gray-700">
                 <div>
                     <label class="text-xs text-gray-400 uppercase">Day</label>
@@ -391,10 +555,17 @@
                     </select>
                 </div>
                 <div>
+                    <label class="text-xs text-gray-400 uppercase">Location / Branch</label>
+                    <!-- Options populated dynamically by loadTimetableLocations() -->
+                    <select id="ttLocation" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1">
+                        <option value="">— All Locations —</option>
+                    </select>
+                </div>
+                <div>
                     <label class="text-xs text-gray-400 uppercase">Slot</label>
+                    <!-- Options populated dynamically by loadTimetableSlots() -->
                     <select id="ttSlot" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1">
-                        <option>Morning (6–8 AM)</option>
-                        <option>Evening (5–7 PM)</option>
+                        <option>Loading slots…</option>
                     </select>
                 </div>
                 <div>
@@ -409,10 +580,138 @@
                     <label class="text-xs text-gray-400 uppercase">Instructor (optional)</label>
                     <input type="text" id="ttInstructor" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1">
                 </div>
-                <button type="submit" class="md:col-span-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded transition">Save Slot</button>
+                <!-- Training content fields (PDF schedule) -->
+                <div class="md:col-span-2 border-t border-gray-700 pt-4 mt-2">
+                    <p class="text-xs text-amber-400 uppercase font-bold tracking-wider mb-3">⚡ Training Content (PDF Schedule)</p>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="text-xs text-gray-400 uppercase">Activities <span class="text-gray-600 normal-case">(comma-separated, e.g. Warm up, Kihons, Kata)</span></label>
+                    <input type="text" id="ttActivities" placeholder="e.g. Warm up, Kihons, Kata" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Focus Label <span class="text-gray-600 normal-case">(e.g. KIHONS)</span></label>
+                    <input type="text" id="ttFocus" placeholder="e.g. KIHONS" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-400 uppercase">Description <span class="text-gray-600 normal-case">(short explanation)</span></label>
+                    <input type="text" id="ttDescription" placeholder="e.g. Repetitive kihon training for perfect kata moves" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 mt-1">
+                </div>
+                <button type="submit" class="md:col-span-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 rounded transition">Save Entry</button>
             </form>
             <div id="timetable-admin-list" class="space-y-2">
                 <p class="text-gray-500 text-sm animate-pulse">Loading timetable...</p>
+            </div>
+        </div>
+
+
+        <!-- 12. GRADING SYLLABUS PDF -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-yellow-500/30 shadow-lg">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-yellow-400 flex items-center gap-2">
+                        <span class="bg-yellow-400/20 p-2 rounded-lg">🥋</span> Grading Syllabus PDF
+                    </h2>
+                    <p class="text-xs text-gray-500 mt-1">Upload or replace the belt grading syllabus PDF displayed on <a href="grading.html" target="_blank" class="text-yellow-400 hover:underline">grading.html</a>.</p>
+                </div>
+                <a href="grading.html" target="_blank" class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-2 rounded border border-gray-600 transition flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    View Page
+                </a>
+            </div>
+
+            <!-- Current PDF status -->
+            <div id="syllabus-current" class="mb-5 p-4 rounded-xl bg-gray-900 border border-gray-700">
+                <p class="text-xs text-gray-500 uppercase tracking-widest mb-2 font-bold">Current Syllabus</p>
+                <div id="syllabus-info" class="flex items-center gap-3">
+                    <svg class="w-9 h-9 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <div class="flex-1 min-w-0">
+                        <p id="syllabus-filename" class="text-white font-semibold text-sm truncate">No PDF uploaded yet</p>
+                        <p id="syllabus-uploaded-at" class="text-xs text-gray-500 mt-0.5"></p>
+                    </div>
+                    <div class="flex gap-2 flex-shrink-0">
+                        <a id="syllabus-preview-btn" href="#" target="_blank"
+                           class="hidden text-xs bg-blue-700/40 hover:bg-blue-600 text-blue-300 hover:text-white px-3 py-1.5 rounded border border-blue-700 transition">Preview</a>
+                        <button id="syllabus-delete-btn" onclick="deleteSyllabus()"
+                           class="hidden text-xs bg-red-900/40 hover:bg-red-600 text-red-300 hover:text-white px-3 py-1.5 rounded border border-red-800 transition">Delete 🗑️</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload area -->
+            <div class="border-2 border-dashed border-gray-600 rounded-xl p-6 text-center hover:border-yellow-500/50 transition" id="syllabus-drop-zone">
+                <svg class="w-10 h-10 text-gray-500 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <p class="text-gray-400 text-sm mb-1">Drag & drop a PDF here, or click to browse</p>
+                <p class="text-gray-600 text-xs mb-4">PDF only · Max 20 MB · Replaces existing syllabus</p>
+                <label class="cursor-pointer bg-yellow-400 hover:bg-amber-300 text-black font-bold text-sm px-5 py-2.5 rounded-lg inline-flex items-center gap-2 transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    Choose PDF
+                    <input type="file" accept="application/pdf" class="hidden" id="syllabus-file-input" onchange="uploadSyllabus(this)">
+                </label>
+            </div>
+
+            <div id="syllabus-status" class="hidden text-sm rounded-lg px-3 py-2 mt-3"></div>
+        </div>
+
+
+        <!-- 13. UPI PAYMENT SETTINGS & RECORDS -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-green-500/30 shadow-lg">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-green-400 flex items-center gap-2">
+                        <span class="bg-green-400/20 p-2 rounded-lg">💳</span> UPI Payments
+                    </h2>
+                    <p class="text-xs text-gray-500 mt-1">Manage UPI settings and review payment submissions from students.</p>
+                </div>
+                <a href="payment.html" target="_blank" class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-2 rounded border border-gray-600 transition flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    View Page
+                </a>
+            </div>
+
+            <!-- UPI Settings -->
+            <div class="bg-gray-900 rounded-xl border border-gray-700 p-5 mb-5">
+                <p class="text-xs text-gray-500 uppercase tracking-widest mb-3 font-bold">UPI Settings</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="text-xs text-gray-400 uppercase mb-1 block">UPI ID <span class="text-green-400">*</span></label>
+                        <input type="text" id="upi-id-input" placeholder="yourname@upi" 
+                               class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-green-500 outline-none text-sm">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-400 uppercase mb-1 block">Display Name (shown on QR)</label>
+                        <input type="text" id="upi-name-input" placeholder="IFSA Karate" 
+                               class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-green-500 outline-none text-sm">
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="text-xs text-gray-400 uppercase mb-1 block">Payment Types (comma-separated)</label>
+                    <input type="text" id="upi-types-input" placeholder="Monthly Fees,Admission Fees,Event Fees,Grading Fees" 
+                           class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-green-500 outline-none text-sm">
+                </div>
+                <button onclick="savePaymentSettings()"
+                    class="bg-green-600 hover:bg-green-700 text-white font-bold px-5 py-2 rounded transition text-sm">Save Settings</button>
+                <span id="upi-settings-status" class="text-xs text-gray-500 ml-3"></span>
+            </div>
+
+            <!-- Payment Records -->
+            <div>
+                <div class="flex items-center justify-between mb-3">
+                    <p class="text-xs text-gray-500 uppercase tracking-widest font-bold">Payment Records</p>
+                    <div class="flex items-center gap-2">
+                        <span id="payment-count" class="text-xs text-gray-500 border border-gray-700 px-2 py-1 rounded"></span>
+                        <button onclick="loadPayments()" class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1 rounded border border-gray-600 transition">↻ Refresh</button>
+                    </div>
+                </div>
+                <!-- Filter tabs -->
+                <div class="flex gap-2 mb-4 flex-wrap">
+                    <button onclick="filterPayments('all')" id="filter-all" class="payment-filter-btn active-filter text-xs px-3 py-1.5 rounded border border-gray-600 bg-gray-700 text-white transition font-semibold">All</button>
+                    <button onclick="filterPayments('pending')" id="filter-pending" class="payment-filter-btn text-xs px-3 py-1.5 rounded border border-amber-800/50 bg-amber-900/20 text-amber-400 transition">Pending</button>
+                    <button onclick="filterPayments('approved')" id="filter-approved" class="payment-filter-btn text-xs px-3 py-1.5 rounded border border-green-800/50 bg-green-900/20 text-green-400 transition">Approved</button>
+                    <button onclick="filterPayments('rejected')" id="filter-rejected" class="payment-filter-btn text-xs px-3 py-1.5 rounded border border-red-800/50 bg-red-900/20 text-red-400 transition">Rejected</button>
+                </div>
+                <div id="payment-records-list" class="space-y-2 max-h-96 overflow-y-auto custom-scrollbar">
+                    <p class="text-gray-500 italic text-sm p-2">Loading payments...</p>
+                </div>
             </div>
         </div>
 
@@ -432,8 +731,547 @@
             </div>
         </div>
 
-    </div><!-- end #dashboard -->
+        <!-- ══════════════════ GOOGLE REVIEWS PANEL (multi-branch) ══════════════════ -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-yellow-500/30 shadow-lg">
+            <div class="flex items-center justify-between mb-1 flex-wrap gap-3">
+                <div class="flex items-center gap-2">
+                    <span class="bg-yellow-400/20 p-2 rounded-lg">⭐</span>
+                    <h2 class="text-xl font-bold text-white">Google Reviews</h2>
+                </div>
+                <!-- Add Branch button -->
+                <button onclick="openAddBranchModal()" class="bg-gray-700 hover:bg-gray-600 text-white text-xs font-bold px-4 py-2 rounded-lg border border-gray-600 transition">+ Add Branch</button>
+            </div>
+            <p class="text-xs text-gray-500 mb-4">Manage reviews per branch. Each branch has its own Place ID, rating, and review cards displayed on the homepage.</p>
+            <div id="gr-admin-status" class="text-sm rounded-lg px-3 py-2 mb-4 hidden"></div>
 
+            <!-- Branch tabs -->
+            <div id="gra-branch-tabs" class="flex gap-2 flex-wrap mb-5 border-b border-gray-700 pb-3">
+                <span class="text-gray-500 text-xs animate-pulse py-2">Loading branches…</span>
+            </div>
+
+            <!-- Per-branch panel (re-rendered when tab changes) -->
+            <div id="gra-branch-panel">
+
+                <!-- Current data display -->
+                <div class="bg-gray-900 rounded-xl border border-gray-700 p-4 mb-5 flex flex-wrap gap-6">
+                    <div class="text-center"><p class="text-xs text-gray-500 mb-1">Rating</p><p id="gra-rating" class="text-2xl font-black text-amber-400">—</p></div>
+                    <div class="text-center"><p class="text-xs text-gray-500 mb-1">Review Count</p><p id="gra-count" class="text-2xl font-black text-white">—</p></div>
+                    <div class="text-center"><p class="text-xs text-gray-500 mb-1">Source</p><p id="gra-source" class="text-sm font-semibold text-gray-400">—</p></div>
+                    <div class="text-center"><p class="text-xs text-gray-500 mb-1">Last Fetched</p><p id="gra-fetched" class="text-xs text-gray-500">—</p></div>
+                </div>
+
+                <!-- Settings: Branch label + Place ID + API Key -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Branch Display Name</label>
+                        <input type="text" id="gra-branch-label" placeholder="e.g. Andheri Branch" maxlength="80" class="w-full bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-amber-400 outline-none text-sm transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Google Place ID</label>
+                        <input type="text" id="gra-place-id" placeholder="ChIJ..." class="w-full bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-amber-400 outline-none text-sm transition">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Places API Key (server-only, per branch)</label>
+                        <input type="password" id="gra-api-key" placeholder="Leave blank to keep existing" class="w-full bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-amber-400 outline-none text-sm transition">
+                    </div>
+                </div>
+
+                <!-- Manual override: rating + count -->
+                <div class="bg-gray-900 rounded-xl border border-gray-700 p-4 mb-5">
+                    <label class="flex items-center gap-3 cursor-pointer mb-3">
+                        <input type="checkbox" id="gra-manual-toggle" class="w-4 h-4 accent-yellow-400" onchange="toggleGrManual()">
+                        <span class="text-sm text-gray-300 font-medium">Use manual override values (bypass live API)</span>
+                    </label>
+                    <div id="gra-manual-fields" class="grid grid-cols-2 gap-4 hidden">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">Rating (e.g. 4.9)</label>
+                            <input type="number" id="gra-manual-rating" min="1" max="5" step="0.1" class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-amber-400 outline-none text-sm transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">Review Count</label>
+                            <input type="number" id="gra-manual-count" min="0" class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-amber-400 outline-none text-sm transition">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings action buttons -->
+                <div class="flex gap-3 flex-wrap mb-8 items-center">
+                    <button onclick="saveGoogleReviewsSettings()" class="bg-amber-500 text-black px-5 py-2 rounded font-bold text-sm hover:bg-amber-400 transition">Save Settings</button>
+                    <button onclick="refreshGoogleReviews()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded font-bold text-sm transition">🔄 Refresh from Google</button>
+                    <button onclick="deleteCurrentBranch()" id="gra-delete-branch-btn" class="ml-auto bg-red-900/40 hover:bg-red-700 text-red-400 hover:text-white px-4 py-2 rounded font-bold text-sm transition border border-red-900/60 hidden">🗑 Delete This Branch</button>
+                </div>
+
+                <!-- ── INDIVIDUAL REVIEWS MANAGER ───────────────────────── -->
+                <div class="border-t border-gray-700 pt-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-base font-bold text-white">📝 Review Cards <span id="gra-branch-badge" class="text-xs text-amber-400 font-normal ml-1"></span></h3>
+                            <p class="text-xs text-gray-500 mt-0.5">Individual review quotes for this branch. Add manually or pull from Google Places API.</p>
+                        </div>
+                        <button onclick="openAddReviewModal()" class="bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold px-4 py-2 rounded-lg transition whitespace-nowrap">+ Add Review</button>
+                    </div>
+                    <!-- Review list -->
+                    <div id="gr-reviews-list" class="space-y-3">
+                        <p class="text-gray-500 text-sm animate-pulse">Loading reviews…</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════ ADD BRANCH MODAL ══════════ -->
+        <div id="gr-branch-modal" class="fixed inset-0 z-[999] hidden items-center justify-center p-4" style="background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);">
+            <div class="bg-gray-800 rounded-2xl border border-gray-600 shadow-2xl w-full max-w-sm">
+                <div class="flex items-center justify-between p-5 border-b border-gray-700">
+                    <h3 class="text-base font-bold text-white">Add New Branch</h3>
+                    <button onclick="closeAddBranchModal()" class="text-gray-400 hover:text-white transition text-xl leading-none">✕</button>
+                </div>
+                <div class="p-5 space-y-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Branch Display Name *</label>
+                        <input type="text" id="gr-new-branch-label" placeholder="e.g. Bandra Branch" maxlength="80"
+                            class="w-full bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-amber-400 outline-none text-sm transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Branch ID (no spaces) *</label>
+                        <input type="text" id="gr-new-branch-id" placeholder="e.g. bandra" maxlength="32"
+                            class="w-full bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-amber-400 outline-none text-sm transition">
+                        <p class="text-xs text-gray-600 mt-1">Letters, numbers, underscores only. Cannot be changed later.</p>
+                    </div>
+                </div>
+                <div class="flex gap-3 p-5 border-t border-gray-700">
+                    <button onclick="createBranch()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-bold py-2.5 rounded-lg text-sm transition">Create Branch</button>
+                    <button onclick="closeAddBranchModal()" class="px-5 bg-gray-700 hover:bg-gray-600 text-white font-bold py-2.5 rounded-lg text-sm transition">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════ ADD/EDIT REVIEW MODAL ══════════════════ -->
+        <div id="gr-review-modal" class="fixed inset-0 z-[999] hidden items-center justify-center p-4" style="background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);">
+            <div class="bg-gray-800 rounded-2xl border border-gray-600 shadow-2xl w-full max-w-lg">
+                <div class="flex items-center justify-between p-5 border-b border-gray-700">
+                    <h3 id="gr-modal-title" class="text-base font-bold text-white">Add Review</h3>
+                    <button onclick="closeReviewModal()" class="text-gray-400 hover:text-white transition text-xl leading-none">✕</button>
+                </div>
+                <div class="p-5 space-y-4">
+                    <input type="hidden" id="gr-edit-idx" value="-1">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Reviewer Name *</label>
+                        <input type="text" id="gr-rv-author" placeholder="e.g. Priya Sharma" maxlength="60"
+                            class="w-full bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-amber-400 outline-none text-sm transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-2 uppercase tracking-wider">Star Rating *</label>
+                        <div id="gr-star-picker" class="flex gap-2"></div>
+                        <input type="hidden" id="gr-rv-rating" value="5">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Review Text *</label>
+                        <textarea id="gr-rv-text" rows="4" placeholder="Write the review quote here…" maxlength="500"
+                            class="w-full bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-amber-400 outline-none text-sm transition resize-none"></textarea>
+                        <p class="text-xs text-gray-600 mt-1 text-right"><span id="gr-rv-charcount">0</span>/500</p>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Date</label>
+                        <input type="date" id="gr-rv-date"
+                            class="w-full bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-amber-400 outline-none text-sm transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-2 uppercase tracking-wider">Avatar Color</label>
+                        <div id="gr-color-picker" class="flex gap-2 flex-wrap"></div>
+                        <input type="hidden" id="gr-rv-color" value="amber">
+                    </div>
+                </div>
+                <div class="flex gap-3 p-5 border-t border-gray-700">
+                    <button onclick="saveReview()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-black font-bold py-2.5 rounded-lg text-sm transition">Save Review</button>
+                    <button onclick="closeReviewModal()" class="px-5 bg-gray-700 hover:bg-gray-600 text-white font-bold py-2.5 rounded-lg text-sm transition">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════ ACHIEVEMENTS WALL PANEL (Phase D-18) ═══════════════ -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-yellow-500/30 shadow-lg">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="bg-yellow-400/20 p-2 rounded-lg">🏆</span>
+                <h2 class="text-xl font-bold text-white">Achievements Wall</h2>
+            </div>
+            <p class="text-xs text-gray-500 mb-5">Add, edit, or delete achievements displayed on the homepage.</p>
+            <div id="ach-status" class="text-sm rounded-lg px-3 py-2 mb-4 hidden"></div>
+            <!-- Add form -->
+            <div class="bg-gray-900 rounded-xl border border-gray-700 p-5 mb-5">
+                <h3 class="text-sm font-bold text-gray-300 mb-4">Add Achievement</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5">Icon (emoji)</label>
+                        <input type="text" id="ach-icon" placeholder="🥇" maxlength="4" class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-brand-accent outline-none text-sm transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5">Year</label>
+                        <input type="text" id="ach-year" placeholder="2024" maxlength="4" class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-brand-accent outline-none text-sm transition">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs text-gray-400 mb-1.5">Title *</label>
+                        <input type="text" id="ach-title" placeholder="National Championship Gold" class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-brand-accent outline-none text-sm transition">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block text-xs text-gray-400 mb-1.5">Subtitle</label>
+                        <input type="text" id="ach-subtitle" placeholder="WKF Senior Kata — New Delhi" class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-brand-accent outline-none text-sm transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5">Category</label>
+                        <select id="ach-category" class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-brand-accent outline-none text-sm transition">
+                            <option value="tournament">Tournament</option>
+                            <option value="certification">Certification</option>
+                            <option value="milestone">Milestone</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1.5">Image <span class="text-gray-600">(optional — shown as carousel background)</span></label>
+                        <input type="file" id="ach-image" accept="image/*" class="w-full text-sm text-gray-300 bg-gray-800 rounded border border-gray-600 p-1.5 cursor-pointer">
+                    </div>
+                </div>
+                <input type="hidden" id="ach-edit-id" value="">
+                <button id="ach-submit-btn" onclick="submitAchievement()" class="bg-amber-500 text-black px-5 py-2 rounded font-bold text-sm hover:bg-amber-400 transition">Add Achievement</button>
+                <button id="ach-cancel-btn" onclick="cancelEditAchievement()" class="ml-2 bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded font-bold text-sm transition hidden">Cancel Edit</button>
+            </div>
+            <!-- List -->
+            <div id="ach-list" class="space-y-2">
+                <p class="text-gray-500 text-sm animate-pulse">Loading…</p>
+            </div>
+        </div>
+
+        <!-- ══════════════════ WHATSAPP GATEWAY PANEL (Phase D-21) ════════════════ -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-yellow-500/30 shadow-lg">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="bg-yellow-400/20 p-2 rounded-lg">📱</span>
+                <h2 class="text-xl font-bold text-white">WhatsApp Notifications</h2>
+            </div>
+            <p class="text-xs text-gray-500 mb-5">Configure the WhatsApp gateway for automatic booking & payment confirmations.</p>
+            <div id="wa-cfg-status" class="text-sm rounded-lg px-3 py-2 mb-4 hidden"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1.5">Gateway Provider</label>
+                    <select id="wa-provider" class="w-full bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-brand-accent outline-none text-sm transition">
+                        <option value="twilio">Twilio</option>
+                        <option value="wati">Wati</option>
+                        <option value="interakt">Interakt</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 mb-1.5">From Phone Number</label>
+                    <input type="tel" id="wa-from-phone" placeholder="+91XXXXXXXXXX" class="w-full bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-brand-accent outline-none text-sm transition">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs text-gray-400 mb-1.5">API Endpoint URL</label>
+                    <input type="url" id="wa-gateway-url" placeholder="https://api.yourgateway.com/v1/messages" class="w-full bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-brand-accent outline-none text-sm transition">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs text-gray-400 mb-1.5">API Token</label>
+                    <input type="password" id="wa-api-token" placeholder="••••••••" class="w-full bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-brand-accent outline-none text-sm transition">
+                </div>
+                <div class="md:col-span-2 border-t border-gray-700 pt-4 mt-1">
+                    <label class="block text-xs text-gray-400 mb-1.5 uppercase tracking-wider">Broadcast Group JID <span class="text-gray-600">(optional)</span></label>
+                    <input type="text" id="wa-broadcast-group-id" placeholder="120363XXXXXXXXXX@broadcast" class="w-full bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-brand-accent outline-none text-sm transition mb-2">
+                    <label class="flex items-center gap-2 cursor-pointer mt-1">
+                        <input type="checkbox" id="wa-broadcast-enabled" class="w-4 h-4 accent-yellow-400">
+                        <span class="text-sm text-gray-300">Enable broadcast group sending with announcements</span>
+                    </label>
+                </div>
+            </div>
+            <div class="flex gap-3 flex-wrap items-end">
+                <button onclick="saveWaConfig()" class="bg-brand-accent text-black px-5 py-2 rounded font-bold text-sm hover:bg-amber-400 transition">Save Gateway Config</button>
+                <div class="flex gap-2">
+                    <input type="tel" id="wa-test-phone" placeholder="Test phone (+91...)" class="bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-brand-accent outline-none text-sm transition w-48">
+                    <button onclick="sendWaTest()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded font-bold text-sm transition">Send Test</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════ WHATSAPP CONTACTS PANEL (Phase D-22) ═══════════════ -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-yellow-500/30 shadow-lg">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="bg-yellow-400/20 p-2 rounded-lg">📋</span>
+                <h2 class="text-xl font-bold text-white">WhatsApp Broadcast Contacts</h2>
+            </div>
+            <p class="text-xs text-gray-500 mb-5">Manage contacts for announcement broadcasts. Active contacts receive messages when you check "Broadcast on WhatsApp" in Announcements.</p>
+            <div id="wa-contacts-status" class="text-sm rounded-lg px-3 py-2 mb-4 hidden"></div>
+            <div class="flex gap-3 mb-3 flex-wrap">
+                <input type="text" id="wac-name" placeholder="Contact name" class="bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-brand-accent outline-none text-sm transition flex-1 min-w-[140px]">
+                <input type="tel" id="wac-phone" placeholder="919876543210" class="bg-gray-900 text-white p-2.5 rounded border border-gray-600 focus:border-brand-accent outline-none text-sm transition flex-1 min-w-[160px]">
+                <button onclick="addWaContact()" class="bg-amber-500 text-black px-4 py-2 rounded font-bold text-sm hover:bg-amber-400 transition">Add</button>
+            </div>
+            <!-- Import from CSV/TXT -->
+            <div class="flex items-center gap-3 mb-4 bg-gray-900 rounded-xl border border-gray-700 p-3">
+                <div class="flex-1">
+                    <p class="text-xs text-gray-400 font-bold mb-0.5">Import from CSV / TXT</p>
+                    <p class="text-[11px] text-gray-600">Format: <code class="text-gray-400">name,phone</code> per line, or just phone numbers. Duplicates are skipped.</p>
+                </div>
+                <label class="flex items-center gap-2 cursor-pointer bg-gray-700 hover:bg-gray-600 text-white font-bold text-xs px-3 py-2 rounded border border-gray-600 transition whitespace-nowrap">
+                    📂 Import File
+                    <input type="file" accept=".csv,.txt,text/csv,text/plain" class="hidden" onchange="importWaContacts(this)">
+                </label>
+            </div>
+            <div class="flex items-center justify-between mb-2">
+                <span id="wac-count" class="text-xs text-gray-500"></span>
+            </div>
+            <div id="wa-contacts-list" class="space-y-1.5 max-h-72 overflow-y-auto custom-scrollbar">
+                <p class="text-gray-500 text-sm animate-pulse">Loading contacts…</p>
+            </div>
+        </div>
+
+        <!-- ══════════════════ HERO STATS PANEL (Fix 5) ═══════════════════════════ -->
+        <div class="bg-gray-800 p-6 rounded-xl mb-8 border border-cyan-500/30 shadow-lg">
+            <div class="flex items-center gap-2 mb-1">
+                <span class="bg-cyan-400/20 p-2 rounded-lg">📊</span>
+                <h2 class="text-xl font-bold text-white">Hero Stats</h2>
+            </div>
+            <p class="text-xs text-gray-500 mb-5">Edit the four counter numbers shown in the hero section (Years · Students · Black Belts · Locations).</p>
+            <div id="stats-status" class="text-sm rounded-lg px-3 py-2 mb-4 hidden"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+                <!-- Years -->
+                <div class="bg-gray-900 rounded-xl border border-gray-700 p-4">
+                    <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Value</label>
+                    <input type="number" id="stat-years-value" min="0" placeholder="15" class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-cyan-400 outline-none text-sm mb-2">
+                    <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Suffix</label>
+                    <input type="text" id="stat-years-suffix" maxlength="5" placeholder="+" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 outline-none text-sm mb-2">
+                    <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Label</label>
+                    <input type="text" id="stat-years-label" maxlength="30" placeholder="Years" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 outline-none text-sm">
+                    <p class="text-[11px] text-gray-600 mt-1.5">e.g. 15+ Years</p>
+                </div>
+                <!-- Students -->
+                <div class="bg-gray-900 rounded-xl border border-gray-700 p-4">
+                    <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Value</label>
+                    <input type="number" id="stat-students-value" min="0" placeholder="500" class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-cyan-400 outline-none text-sm mb-2">
+                    <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Suffix</label>
+                    <input type="text" id="stat-students-suffix" maxlength="5" placeholder="+" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 outline-none text-sm mb-2">
+                    <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Label</label>
+                    <input type="text" id="stat-students-label" maxlength="30" placeholder="Students" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 outline-none text-sm">
+                    <p class="text-[11px] text-gray-600 mt-1.5">e.g. 500+ Students</p>
+                </div>
+                <!-- Black Belts -->
+                <div class="bg-gray-900 rounded-xl border border-gray-700 p-4">
+                    <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Value</label>
+                    <input type="number" id="stat-blackbelts-value" min="0" placeholder="50" class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-cyan-400 outline-none text-sm mb-2">
+                    <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Suffix</label>
+                    <input type="text" id="stat-blackbelts-suffix" maxlength="5" placeholder="+" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 outline-none text-sm mb-2">
+                    <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Label</label>
+                    <input type="text" id="stat-blackbelts-label" maxlength="30" placeholder="Black Belts" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 outline-none text-sm">
+                    <p class="text-[11px] text-gray-600 mt-1.5">e.g. 50+ Black Belts</p>
+                </div>
+                <!-- Locations -->
+                <div class="bg-gray-900 rounded-xl border border-gray-700 p-4">
+                    <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Value</label>
+                    <input type="number" id="stat-locations-value" min="0" placeholder="3" class="w-full bg-gray-800 text-white p-2.5 rounded border border-gray-600 focus:border-cyan-400 outline-none text-sm mb-2">
+                    <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Suffix</label>
+                    <input type="text" id="stat-locations-suffix" maxlength="5" placeholder="" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 outline-none text-sm mb-2">
+                    <label class="block text-xs text-gray-400 mb-1 uppercase tracking-wider">Label</label>
+                    <input type="text" id="stat-locations-label" maxlength="30" placeholder="Locations" class="w-full bg-gray-800 text-white p-2 rounded border border-gray-600 outline-none text-sm">
+                    <p class="text-[11px] text-gray-600 mt-1.5">e.g. 3 Locations</p>
+                </div>
+            </div>
+            <button onclick="saveStats()" class="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2 rounded font-bold text-sm transition">Save Stats</button>
+        </div>
+
+<div class="bg-gray-800 p-6 rounded-xl mb-8 border border-violet-500/30 shadow-lg">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-5">
+        <div>
+            <h2 class="text-xl font-bold text-violet-400 flex items-center gap-2">
+                <span class="bg-violet-400/20 p-2 rounded-lg">🥋</span> Student Management
+            </h2>
+            <p class="text-xs text-gray-500 mt-1">Add students, manage profiles, mark attendance, record payments and grading.</p>
+        </div>
+        <button onclick="openAddStudent()"
+            class="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 px-5 py-2.5 rounded-lg text-white font-semibold text-sm transition shadow-lg whitespace-nowrap">
+            + Add Student
+        </button>
+    </div>
+
+    <!-- Search + Filter -->
+    <div class="flex flex-col sm:flex-row gap-3 mb-5">
+        <input type="text" id="student-search" placeholder="Search by name, email, batch…"
+            oninput="filterStudents()"
+            class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 outline-none focus:border-violet-500 transition">
+        <select id="student-status-filter" onchange="filterStudents()"
+            class="bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-violet-500">
+            <option value="all">All Students</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+        </select>
+    </div>
+
+    <!-- Student count -->
+    <p id="student-count" class="text-xs text-gray-500 mb-3"></p>
+
+    <!-- Student list -->
+    <div id="students-list" class="space-y-3">
+        <p class="text-gray-500 text-sm">Loading students…</p>
+    </div>
+
+    <!-- Student Detail Drawer (hidden until a student is selected) -->
+    <div id="student-drawer" class="hidden mt-6 bg-gray-900 rounded-xl border border-gray-700 p-5">
+        <div class="flex items-center justify-between mb-4">
+            <h3 id="drawer-name" class="text-lg font-bold text-white"></h3>
+            <button onclick="closeDrawer()" class="text-gray-500 hover:text-white text-xl leading-none">×</button>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex gap-2 mb-5 border-b border-gray-700 pb-1">
+            <button onclick="switchTab('attendance')" class="drawer-tab active-tab text-sm px-4 py-1.5 rounded-t-lg font-semibold" data-tab="attendance">Attendance</button>
+            <button onclick="switchTab('payments')"   class="drawer-tab text-sm px-4 py-1.5 rounded-t-lg font-semibold text-gray-400" data-tab="payments">Payments</button>
+            <button onclick="switchTab('grading')"    class="drawer-tab text-sm px-4 py-1.5 rounded-t-lg font-semibold text-gray-400" data-tab="grading">Grading</button>
+            <button onclick="switchTab('edit')"       class="drawer-tab text-sm px-4 py-1.5 rounded-t-lg font-semibold text-gray-400" data-tab="edit">Edit Profile</button>
+        </div>
+
+        <!-- Tab: Attendance -->
+        <div id="tab-attendance" class="drawer-tab-content">
+            <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                <input type="date" id="att-date" class="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+                <select id="att-status" class="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+                    <option value="present">Present</option>
+                    <option value="absent">Absent</option>
+                    <option value="no-class">No Class</option>
+                </select>
+                <button onclick="markAttendance()" class="bg-violet-600 hover:bg-violet-700 px-4 py-2 rounded-lg text-sm font-semibold text-white transition">Mark</button>
+            </div>
+            <div id="att-records" class="text-sm text-gray-400 max-h-64 overflow-y-auto space-y-1"></div>
+        </div>
+
+        <!-- Tab: Payments -->
+        <div id="tab-payments" class="drawer-tab-content hidden">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">Month (e.g. June 2025)</p>
+                    <input type="text" id="pay-month" placeholder="June 2025" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">Amount (₹)</p>
+                    <input type="number" id="pay-amount" placeholder="1500" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">Date Paid</p>
+                    <input type="date" id="pay-date" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">Receipt #</p>
+                    <input type="text" id="pay-receipt" placeholder="R001" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">Type</p>
+                    <select id="pay-type" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+                        <option>Monthly Fees</option>
+                        <option>Admission Fee</option>
+                        <option>Event Fee</option>
+                        <option>Grading Fee</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="recordPayment()" class="w-full bg-green-700 hover:bg-green-600 px-4 py-2 rounded-lg text-sm font-semibold text-white transition">Record Payment</button>
+                </div>
+            </div>
+            <div id="pay-records" class="text-sm text-gray-400 max-h-64 overflow-y-auto"></div>
+        </div>
+
+        <!-- Tab: Grading -->
+        <div id="tab-grading" class="drawer-tab-content hidden">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">Date</p>
+                    <input type="date" id="grad-date" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">Result</p>
+                    <select id="grad-result" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+                        <option>Pass</option><option>Fail</option><option>Distinction</option>
+                    </select>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-500 mb-1">Belt Awarded</p>
+                    <select id="grad-belt" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+                        <option value="">— None —</option>
+                        <option>White Belt</option><option>Yellow Belt</option><option>Orange Belt</option>
+                        <option>Green Belt</option><option>Blue Belt</option><option>Purple Belt</option>
+                        <option>Red Belt</option><option>Brown Belt</option><option>Black Belt</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button onclick="recordGrading()" class="w-full bg-amber-600 hover:bg-amber-500 px-4 py-2 rounded-lg text-sm font-semibold text-white transition">Record</button>
+                </div>
+            </div>
+            <input type="text" id="grad-notes" placeholder="Notes (optional)" class="w-full mb-4 bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+            <div id="grad-records" class="text-sm text-gray-400 max-h-64 overflow-y-auto"></div>
+        </div>
+
+        <!-- Tab: Edit Profile -->
+        <div id="tab-edit" class="drawer-tab-content hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div><p class="text-xs text-gray-500 mb-1">Full Name</p><input type="text" id="edit-name" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500"></div>
+                <div><p class="text-xs text-gray-500 mb-1">Email</p><input type="email" id="edit-email-field" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500"></div>
+                <div><p class="text-xs text-gray-500 mb-1">Phone</p><input type="tel" id="edit-phone-field" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500"></div>
+                <div><p class="text-xs text-gray-500 mb-1">Batch</p><input type="text" id="edit-batch" placeholder="e.g. Beginner" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500"></div>
+                <div><p class="text-xs text-gray-500 mb-1">Location</p><input type="text" id="edit-location" placeholder="e.g. Andheri" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500"></div>
+                <div><p class="text-xs text-gray-500 mb-1">Belt Level</p>
+                    <select id="edit-belt-level" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+                        <option>White Belt</option><option>Yellow Belt</option><option>Orange Belt</option>
+                        <option>Green Belt</option><option>Blue Belt</option><option>Purple Belt</option>
+                        <option>Red Belt</option><option>Brown Belt</option><option>Black Belt</option>
+                    </select>
+                </div>
+                <div><p class="text-xs text-gray-500 mb-1">Status</p>
+                    <select id="edit-status" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+                <div><p class="text-xs text-gray-500 mb-1">Enrolled Date</p><input type="date" id="edit-enrolled" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500"></div>
+            </div>
+            <div class="border-t border-gray-700 pt-4 mb-4">
+                <p class="text-xs text-gray-500 mb-2">Reset Password (leave blank to keep current)</p>
+                <input type="text" id="edit-temp-pw" placeholder="New temporary password…"
+                    class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-violet-500">
+            </div>
+            <div class="flex gap-3">
+                <button onclick="saveStudentEdit()" class="bg-violet-600 hover:bg-violet-700 px-5 py-2 rounded-lg text-sm font-semibold text-white transition">Save Changes</button>
+                <button onclick="deleteStudent()" class="bg-red-900/50 hover:bg-red-800 border border-red-800 px-5 py-2 rounded-lg text-sm font-semibold text-red-300 transition">Delete Student</button>
+            </div>
+            <p id="edit-status-msg" class="text-sm mt-3 hidden"></p>
+        </div>
+    </div><!-- /student-drawer -->
+</div><!-- /students section -->
+
+
+<!-- Add Student Modal -->
+<div id="add-student-modal" class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden p-4">
+    <div class="bg-gray-800 rounded-xl border border-gray-700 p-6 w-full max-w-md shadow-2xl">
+        <div class="flex justify-between items-center mb-5">
+            <h3 class="text-lg font-bold text-white">Add New Student</h3>
+            <button onclick="closeAddStudent()" class="text-gray-500 hover:text-white text-xl">×</button>
+        </div>
+        <div class="space-y-3">
+            <div><p class="text-xs text-gray-500 mb-1">Full Name *</p><input type="text" id="new-name" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-violet-500"></div>
+            <div><p class="text-xs text-gray-500 mb-1">Email *</p><input type="email" id="new-email" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-violet-500"></div>
+            <div><p class="text-xs text-gray-500 mb-1">Phone</p><input type="tel" id="new-phone" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-violet-500"></div>
+            <div class="grid grid-cols-2 gap-3">
+                <div><p class="text-xs text-gray-500 mb-1">Batch</p><input type="text" id="new-batch" placeholder="Beginner" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-violet-500"></div>
+                <div><p class="text-xs text-gray-500 mb-1">Location</p><input type="text" id="new-location" placeholder="Andheri" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-violet-500"></div>
+            </div>
+            <div><p class="text-xs text-gray-500 mb-1">Belt Level</p>
+                <select id="new-belt" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-violet-500">
+                    <option>White Belt</option><option>Yellow Belt</option><option>Orange Belt</option>
+                    <option>Green Belt</option><option>Blue Belt</option><option>Purple Belt</option>
+                    <option>Red Belt</option><option>Brown Belt</option><option>Black Belt</option>
+                </select>
+            </div>
+            <div><p class="text-xs text-gray-500 mb-1">Temporary Password *</p><input type="text" id="new-tempPw" placeholder="Student must change on first login" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2.5 text-sm text-white outline-none focus:border-violet-500"></div>
+        </div>
+        <p id="add-student-error" class="text-red-400 text-sm mt-3 hidden"></p>
+        <div class="flex gap-3 mt-5">
+            <button onclick="submitAddStudent()" class="flex-1 bg-violet-600 hover:bg-violet-700 py-2.5 rounded-lg text-sm font-bold text-white transition">Add Student</button>
+            <button onclick="closeAddStudent()" class="flex-1 bg-gray-700 hover:bg-gray-600 py-2.5 rounded-lg text-sm font-bold text-white transition">Cancel</button>
+        </div>
+    </div>
+
+ </div>
+</div><!-- end #dashboard -->
 
 <script>
 // ════════════════════════════════════════════════════════════
@@ -459,7 +1297,7 @@ function safe(str) {
 // ── Token helpers ─────────────────────────────────────────────
 function getToken() { return sessionStorage.getItem('ifsa_token'); }
 function setToken(t) { sessionStorage.setItem('ifsa_token', t); }
-function clearToken() { sessionStorage.removeItem('ifsa_token'); sessionStorage.removeItem('ifsa_login_time'); }
+function clearToken() { sessionStorage.removeItem('ifsa_token'); sessionStorage.removeItem('ifsa_login_time'); sessionStorage.removeItem('ifsa_admin_name'); }
 
 // Attach Authorization header to all write requests
 function authHeaders() {
@@ -508,6 +1346,10 @@ function startSessionTimer() {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
+            const data = await res.json();
+            if (data.name && !sessionStorage.getItem('ifsa_admin_name')) {
+                sessionStorage.setItem('ifsa_admin_name', data.name);
+            }
             showDash();
         } else {
             clearToken();
@@ -553,6 +1395,7 @@ async function checkLogin() {
             // Success — store token and show dashboard
             setToken(data.token);
             sessionStorage.setItem('ifsa_login_time', Date.now());
+            if (data.name) sessionStorage.setItem('ifsa_admin_name', data.name);
             showDash();
         }
     } catch (e) {
@@ -568,6 +1411,13 @@ function showDash() {
     document.getElementById('login-section').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
     startSessionTimer();
+    // Show admin name badge (Plan 2 Fix 2)
+    const adminName = sessionStorage.getItem('ifsa_admin_name');
+    if (adminName) {
+        const badge = document.getElementById('admin-name-badge');
+        const val   = document.getElementById('admin-name-val');
+        if (badge && val) { val.textContent = adminName; badge.classList.remove('hidden'); }
+    }
     loadSlideshow();
     loadGallery();
     loadDocs();
@@ -580,7 +1430,17 @@ function showDash() {
     loadBookings();
     loadAdminTimetable();
     loadAdminTestimonials();
+    loadSyllabus();
+    loadPaymentSettings();
+    loadPayments();
     loadActivityLog();
+    // Phase 3 — previously missing wires
+    loadAchievements();
+    loadWaContacts();
+    loadWaConfig();
+    loadGoogleReviewsAdmin();
+    loadStats();
+    loadStudents();
 }
 
 function logout() {
@@ -1013,21 +1873,168 @@ async function delEvent(id) {
 
 
 // ════════════════════════════════════════════════════════════
-//  5. ANNOUNCEMENTS
+//  5. BROADCAST CENTER — Notice Board + Push + WhatsApp
 // ════════════════════════════════════════════════════════════
-async function addAnnouncement() {
-    const msg     = document.getElementById('announce-msg').value;
-    const expiry  = document.getElementById('announce-expiry').value; // Task 6.2
-    if (!msg.trim()) return;
-    await authFetch(`${API}/announcement/add`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
-        body: JSON.stringify({ message: msg, expires_on: expiry || null })
-    });
-    document.getElementById('announce-msg').value  = '';
-    document.getElementById('announce-expiry').value = '';
-    loadAnnouncements();
+
+// Templates shared between notice board and push
+const BROADCAST_TEMPLATES = {
+    grading:  { title: '🎽 Grading This Saturday!',       body: 'Please confirm your attendance by Friday. See you on the mat!',               url: '/grading.html' },
+    fee:      { title: '💳 Fee Reminder',                  body: 'Your monthly fee is due. Please pay before the end of the month.',             url: '/payment.html' },
+    cancel:   { title: '❌ Class Cancelled Today',         body: "Due to an unforeseen event, today's class is cancelled. See you next class!", url: '/' },
+    document: { title: '📄 New Document Available',        body: 'A new document has been uploaded. Check the documents page.',                  url: '/documents.html' },
+    welcome:  { title: '👋 Welcome to IFSA!',              body: 'Your student portal is ready. Log in to view your attendance and schedule.',   url: '/portal.html' },
+    event:    { title: '📅 New Event Added',               body: 'A new event has been added to the calendar. Check the schedule page for details.', url: '/calender.html' },
+};
+
+function applyBroadcastTemplate(key) {
+    const t = BROADCAST_TEMPLATES[key];
+    if (!t) return;
+    const titleEl = document.getElementById('announce-title');
+    const msgEl   = document.getElementById('announce-msg');
+    const urlEl   = document.getElementById('push-url');
+    if (titleEl) titleEl.value = t.title;
+    if (msgEl)   msgEl.value   = t.body;
+    if (urlEl)   urlEl.value   = t.url;
+    updateBroadcastPreview();
 }
+
+function updateBroadcastPreview() {
+    const title = document.getElementById('announce-title')?.value || 'Notification Title';
+    const body  = document.getElementById('announce-msg')?.value   || 'Your message will appear here…';
+    const pTitle = document.getElementById('preview-title');
+    const pBody  = document.getElementById('preview-body');
+    if (pTitle) pTitle.textContent = title;
+    if (pBody)  pBody.textContent  = body;
+    const count = document.getElementById('announce-msg');
+    const cEl   = document.getElementById('announce-msg-count');
+    if (count && cEl) cEl.textContent = count.value.length;
+}
+
+function toggleBroadcastOptions() {
+    const pushChecked = document.getElementById('ch-push')?.checked;
+    const nbChecked   = document.getElementById('ch-noticeboard')?.checked;
+    const pushOpts  = document.getElementById('push-options');
+    const nbOpts    = document.getElementById('nb-options');
+    const previewBox= document.getElementById('push-preview-box');
+    if (pushOpts)   pushOpts.classList.toggle('hidden', !pushChecked);
+    if (previewBox) previewBox.classList.toggle('hidden', !pushChecked);
+    if (nbOpts)     nbOpts.classList.toggle('hidden', !nbChecked);
+}
+
+function clearBroadcastForm() {
+    ['announce-title','announce-msg','push-url','announce-expiry'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+    });
+    const preset = document.getElementById('push-url-preset');
+    if (preset) preset.value = '';
+    const resultEl = document.getElementById('broadcast-result');
+    if (resultEl) resultEl.classList.add('hidden');
+    updateBroadcastPreview();
+}
+
+// URL preset helper (shared with push-url-preset select)
+function applyPushUrlPreset() {
+    const val   = document.getElementById('push-url-preset')?.value;
+    const urlEl = document.getElementById('push-url');
+    if (!urlEl) return;
+    if (val && val !== 'custom') {
+        urlEl.value = val;
+        urlEl.classList.add('hidden');
+    } else if (val === 'custom') {
+        urlEl.value = '';
+        urlEl.classList.remove('hidden');
+        urlEl.focus();
+    }
+}
+
+async function sendBroadcast() {
+    const title      = (document.getElementById('announce-title')?.value || '').trim();
+    const msg        = (document.getElementById('announce-msg')?.value   || '').trim();
+    const expiry     = document.getElementById('announce-expiry')?.value || null;
+    const toBoard    = document.getElementById('ch-noticeboard')?.checked;
+    const toPush     = document.getElementById('ch-push')?.checked;
+    const toWA       = document.getElementById('ch-whatsapp')?.checked;
+    const url        = (document.getElementById('push-url')?.value  || '/').trim();
+    const audience   = document.getElementById('push-audience')?.value || 'all';
+    const resultEl   = document.getElementById('broadcast-result');
+    const sendBtn    = document.getElementById('broadcast-send-text');
+
+    if (!msg) {
+        resultEl.textContent = '⚠️ Message is required.';
+        resultEl.className   = 'text-sm mt-3 text-amber-400';
+        resultEl.classList.remove('hidden');
+        return;
+    }
+    if (!toBoard && !toPush && !toWA) {
+        resultEl.textContent = '⚠️ Select at least one delivery channel.';
+        resultEl.className   = 'text-sm mt-3 text-amber-400';
+        resultEl.classList.remove('hidden');
+        return;
+    }
+
+    sendBtn.textContent = 'Sending…';
+    resultEl.classList.add('hidden');
+    const results = [];
+
+    try {
+        // 1. Post to Notice Board
+        if (toBoard) {
+            await authFetch(`${API}/announcement/add`, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ message: msg, expires_on: expiry || null })
+            });
+            results.push('📌 Notice Board ✓');
+            loadAnnouncements();
+        }
+
+        // 2. Push Notification
+        if (toPush) {
+            const pushTitle = title || msg.slice(0, 60);
+            const res  = await authFetch(`${API}/push/send`, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:    JSON.stringify({ title: pushTitle, body: msg, url, audience })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error('Push: ' + (data.error || 'Server error'));
+            results.push(`🔔 Push → ${data.sent} subscriber${data.sent !== 1 ? 's' : ''} ✓`);
+            loadPushStats();
+        }
+
+        // 3. WhatsApp Broadcast
+        if (toWA) {
+            try {
+                const waMsg = (title ? `*${title}*\n` : '') + msg;
+                const res   = await authFetch(`${API}/wa-broadcast`, {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify({ message: waMsg })
+                });
+                const data  = await res.json();
+                if (!res.ok) throw new Error(data.error || 'WA error');
+                results.push(`📱 WhatsApp → ${data.sent || '?'} contacts ✓`);
+            } catch(e) {
+                results.push(`📱 WhatsApp ✗ (${e.message})`);
+            }
+        }
+
+        resultEl.textContent = results.join(' · ');
+        resultEl.className   = 'text-sm mt-3 text-green-400';
+        resultEl.classList.remove('hidden');
+
+    } catch(e) {
+        resultEl.textContent = `❌ ${e.message}`;
+        resultEl.className   = 'text-sm mt-3 text-red-400';
+        resultEl.classList.remove('hidden');
+    } finally {
+        sendBtn.textContent = 'Send';
+    }
+}
+
+// Legacy alias — keep addAnnouncement wired to the new flow
+function addAnnouncement() { sendBroadcast(); }
 
 async function loadAnnouncements() {
     const res = await fetch(`${API}/announcement/list`);
@@ -1300,7 +2307,87 @@ async function deleteTestimonial(id) {
 // ════════════════════════════════════════════════════════════
 //  10. TIMETABLE
 // ════════════════════════════════════════════════════════════
+
+// ── Plan 2 Fix 1: Slot manager ───────────────────────────────
+function showSlotStatus(msg, ok) {
+    const el = document.getElementById('slot-manager-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'text-xs rounded px-2 py-1 mt-2 ' + (ok ? 'bg-green-900/40 text-green-400' : 'bg-red-900/40 text-red-400');
+    el.classList.remove('hidden');
+    setTimeout(() => el.classList.add('hidden'), 3500);
+}
+
+async function loadTimetableSlots() {
+    try {
+        const res   = await fetch(`${API}/timetable-slots`);
+        const slots = await res.json();
+
+        // 1. Render the Manage Slots list
+        const listEl = document.getElementById('slot-manager-list');
+        if (listEl) {
+            if (!slots.length) {
+                listEl.innerHTML = '<p class="text-gray-600 text-xs italic">No slots yet.</p>';
+            } else {
+                listEl.innerHTML = slots.map((slot, idx) => {
+                    const s = safe(slot);
+                    return `<div class="flex items-center justify-between bg-gray-800 px-3 py-2 rounded border border-gray-700 hover:border-indigo-700/50 transition">
+                        <span class="text-sm text-gray-200">• ${s}</span>
+                        <button onclick="deleteTimetableSlotByIndex(${idx}, '${s.replace(/'/g, "\\'")}')
+"                            class="text-xs bg-red-900/40 hover:bg-red-600 text-red-300 hover:text-white px-2 py-1 rounded border border-red-800 transition ml-3">✕ Delete</button>
+                    </div>`;
+                }).join('');
+            }
+        }
+
+        // 2. Repopulate #ttSlot <select> dynamically
+        const select = document.getElementById('ttSlot');
+        if (select) {
+            const prev = select.value;
+            select.innerHTML = slots.length
+                ? slots.map(s => `<option value="${safe(s)}">${safe(s)}</option>`).join('')
+                : '<option value="">No slots — add one above</option>';
+            // Try to restore previously selected value
+            if (prev && slots.includes(prev)) select.value = prev;
+        }
+    } catch(e) {
+        console.error('loadTimetableSlots error:', e);
+    }
+}
+
+async function addTimetableSlot() {
+    const input = document.getElementById('new-slot-input');
+    const slot  = input ? input.value.trim() : '';
+    if (!slot) { showSlotStatus('Enter a slot name.', false); return; }
+    try {
+        const res  = await authFetch(`${API}/timetable-slots`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slot })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed');
+        if (input) input.value = '';
+        showSlotStatus('Slot added ✓', true);
+        loadTimetableSlots();
+    } catch(e) { showSlotStatus('Error: ' + e.message, false); }
+}
+
+async function deleteTimetableSlotByIndex(idx, slotName) {
+    if (!confirm(`Delete slot "${slotName}"?\nThis will also remove all timetable entries using this slot.`)) return;
+    try {
+        const res  = await authFetch(`${API}/timetable-slots/${idx}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed');
+        showSlotStatus(`Slot "${slotName}" deleted.`, true);
+        loadTimetableSlots();
+        loadAdminTimetable(); // refresh timetable entries too
+    } catch(e) { showSlotStatus('Error: ' + e.message, false); }
+}
+
 async function loadAdminTimetable() {
+    // Always load slots & locations first so dropdowns are ready before the form is used
+    await Promise.all([loadTimetableSlots(), loadTimetableLocations()]);
     try {
         const res = await fetch(`${API}/timetable`);
         const data = await res.json();
@@ -1313,40 +2400,289 @@ async function loadAdminTimetable() {
             const time  = safe(t.time || '');
             const inst  = safe(t.instructor || '');
             const id    = safe(t.id);
+            const loc   = safe(t.locationName || t.locationId || '');
             return `<div class="flex items-center justify-between bg-gray-700/50 p-3 rounded border border-gray-600">
                 <div>
                     <span class="font-bold text-indigo-300 text-sm">${day} · ${slot}</span>
+                    ${loc ? `<span class="ml-2 text-xs bg-amber-900/40 text-amber-400 border border-amber-800 px-2 py-0.5 rounded-full">${loc}</span>` : ''}
                     <div class="text-xs text-gray-300 mt-0.5">${batch}${time?' — '+time:''}${inst?' · '+inst:''}</div>
                 </div>
-                <button onclick="deleteTimetableSlot('${id}')"
+                <button onclick="deleteTimetableEntry('${id}')"
                     class="bg-red-900/40 hover:bg-red-600 text-red-300 hover:text-white px-2 py-1 rounded text-xs border border-red-800 transition">✕</button>
             </div>`;
         }).join('');
     } catch(e) { console.error(e); }
 }
 
+// ── Location dropdown for timetable form ─────────────────────
+async function loadTimetableLocations() {
+    try {
+        const res  = await fetch(`${API}/locations`);
+        const locs = await res.json();
+        const sel  = document.getElementById('ttLocation');
+        if (!sel) return;
+        // Keep the placeholder, repopulate the rest
+        sel.innerHTML = '<option value="">— All Locations —</option>';
+        locs.forEach(loc => {
+            const opt = document.createElement('option');
+            opt.value       = loc.id || loc.name;
+            opt.textContent = loc.name + (loc.label ? ' — ' + loc.label : '');
+            opt.dataset.name = loc.name;
+            sel.appendChild(opt);
+        });
+    } catch(e) { console.error('loadTimetableLocations error:', e); }
+}
+
 document.getElementById('timetableForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const locSel      = document.getElementById('ttLocation');
+    const locationId  = locSel ? locSel.value : '';
+    // Prefer the data-name attribute so we always send a human-readable name too
+    const selectedOpt = locSel && locSel.selectedIndex >= 0 ? locSel.options[locSel.selectedIndex] : null;
+    const locationName = selectedOpt ? (selectedOpt.dataset.name || selectedOpt.textContent.split(' —')[0].trim()) : '';
     await authFetch(`${API}/timetable`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${getToken()}` },
         body: JSON.stringify({
-            day:        document.getElementById('ttDay').value,
-            slot:       document.getElementById('ttSlot').value,
-            batch:      document.getElementById('ttBatch').value,
-            time:       document.getElementById('ttTime').value,
-            instructor: document.getElementById('ttInstructor').value
+            day:          document.getElementById('ttDay').value,
+            slot:         document.getElementById('ttSlot').value,
+            batch:        document.getElementById('ttBatch').value,
+            time:         document.getElementById('ttTime').value,
+            instructor:   document.getElementById('ttInstructor').value,
+            activities:   document.getElementById('ttActivities').value,
+            focus:        document.getElementById('ttFocus').value,
+            description:  document.getElementById('ttDescription').value,
+            locationId,
+            locationName
         })
     });
     e.target.reset();
     loadAdminTimetable();
 });
 
-async function deleteTimetableSlot(id) {
-    if (confirm('Delete this slot?')) {
+async function deleteTimetableEntry(id) {
+    if (confirm('Delete this timetable entry?')) {
         await authFetch(`${API}/timetable/${id}`, { method: 'DELETE' });
         loadAdminTimetable();
     }
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  12. GRADING SYLLABUS PDF
+// ════════════════════════════════════════════════════════════
+function showSyllabusStatus(msg, ok) {
+    const el = document.getElementById('syllabus-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'text-sm rounded-lg px-3 py-2 mt-3 ' + (ok ? 'bg-green-900/40 text-green-400' : 'bg-red-900/40 text-red-400');
+    el.classList.remove('hidden');
+    setTimeout(() => el.classList.add('hidden'), 4000);
+}
+
+async function loadSyllabus() {
+    try {
+        const res  = await fetch(`${API}/syllabus`);
+        const data = await res.json();
+        const fnEl  = document.getElementById('syllabus-filename');
+        const atEl  = document.getElementById('syllabus-uploaded-at');
+        const prvBtn = document.getElementById('syllabus-preview-btn');
+        const delBtn = document.getElementById('syllabus-delete-btn');
+
+        if (data && data.pdfPath) {
+            if (fnEl)  fnEl.textContent  = safe(data.filename || 'grading-syllabus.pdf');
+            if (atEl)  atEl.textContent  = data.uploadedAt ? 'Uploaded: ' + new Date(data.uploadedAt).toLocaleString('en-IN', { dateStyle:'medium', timeStyle:'short' }) : '';
+            if (prvBtn) { prvBtn.href = data.pdfPath; prvBtn.classList.remove('hidden'); }
+            if (delBtn) delBtn.classList.remove('hidden');
+        } else {
+            if (fnEl)  fnEl.textContent  = 'No PDF uploaded yet';
+            if (atEl)  atEl.textContent  = '';
+            if (prvBtn) prvBtn.classList.add('hidden');
+            if (delBtn) delBtn.classList.add('hidden');
+        }
+    } catch(e) {
+        console.error('Syllabus load error:', e);
+    }
+}
+
+async function uploadSyllabus(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    if (file.type !== 'application/pdf') { showSyllabusStatus('Only PDF files are accepted.', false); return; }
+    if (file.size > 20 * 1024 * 1024) { showSyllabusStatus('File too large. Max 20 MB.', false); return; }
+
+    showSyllabusStatus('Uploading…', true);
+    const formData = new FormData();
+    formData.append('pdf', file);
+
+    try {
+        const res  = await authFetch(`${API}/syllabus`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Upload failed');
+        showSyllabusStatus('Syllabus uploaded successfully ✓', true);
+        loadSyllabus();
+    } catch(e) {
+        showSyllabusStatus('Error: ' + e.message, false);
+    }
+    input.value = '';
+}
+
+async function deleteSyllabus() {
+    if (!confirm('Remove the grading syllabus PDF? Students will no longer see it on grading.html.')) return;
+    try {
+        const res = await authFetch(`${API}/syllabus`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Delete failed');
+        showSyllabusStatus('Syllabus PDF removed.', true);
+        loadSyllabus();
+    } catch(e) {
+        showSyllabusStatus('Error: ' + e.message, false);
+    }
+}
+
+// Drag-and-drop support for syllabus
+(function initSyllabusDrop() {
+    document.addEventListener('DOMContentLoaded', () => {
+        const zone = document.getElementById('syllabus-drop-zone');
+        if (!zone) return;
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('border-yellow-400'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('border-yellow-400'));
+        zone.addEventListener('drop', e => {
+            e.preventDefault();
+            zone.classList.remove('border-yellow-400');
+            const file = e.dataTransfer.files[0];
+            if (!file) return;
+            const fakeInput = { files: [file] };
+            uploadSyllabus(fakeInput);
+        });
+    });
+})();
+
+
+// ════════════════════════════════════════════════════════════
+//  13. UPI PAYMENTS
+// ════════════════════════════════════════════════════════════
+let _allPayments = [];
+
+async function loadPaymentSettings() {
+    try {
+        const res  = await fetch(`${API}/payment-settings`);
+        const data = await res.json();
+        if (data.upiId)   document.getElementById('upi-id-input').value   = data.upiId;
+        if (data.name)    document.getElementById('upi-name-input').value  = data.name;
+        if (data.types)   document.getElementById('upi-types-input').value = data.types.join(',');
+    } catch(e) { console.error('Payment settings load error:', e); }
+}
+
+async function savePaymentSettings() {
+    const upiId = document.getElementById('upi-id-input').value.trim();
+    const name  = document.getElementById('upi-name-input').value.trim();
+    const types = document.getElementById('upi-types-input').value.trim();
+    if (!upiId) { document.getElementById('upi-settings-status').textContent = 'UPI ID is required.'; return; }
+
+    const statusEl = document.getElementById('upi-settings-status');
+    statusEl.textContent = 'Saving…';
+
+    try {
+        const res = await authFetch(`${API}/payment-settings`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ upiId, name, types: types ? types.split(',').map(t=>t.trim()) : [] })
+        });
+        if (!res.ok) throw new Error('Failed');
+        statusEl.textContent = '✓ Saved';
+        setTimeout(() => { statusEl.textContent = ''; }, 2500);
+    } catch(e) {
+        statusEl.textContent = 'Error saving settings.';
+    }
+}
+
+async function loadPayments() {
+    try {
+        const res  = await authFetch(`${API}/payments`);
+        const list = await res.json();
+        _allPayments = Array.isArray(list) ? list : [];
+        const count = document.getElementById('payment-count');
+        if (count) count.textContent = `${_allPayments.length} total`;
+        renderPayments('all');
+    } catch(e) {
+        document.getElementById('payment-records-list').innerHTML = '<p class="text-red-400 text-sm p-2">Failed to load payments.</p>';
+    }
+}
+
+function filterPayments(status) {
+    document.querySelectorAll('.payment-filter-btn').forEach(b => b.classList.remove('bg-gray-600','text-white','active-filter'));
+    const active = document.getElementById('filter-' + status);
+    if (active) { active.classList.add('bg-gray-600','text-white','active-filter'); }
+    renderPayments(status);
+}
+
+function renderPayments(status) {
+    const list = status === 'all' ? _allPayments : _allPayments.filter(p => p.status === status);
+    const el   = document.getElementById('payment-records-list');
+    if (!list.length) {
+        el.innerHTML = '<p class="text-gray-500 italic text-sm p-2">No ' + (status === 'all' ? '' : status + ' ') + 'payments found.</p>';
+        return;
+    }
+
+    const statusColor = { pending: 'text-amber-400 bg-amber-900/20 border-amber-800', approved: 'text-green-400 bg-green-900/20 border-green-800', rejected: 'text-red-400 bg-red-900/20 border-red-800' };
+
+    el.innerHTML = list.map(p => {
+        const name    = safe(p.name || '—');
+        const phone   = safe(p.phone || '—');
+        const branch  = safe(p.branch || '—');
+        const type    = safe(p.type || '—');
+        const amount  = safe(String(p.amount || '—'));
+        const month   = safe(p.month || '—');
+        const status  = safe(p.status || 'pending');
+        const id      = safe(p.id);
+        const date    = p.createdAt ? new Date(p.createdAt).toLocaleString('en-IN', { dateStyle:'short', timeStyle:'short' }) : '';
+        const sc      = statusColor[p.status] || statusColor.pending;
+        const ssUrl   = p.screenshotUrl ? `${SERVER_URL}${safe(p.screenshotUrl)}` : '';
+
+        return `<div class="bg-gray-700/50 p-4 rounded-xl border border-gray-600">
+            <div class="flex flex-col md:flex-row md:items-center gap-3">
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="font-bold text-white text-sm">${name}</span>
+                        <span class="text-gray-400 text-xs">${phone}</span>
+                        <span class="text-xs px-2 py-0.5 rounded border ${sc} font-bold">${status.toUpperCase()}</span>
+                    </div>
+                    <div class="text-xs text-gray-400 mt-1 flex flex-wrap gap-x-3">
+                        <span>₹${amount}</span>
+                        <span>${type}</span>
+                        <span>${month}</span>
+                        <span>${branch}</span>
+                        <span class="text-gray-600">${date}</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    ${ssUrl ? `<a href="${ssUrl}" target="_blank" class="text-xs bg-blue-700/40 hover:bg-blue-600 text-blue-300 hover:text-white px-2.5 py-1.5 rounded border border-blue-700 transition">Screenshot</a>` : '<span class="text-xs text-gray-600">No screenshot</span>'}
+                    ${status !== 'approved' ? `<button onclick="updatePaymentStatus('${id}','approved')" class="text-xs bg-green-900/40 hover:bg-green-600 text-green-400 hover:text-white px-2.5 py-1.5 rounded border border-green-800 transition">✓ Approve</button>` : ''}
+                    ${status !== 'rejected' ? `<button onclick="updatePaymentStatus('${id}','rejected')" class="text-xs bg-red-900/40 hover:bg-red-600 text-red-400 hover:text-white px-2.5 py-1.5 rounded border border-red-800 transition">✗ Reject</button>` : ''}
+                    <button onclick="deletePayment('${id}')" class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-400 hover:text-white px-2 py-1.5 rounded border border-gray-600 transition" title="Delete">🗑️</button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+async function updatePaymentStatus(id, status) {
+    try {
+        await authFetch(`${API}/payments/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status })
+        });
+        loadPayments();
+    } catch(e) { alert('Error updating payment status.'); }
+}
+
+async function deletePayment(id) {
+    if (!confirm('Delete this payment record?')) return;
+    try {
+        await authFetch(`${API}/payments/${id}`, { method: 'DELETE' });
+        loadPayments();
+    } catch(e) { alert('Error deleting payment.'); }
 }
 
 
@@ -1373,6 +2709,8 @@ async function loadActivityLog() {
             DELETE_DOCUMENT:     'text-red-300',
             ADD_ANNOUNCEMENT:    'text-amber-400',
             DELETE_ANNOUNCEMENT: 'text-amber-300',
+            ADD_TIMETABLE_SLOT:  'text-indigo-400',
+            DELETE_TIMETABLE_SLOT: 'text-indigo-300',
         };
 
         el.innerHTML = log.map(entry => {
@@ -1380,9 +2718,11 @@ async function loadActivityLog() {
             const action = safe(entry.action);
             const item   = safe(entry.item || '—');
             const ip     = safe(entry.ip || '');
+            const who    = safe(entry.who || entry.admin || '');
             const color  = actionColors[entry.action] || 'text-gray-300';
             return `<div class="flex items-start gap-2 bg-gray-900/60 p-2 rounded border border-gray-700/50 hover:bg-gray-900 transition">
                 <span class="text-gray-600 shrink-0 w-28">${ts}</span>
+                ${who ? `<span class="text-violet-400 font-semibold shrink-0 w-32 truncate" title="${who}">👤 ${who}</span>` : ''}
                 <span class="${color} font-bold shrink-0 w-44">${action}</span>
                 <span class="text-gray-300 truncate flex-1">${item}</span>
                 <span class="text-gray-700 shrink-0 text-[10px] hidden md:block">${ip}</span>
@@ -1393,7 +2733,1127 @@ async function loadActivityLog() {
     }
 }
 
-</script>
+// ════════════════════════════════════════════════════════════
+//  FIX 4B — ACHIEVEMENTS CRUD (was entirely missing)
+// ════════════════════════════════════════════════════════════
+function showAchStatus(msg, ok) {
+    const el = document.getElementById('ach-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'text-sm rounded-lg px-3 py-2 mb-4 ' + (ok ? 'bg-green-900/40 text-green-400' : 'bg-red-900/40 text-red-400');
+    el.classList.remove('hidden');
+    setTimeout(() => el.classList.add('hidden'), 4000);
+}
 
-</body>
-</html>
+async function loadAchievements() {
+    const list = document.getElementById('ach-list');
+    if (!list) return;
+    try {
+        const res  = await fetch(`${API}/achievements`);
+        const data = await res.json();
+        if (!data.length) {
+            list.innerHTML = '<p class="text-gray-500 text-sm italic">No achievements yet. Add one above.</p>';
+            return;
+        }
+        const catColors = {
+            tournament:    'text-yellow-400 bg-yellow-900/20 border-yellow-700',
+            certification: 'text-blue-400   bg-blue-900/20   border-blue-700',
+            milestone:     'text-green-400  bg-green-900/20  border-green-700'
+        };
+        list.innerHTML = data.map(a => {
+            const icon     = safe(a.icon || '🏅');
+            const title    = safe(a.title);
+            const subtitle = safe(a.subtitle || '');
+            const year     = safe(a.year);
+            const cat      = safe(a.category || 'tournament');
+            const id       = safe(a.id);
+            const cc       = catColors[a.category] || catColors.tournament;
+            const hasImg   = !!a.image;
+            return `<div class="flex items-center gap-3 bg-gray-700/50 p-3 rounded-xl border border-gray-600 hover:border-gray-500 transition">
+                <div class="text-2xl w-10 text-center flex-shrink-0">${icon}</div>
+                ${hasImg ? `<img src="${safe(a.image)}" class="w-12 h-12 rounded-lg object-cover border border-gray-600 flex-shrink-0" loading="lazy">` : ''}
+                <div class="flex-1 min-w-0">
+                    <div class="font-bold text-white text-sm truncate">${title}</div>
+                    ${subtitle ? `<div class="text-xs text-gray-400 truncate">${subtitle}</div>` : ''}
+                    <div class="flex items-center gap-2 mt-1">
+                        <span class="text-xs font-bold px-2 py-0.5 rounded-full border ${cc}">${cat}</span>
+                        <span class="text-xs text-amber-400 font-bold">${year}</span>
+                    </div>
+                </div>
+                <div class="flex gap-2 flex-shrink-0">
+                    <button onclick="editAchievement('${id}')"
+                        class="bg-gray-700 hover:bg-gray-600 text-gray-300 hover:text-white px-2.5 py-1.5 rounded text-xs border border-gray-600 transition">Edit</button>
+                    <button onclick="deleteAchievement('${id}')"
+                        class="bg-red-900/40 hover:bg-red-600 text-red-300 hover:text-white px-2.5 py-1.5 rounded text-xs border border-red-800 transition">✕</button>
+                </div>
+            </div>`;
+        }).join('');
+    } catch(e) {
+        document.getElementById('ach-list').innerHTML = '<p class="text-red-400 text-sm">Failed to load achievements.</p>';
+    }
+}
+
+async function submitAchievement() {
+    const editId   = document.getElementById('ach-edit-id').value;
+    const title    = document.getElementById('ach-title').value.trim();
+    const icon     = document.getElementById('ach-icon').value.trim();
+    const year     = document.getElementById('ach-year').value.trim();
+    const subtitle = document.getElementById('ach-subtitle').value.trim();
+    const category = document.getElementById('ach-category').value;
+    const imageFile = document.getElementById('ach-image').files[0];
+
+    if (!title) { showAchStatus('Title is required.', false); return; }
+
+    const btn = document.getElementById('ach-submit-btn');
+    btn.textContent = editId ? 'Updating…' : 'Adding…';
+    btn.disabled = true;
+
+    try {
+        const formData = new FormData();
+        formData.append('title',    title);
+        formData.append('icon',     icon    || '🏅');
+        formData.append('year',     year    || String(new Date().getFullYear()));
+        formData.append('subtitle', subtitle);
+        formData.append('category', category);
+        if (imageFile) formData.append('image', imageFile);
+
+        const url    = editId ? `${API}/achievements/${editId}` : `${API}/achievements`;
+        const method = editId ? 'PUT' : 'POST';
+        const res    = await authFetch(url, { method, body: formData });
+        const data   = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed');
+
+        showAchStatus(editId ? 'Achievement updated ✓' : 'Achievement added ✓', true);
+        cancelEditAchievement();
+        loadAchievements();
+    } catch(e) {
+        showAchStatus('Error: ' + e.message, false);
+    }
+
+    btn.disabled = false;
+    btn.textContent = document.getElementById('ach-edit-id').value ? 'Update Achievement' : 'Add Achievement';
+}
+
+// Keep the old name as alias so any lingering onclick="addAchievement()" still works
+function addAchievement() { submitAchievement(); }
+
+async function deleteAchievement(id) {
+    if (!confirm('Delete this achievement?')) return;
+    try {
+        const res = await authFetch(`${API}/achievements/${id}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Delete failed');
+        showAchStatus('Deleted.', true);
+        loadAchievements();
+    } catch(e) { showAchStatus('Error deleting achievement.', false); }
+}
+
+async function editAchievement(id) {
+    try {
+        const res  = await fetch(`${API}/achievements`);
+        const list = await res.json();
+        const a    = list.find(x => x.id === id);
+        if (!a) return;
+        document.getElementById('ach-icon').value     = a.icon     || '';
+        document.getElementById('ach-year').value     = a.year     || '';
+        document.getElementById('ach-title').value    = a.title    || '';
+        document.getElementById('ach-subtitle').value = a.subtitle || '';
+        document.getElementById('ach-category').value = a.category || 'tournament';
+        document.getElementById('ach-image').value    = '';           // can't pre-fill file input
+        document.getElementById('ach-edit-id').value  = id;
+        document.getElementById('ach-submit-btn').textContent = 'Update Achievement';
+        document.getElementById('ach-cancel-btn').classList.remove('hidden');
+        document.getElementById('ach-submit-btn').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch(e) { alert('Could not load achievement data.'); }
+}
+
+function cancelEditAchievement() {
+    ['ach-icon','ach-year','ach-title','ach-subtitle'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '';
+    });
+    document.getElementById('ach-category').value = 'tournament';
+    document.getElementById('ach-image').value    = '';
+    document.getElementById('ach-edit-id').value  = '';
+    document.getElementById('ach-submit-btn').textContent = 'Add Achievement';
+    document.getElementById('ach-cancel-btn').classList.add('hidden');
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  FIX 4C — WHATSAPP CONTACTS (was entirely missing)
+// ════════════════════════════════════════════════════════════
+function showWacStatus(msg, ok) {
+    const el = document.getElementById('wa-contacts-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'text-sm rounded-lg px-3 py-2 mb-4 ' + (ok ? 'bg-green-900/40 text-green-400' : 'bg-red-900/40 text-red-400');
+    el.classList.remove('hidden');
+    setTimeout(() => el.classList.add('hidden'), 4000);
+}
+
+async function loadWaContacts() {
+    const list = document.getElementById('wa-contacts-list');
+    if (!list) return;
+    try {
+        const res  = await authFetch(`${API}/wa-contacts`);
+        const data = await res.json();
+        const countEl = document.getElementById('wac-count');
+        const active  = data.filter(c => c.active).length;
+        if (countEl) countEl.textContent = `${data.length} contacts · ${active} active`;
+        if (!data.length) {
+            list.innerHTML = '<p class="text-gray-500 text-sm italic">No contacts yet.</p>';
+            return;
+        }
+        list.innerHTML = data.map(c => {
+            const name  = safe(c.name  || '');
+            const phone = safe(c.phone || '');
+            return `<div class="flex items-center justify-between bg-gray-700/50 p-2.5 rounded border border-gray-600 hover:border-gray-500 transition">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <div class="w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold
+                        ${c.active ? 'bg-green-700 text-green-100' : 'bg-gray-700 text-gray-500'}">
+                        ${c.active ? '✓' : '✗'}
+                    </div>
+                    <div class="min-w-0">
+                        <div class="text-sm font-semibold text-white truncate">${name || 'Unnamed'}</div>
+                        <div class="text-xs text-gray-400 font-mono">${phone}</div>
+                    </div>
+                </div>
+                <div class="flex gap-2 flex-shrink-0 ml-2">
+                    <button onclick="toggleWaContact('${phone}')"
+                        class="text-xs px-2.5 py-1.5 rounded border transition
+                            ${c.active ? 'bg-amber-900/30 border-amber-800 text-amber-400 hover:bg-amber-700 hover:text-white' : 'bg-green-900/30 border-green-800 text-green-400 hover:bg-green-700 hover:text-white'}">
+                        ${c.active ? 'Disable' : 'Enable'}
+                    </button>
+                    <button onclick="deleteWaContact('${phone}')"
+                        class="bg-red-900/40 hover:bg-red-600 text-red-300 hover:text-white px-2.5 py-1.5 rounded text-xs border border-red-800 transition">✕</button>
+                </div>
+            </div>`;
+        }).join('');
+    } catch(e) {
+        document.getElementById('wa-contacts-list').innerHTML = '<p class="text-red-400 text-sm">Failed to load contacts.</p>';
+    }
+}
+
+async function addWaContact() {
+    const name  = document.getElementById('wac-name').value.trim();
+    const phone = document.getElementById('wac-phone').value.trim();
+    if (!phone) { showWacStatus('Phone number is required.', false); return; }
+    try {
+        const res  = await authFetch(`${API}/wa-contacts`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, phone })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed');
+        showWacStatus('Contact added ✓', true);
+        document.getElementById('wac-name').value  = '';
+        document.getElementById('wac-phone').value = '';
+        loadWaContacts();
+    } catch(e) { showWacStatus('Error: ' + e.message, false); }
+}
+
+async function deleteWaContact(phone) {
+    if (!confirm('Remove this contact?')) return;
+    try {
+        const res = await authFetch(`${API}/wa-contacts/${encodeURIComponent(phone)}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error('Delete failed');
+        showWacStatus('Contact removed.', true);
+        loadWaContacts();
+    } catch(e) { showWacStatus('Error removing contact.', false); }
+}
+
+async function toggleWaContact(phone) {
+    try {
+        const res = await authFetch(`${API}/wa-contacts/${encodeURIComponent(phone)}/toggle`, { method: 'PATCH' });
+        if (!res.ok) throw new Error('Toggle failed');
+        loadWaContacts();
+    } catch(e) { showWacStatus('Error toggling contact.', false); }
+}
+
+async function importWaContacts(input) {
+    if (!input.files || !input.files[0]) return;
+    const file = input.files[0];
+    showWacStatus('Importing…', true);
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+        const res  = await authFetch(`${API}/wa-contacts/import`, { method: 'POST', body: formData });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Import failed');
+        showWacStatus(`Import done ✓ — Added: ${data.added}, Skipped: ${data.skipped}, Total: ${data.total}`, true);
+        loadWaContacts();
+    } catch(e) { showWacStatus('Error: ' + e.message, false); }
+    input.value = '';
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  FIX 4D — GOOGLE REVIEWS ADMIN (was entirely missing)
+// ════════════════════════════════════════════════════════════
+// ── openAddBranchModal ────────────────────────────────────────
+async function openAddBranchModal() {
+    const label = prompt('Branch display name (e.g. Dombivali):');
+    if (!label || !label.trim()) return;
+
+    // Derive a safe branchId from the label
+    const branchId = label.trim().toLowerCase().replace(/[^a-z0-9]/g, '_').slice(0, 32);
+
+    try {
+        const token = sessionStorage.getItem('adminToken');
+        const res   = await fetch(`${API}/google-reviews/branches`, {
+            method:  'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body:    JSON.stringify({ branchId, label: label.trim() })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Failed to create branch');
+
+        // Switch to new branch and reload
+        window._grActiveBranch = branchId;
+        showGrAdminStatus(`Branch "${label.trim()}" created ✓`, true);
+        loadGoogleReviewsAdmin();
+    } catch(e) {
+        showGrAdminStatus('Error: ' + e.message, false);
+    }
+}
+
+function showGrAdminStatus(msg, ok) {
+    const el = document.getElementById('gr-admin-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'text-sm rounded-lg px-3 py-2 mb-4 ' + (ok ? 'bg-green-900/40 text-green-400' : 'bg-red-900/40 text-red-400');
+    el.classList.remove('hidden');
+    setTimeout(() => el.classList.add('hidden'), 5000);
+}
+
+async function loadGoogleReviewsAdmin() {
+    try {
+        const res  = await fetch(`${API}/google-reviews`);
+        const resp = await res.json();
+
+        // Server returns multi-branch format: { branches: { main: {...}, ... } }
+        // Fall back to legacy flat format for backwards compat.
+        let data = resp;
+        if (resp && resp.branches) {
+            // Use active branch (tracked by _grActiveBranch) or fall back to first branch
+            const activeBid = window._grActiveBranch || Object.keys(resp.branches)[0] || 'main';
+            window._grActiveBranch = activeBid;
+            data = resp.branches[activeBid] || resp.branches[Object.keys(resp.branches)[0]] || {};
+
+            // Render branch tabs
+            const tabsEl = document.getElementById('gra-branch-tabs');
+            if (tabsEl) {
+                tabsEl.innerHTML = Object.entries(resp.branches).map(([bid, b]) => `
+                    <button onclick="switchGrBranch('${bid}')"
+                        class="px-3 py-1.5 rounded-lg text-xs font-bold border transition ${activeBid === bid
+                            ? 'bg-amber-500 text-black border-amber-500'
+                            : 'bg-gray-700 text-gray-300 border-gray-600 hover:bg-gray-600'}">
+                        ${b.label || bid}
+                    </button>`).join('');
+            }
+        }
+
+        const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+        set('gra-rating',  data.rating        || '—');
+        set('gra-count',   data.totalRatings   || '—');
+        set('gra-source',  data.manualOverride ? 'Manual override' : 'Google Places API');
+        set('gra-fetched', data.lastFetched    ? new Date(data.lastFetched).toLocaleString('en-IN', { dateStyle:'short', timeStyle:'short' }) : '—');
+
+        if (data.placeId) {
+            const el = document.getElementById('gra-place-id');
+            if (el) el.value = data.placeId;
+        }
+        if (data.label) {
+            const el = document.getElementById('gra-branch-name');
+            if (el && !el.value) el.value = data.label;
+        }
+        if (data.manualOverride) {
+            const toggle = document.getElementById('gra-manual-toggle');
+            if (toggle) { toggle.checked = true; toggleGrManual(); }
+            const rEl = document.getElementById('gra-manual-rating');
+            const cEl = document.getElementById('gra-manual-count');
+            if (rEl) rEl.value = data.rating        || '';
+            if (cEl) cEl.value = data.totalRatings   || '';
+        }
+        // Load reviews list
+        _grReviews = Array.isArray(data.reviews) ? data.reviews : [];
+        renderGrReviewsList();
+    } catch(e) { console.error('Google Reviews admin load error:', e); }
+}
+
+// Switch active branch tab
+function switchGrBranch(bid) {
+    window._grActiveBranch = bid;
+    loadGoogleReviewsAdmin();
+}
+
+function toggleGrManual() {
+    const checked = document.getElementById('gra-manual-toggle').checked;
+    const fields  = document.getElementById('gra-manual-fields');
+    if (fields) fields.classList.toggle('hidden', !checked);
+}
+
+async function saveGoogleReviewsSettings() {
+    const bid           = window._grActiveBranch || 'main';
+    const placeId       = document.getElementById('gra-place-id').value.trim();
+    const apiKey        = document.getElementById('gra-api-key') ? document.getElementById('gra-api-key').value.trim() : '';
+    const manualOverride= document.getElementById('gra-manual-toggle') ? document.getElementById('gra-manual-toggle').checked : false;
+    const rating        = document.getElementById('gra-manual-rating') ? document.getElementById('gra-manual-rating').value : '';
+    const totalRatings  = document.getElementById('gra-manual-count')  ? document.getElementById('gra-manual-count').value  : '';
+    const label         = document.getElementById('gra-branch-name')   ? document.getElementById('gra-branch-name').value.trim() : '';
+
+    try {
+        const res  = await authFetch(`${API}/google-reviews/settings?branch=${encodeURIComponent(bid)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ placeId, apiKey: apiKey || undefined, manualOverride, rating, totalRatings, label: label || undefined })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Save failed');
+        showGrAdminStatus('Settings saved ✓', true);
+        loadGoogleReviewsAdmin();
+    } catch(e) { showGrAdminStatus('Error: ' + e.message, false); }
+}
+
+async function refreshGoogleReviews() {
+    const bid = window._grActiveBranch || 'main';
+    showGrAdminStatus('Fetching from Google Places API…', true);
+    try {
+        const res  = await authFetch(`${API}/google-reviews/refresh?branch=${encodeURIComponent(bid)}`, { method: 'POST' });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Refresh failed');
+        showGrAdminStatus(`Refreshed ✓ — Rating: ${data.data.rating} · ${data.data.totalRatings} reviews`, true);
+        loadGoogleReviewsAdmin();
+    } catch(e) { showGrAdminStatus('Error: ' + e.message, false); }
+}
+
+// ════════════════════════════════════════════════════════════
+//  REVIEWS MANAGER — add/edit/delete individual review cards
+// ════════════════════════════════════════════════════════════
+
+// Local cache of reviews array
+let _grReviews = [];
+
+// Avatar color options
+const GR_COLORS = {
+    amber:  { bg: 'bg-amber-500/20',  border: 'border-amber-500/40',  text: 'text-amber-400',  hex: '#f59e0b' },
+    blue:   { bg: 'bg-blue-500/20',   border: 'border-blue-500/40',   text: 'text-blue-400',   hex: '#3b82f6' },
+    green:  { bg: 'bg-green-500/20',  border: 'border-green-500/40',  text: 'text-green-400',  hex: '#22c55e' },
+    purple: { bg: 'bg-purple-500/20', border: 'border-purple-500/40', text: 'text-purple-400', hex: '#a855f7' },
+    rose:   { bg: 'bg-rose-500/20',   border: 'border-rose-500/40',   text: 'text-rose-400',   hex: '#f43f5e' },
+    cyan:   { bg: 'bg-cyan-500/20',   border: 'border-cyan-500/40',   text: 'text-cyan-400',   hex: '#06b6d4' },
+};
+
+function renderGrReviewsList() {
+    const el = document.getElementById('gr-reviews-list');
+    if (!el) return;
+    if (!_grReviews.length) {
+        el.innerHTML = '<p class="text-gray-500 text-sm py-3">No reviews yet. Click <strong class="text-amber-400">+ Add Review</strong> to add the first one.</p>';
+        return;
+    }
+    el.innerHTML = _grReviews.map((r, i) => {
+        const stars = '⭐'.repeat(Math.min(5, r.rating || 5));
+        const col   = GR_COLORS[r.color] || GR_COLORS.amber;
+        const initial = (r.author || 'A')[0].toUpperCase();
+        return `
+        <div class="flex items-start gap-3 bg-gray-900 rounded-xl border border-gray-700 p-4 hover:border-gray-600 transition group">
+            <!-- Avatar -->
+            <div class="w-10 h-10 rounded-full ${col.bg} border ${col.border} flex items-center justify-center ${col.text} font-bold text-sm flex-shrink-0 mt-0.5">${initial}</div>
+            <!-- Content -->
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-2 mb-0.5 flex-wrap">
+                    <span class="font-bold text-white text-sm truncate">${r.author || 'Anonymous'}</span>
+                    <span class="text-xs text-gray-500">${r.time || ''}</span>
+                </div>
+                <div class="text-xs mb-1.5">${stars}</div>
+                <p class="text-gray-300 text-xs leading-relaxed line-clamp-2">"${r.text || ''}"</p>
+            </div>
+            <!-- Actions -->
+            <div class="flex gap-2 flex-shrink-0 opacity-0 group-hover:opacity-100 transition">
+                <button onclick="openEditReviewModal(${i})" class="text-xs bg-gray-700 hover:bg-gray-600 text-white px-3 py-1.5 rounded-lg font-semibold transition">Edit</button>
+                <button onclick="deleteReview(${i})" class="text-xs bg-red-900/40 hover:bg-red-700 text-red-400 hover:text-white px-3 py-1.5 rounded-lg font-semibold transition">Delete</button>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function renderStarPicker(selected) {
+    const el = document.getElementById('gr-star-picker');
+    if (!el) return;
+    el.innerHTML = [1,2,3,4,5].map(n => `
+        <button type="button" onclick="setReviewStar(${n})"
+            class="text-2xl transition hover:scale-110 ${n <= selected ? 'opacity-100' : 'opacity-30'}"
+            style="line-height:1;">⭐</button>`).join('');
+}
+
+function setReviewStar(n) {
+    document.getElementById('gr-rv-rating').value = n;
+    renderStarPicker(n);
+}
+
+function renderColorPicker(selected) {
+    const el = document.getElementById('gr-color-picker');
+    if (!el) return;
+    el.innerHTML = Object.entries(GR_COLORS).map(([key, col]) => `
+        <button type="button" onclick="setReviewColor('${key}')"
+            class="w-7 h-7 rounded-full border-2 transition hover:scale-110 ${selected === key ? 'border-white scale-110' : 'border-transparent'}"
+            style="background:${col.hex};" title="${key}"></button>`).join('');
+}
+
+function setReviewColor(key) {
+    document.getElementById('gr-rv-color').value = key;
+    renderColorPicker(key);
+}
+
+function openAddReviewModal() {
+    document.getElementById('gr-modal-title').textContent = 'Add Review';
+    document.getElementById('gr-edit-idx').value   = '-1';
+    document.getElementById('gr-rv-author').value  = '';
+    document.getElementById('gr-rv-text').value    = '';
+    document.getElementById('gr-rv-date').value    = new Date().toISOString().slice(0, 10);
+    document.getElementById('gr-rv-rating').value  = '5';
+    document.getElementById('gr-rv-color').value   = 'amber';
+    document.getElementById('gr-rv-charcount').textContent = '0';
+    renderStarPicker(5);
+    renderColorPicker('amber');
+    const modal = document.getElementById('gr-review-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.getElementById('gr-rv-author').focus();
+}
+
+function openEditReviewModal(idx) {
+    const r = _grReviews[idx];
+    if (!r) return;
+    document.getElementById('gr-modal-title').textContent = 'Edit Review';
+    document.getElementById('gr-edit-idx').value   = idx;
+    document.getElementById('gr-rv-author').value  = r.author  || '';
+    document.getElementById('gr-rv-text').value    = r.text    || '';
+    document.getElementById('gr-rv-date').value    = r.time    || '';
+    document.getElementById('gr-rv-rating').value  = r.rating  || 5;
+    document.getElementById('gr-rv-color').value   = r.color   || 'amber';
+    document.getElementById('gr-rv-charcount').textContent = (r.text || '').length;
+    renderStarPicker(r.rating || 5);
+    renderColorPicker(r.color || 'amber');
+    const modal = document.getElementById('gr-review-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeReviewModal() {
+    const modal = document.getElementById('gr-review-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+async function saveReview() {
+    const author = document.getElementById('gr-rv-author').value.trim();
+    const text   = document.getElementById('gr-rv-text').value.trim();
+    const date   = document.getElementById('gr-rv-date').value;
+    const rating = parseInt(document.getElementById('gr-rv-rating').value, 10) || 5;
+    const color  = document.getElementById('gr-rv-color').value || 'amber';
+    const idx    = parseInt(document.getElementById('gr-edit-idx').value, 10);
+
+    if (!author) { alert('Reviewer name is required.'); return; }
+    if (!text)   { alert('Review text is required.'); return; }
+
+    const entry = { author, text, rating, time: date, color };
+
+    // Build updated reviews array
+    const updated = [..._grReviews];
+    if (idx >= 0) { updated[idx] = entry; }
+    else          { updated.push(entry); }
+
+    const bid = window._grActiveBranch || 'main';
+    try {
+        const res = await authFetch(`${API}/google-reviews/reviews?branch=${encodeURIComponent(bid)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reviews: updated })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Save failed');
+        _grReviews = updated;
+        renderGrReviewsList();
+        closeReviewModal();
+        showGrAdminStatus(idx >= 0 ? 'Review updated ✓' : 'Review added ✓', true);
+    } catch(e) {
+        showGrAdminStatus('Error: ' + e.message, false);
+    }
+}
+
+async function deleteReview(idx) {
+    if (!confirm('Delete this review?')) return;
+    const updated = _grReviews.filter((_, i) => i !== idx);
+    const bid = window._grActiveBranch || 'main';
+    try {
+        const res = await authFetch(`${API}/google-reviews/reviews?branch=${encodeURIComponent(bid)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ reviews: updated })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Delete failed');
+        _grReviews = updated;
+        renderGrReviewsList();
+        showGrAdminStatus('Review deleted ✓', true);
+    } catch(e) {
+        showGrAdminStatus('Error: ' + e.message, false);
+    }
+}
+
+// Wire textarea char count
+document.addEventListener('DOMContentLoaded', () => {
+    const ta = document.getElementById('gr-rv-text');
+    if (ta) ta.addEventListener('input', () => {
+        const cc = document.getElementById('gr-rv-charcount');
+        if (cc) cc.textContent = ta.value.length;
+    });
+    // Close modal on backdrop click
+    const modal = document.getElementById('gr-review-modal');
+    if (modal) modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeReviewModal();
+    });
+});
+
+
+// ════════════════════════════════════════════════════════════
+//  FIX 4A — WA CONFIG: persist broadcastGroupId (extended)
+// ════════════════════════════════════════════════════════════
+function showWaCfgStatus(msg, ok) {
+    const el = document.getElementById('wa-cfg-status');
+    if (!el) return;
+    el.textContent = msg;
+    el.className = 'text-sm rounded-lg px-3 py-2 mb-4 ' + (ok ? 'bg-green-900/40 text-green-400' : 'bg-red-900/40 text-red-400');
+    el.classList.remove('hidden');
+    setTimeout(() => el.classList.add('hidden'), 4000);
+}
+
+async function loadWaConfig() {
+    try {
+        const res  = await authFetch(`${API}/wa-config`);
+        const data = await res.json();
+        const set  = (id, val) => { const el = document.getElementById(id); if (el && val !== undefined) el.value = val; };
+        set('wa-provider',     data.provider    || 'custom');
+        set('wa-from-phone',   data.fromPhone   || '');
+        set('wa-gateway-url',  data.gatewayUrl  || '');
+        // Never prefill token (masked as ••••••••)
+        set('wa-broadcast-group-id', data.broadcastGroupId || '');
+        const enabledEl = document.getElementById('wa-broadcast-enabled');
+        if (enabledEl) enabledEl.checked = !!data.broadcastEnabled;
+    } catch(e) { console.error('WA config load error:', e); }
+}
+
+async function saveWaConfig() {
+    const gatewayUrl       = document.getElementById('wa-gateway-url').value.trim();
+    const apiToken         = document.getElementById('wa-api-token').value.trim();
+    const fromPhone        = document.getElementById('wa-from-phone').value.trim();
+    const provider         = document.getElementById('wa-provider').value;
+    const broadcastGroupId = document.getElementById('wa-broadcast-group-id').value.trim();
+    const broadcastEnabled = document.getElementById('wa-broadcast-enabled').checked;
+    try {
+        const body = { gatewayUrl, fromPhone, provider, broadcastGroupId, broadcastEnabled };
+        if (apiToken) body.apiToken = apiToken; // only send if changed
+        const res  = await authFetch(`${API}/wa-config`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Save failed');
+        showWaCfgStatus('WhatsApp config saved ✓', true);
+        document.getElementById('wa-api-token').value = '';
+    } catch(e) { showWaCfgStatus('Error: ' + e.message, false); }
+}
+
+async function sendWaTest() {
+    const phone = document.getElementById('wa-test-phone').value.trim();
+    if (!phone) { showWaCfgStatus('Enter a test phone number.', false); return; }
+    try {
+        const res  = await authFetch(`${API}/wa-config/test`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone })
+        });
+        const data = await res.json();
+        showWaCfgStatus(data.message || 'Test sent.', true);
+    } catch(e) { showWaCfgStatus('Error: ' + e.message, false); }
+}
+
+
+// ════════════════════════════════════════════════════════════
+//  FIX 5 — HERO STATS (new)
+// ════════════════════════════════════════════════════════════
+async function loadStats() {
+    try {
+        const res  = await fetch(`${API}/stats`);
+        const data = await res.json();
+        const map  = { years: 'years', students: 'students', blackBelts: 'blackbelts', locations: 'locations' };
+        Object.entries(map).forEach(([key, slug]) => {
+            const s = data[key];
+            if (!s) return;
+            const vEl = document.getElementById(`stat-${slug}-value`);
+            const xEl = document.getElementById(`stat-${slug}-suffix`);
+            const lEl = document.getElementById(`stat-${slug}-label`);
+            if (vEl) vEl.value = s.value  !== undefined ? s.value  : '';
+            if (xEl) xEl.value = s.suffix !== undefined ? s.suffix : '';
+            if (lEl) lEl.value = s.label  !== undefined ? s.label  : '';
+        });
+    } catch(e) { console.error('Stats load error:', e); }
+}
+
+async function saveStats() {
+    const statusEl = document.getElementById('stats-status');
+    const makeStatObj = (slug) => ({
+        value:  Number(document.getElementById(`stat-${slug}-value`).value  || 0),
+        suffix: document.getElementById(`stat-${slug}-suffix`).value,
+        label:  document.getElementById(`stat-${slug}-label`).value.trim()
+    });
+    const body = {
+        years:      makeStatObj('years'),
+        students:   makeStatObj('students'),
+        blackBelts: makeStatObj('blackbelts'),
+        locations:  makeStatObj('locations')
+    };
+    if (statusEl) { statusEl.textContent = 'Saving…'; statusEl.className = 'text-sm rounded-lg px-3 py-2 mb-4 bg-gray-700 text-gray-300'; statusEl.classList.remove('hidden'); }
+    try {
+        const res  = await authFetch(`${API}/stats`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Save failed');
+        if (statusEl) { statusEl.textContent = 'Stats saved ✓'; statusEl.className = 'text-sm rounded-lg px-3 py-2 mb-4 bg-green-900/40 text-green-400'; setTimeout(() => statusEl.classList.add('hidden'), 3000); }
+    } catch(e) {
+        if (statusEl) { statusEl.textContent = 'Error: ' + e.message; statusEl.className = 'text-sm rounded-lg px-3 py-2 mb-4 bg-red-900/40 text-red-400'; }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  PHASE 3 — STUDENT MANAGEMENT JS
+// ═══════════════════════════════════════════════════════════
+
+let _students = [];
+let _activeStudent = null;
+let _activeTab = 'attendance';
+
+// ── Load on dashboard init ──────────────────────────────────
+// Add this call to your existing initDashboard() or wherever
+// you call loadGallery(), loadDocuments() etc:
+//   loadStudents();
+
+async function loadStudents() {
+    try {
+        const res  = await authFetch(`${API}/admin/students`);
+        if (!res.ok) throw new Error('Failed to load students');
+        _students = await res.json();
+        renderStudentList(_students);
+    } catch(e) {
+        document.getElementById('students-list').innerHTML =
+            `<p class="text-red-400 text-sm">Error loading students: ${e.message}</p>`;
+    }
+}
+
+function filterStudents() {
+    const q      = (document.getElementById('student-search').value || '').toLowerCase();
+    const status = document.getElementById('student-status-filter').value;
+    const filtered = _students.filter(s => {
+        const matchStatus = status === 'all' || s.status === status;
+        const matchQ = !q || [s.name, s.email, s.batchId, s.locationId]
+            .some(v => (v||'').toLowerCase().includes(q));
+        return matchStatus && matchQ;
+    });
+    renderStudentList(filtered);
+}
+
+function renderStudentList(list) {
+    const container = document.getElementById('students-list');
+    const countEl   = document.getElementById('student-count');
+    countEl.textContent = `${list.length} student${list.length !== 1 ? 's' : ''}`;
+
+    if (!list.length) {
+        container.innerHTML = `<p class="text-gray-500 text-sm">No students found.</p>`;
+        return;
+    }
+
+    container.innerHTML = list.map(s => `
+        <div class="flex items-center justify-between p-4 bg-gray-900 rounded-xl border border-gray-700 hover:border-violet-500/50 transition cursor-pointer"
+            onclick="openStudentDrawer('${s.id}')">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-violet-500/20 flex items-center justify-center text-violet-300 font-bold text-sm">
+                    ${(s.name||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()}
+                </div>
+                <div>
+                    <p class="font-semibold text-white text-sm">${adminEsc(s.name)}</p>
+                    <p class="text-xs text-gray-500">${adminEsc(s.email)} · ${adminEsc(s.batchId||'—')} · ${adminEsc(s.locationId||'—')}</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${s.beltLevel?.toLowerCase().includes('black') ? 'bg-gray-700 text-gray-100' : 'bg-violet-900/40 text-violet-300'}">
+                    ${adminEsc(s.beltLevel||'White Belt')}
+                </span>
+                <span class="text-xs px-2 py-0.5 rounded-full font-semibold ${s.status === 'active' ? 'bg-green-900/40 text-green-400' : 'bg-red-900/40 text-red-400'}">
+                    ${s.status || 'active'}
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ── Student Drawer ──────────────────────────────────────────
+function openStudentDrawer(id) {
+    const student = _students.find(s => s.id === id);
+    if (!student) return;
+    _activeStudent = student;
+
+    document.getElementById('drawer-name').textContent = student.name;
+    document.getElementById('student-drawer').classList.remove('hidden');
+    document.getElementById('student-drawer').scrollIntoView({ behavior:'smooth', block:'start' });
+
+    // Set today's date on attendance picker
+    const today = new Date().toISOString().slice(0,10);
+    document.getElementById('att-date').value  = today;
+    document.getElementById('pay-date').value  = today;
+    document.getElementById('grad-date').value = today;
+
+    // Fill edit form
+    document.getElementById('edit-name').value         = student.name || '';
+    document.getElementById('edit-email-field').value  = student.email || '';
+    document.getElementById('edit-phone-field').value  = student.phone || '';
+    document.getElementById('edit-batch').value        = student.batchId || '';
+    document.getElementById('edit-location').value     = student.locationId || '';
+    document.getElementById('edit-belt-level').value   = student.beltLevel || 'White Belt';
+    document.getElementById('edit-status').value       = student.status || 'active';
+    document.getElementById('edit-enrolled').value     = student.enrolledDate || '';
+    document.getElementById('edit-temp-pw').value      = '';
+
+    switchTab('attendance');
+    renderDrawerAttendance();
+    renderDrawerPayments();
+    renderDrawerGrading();
+}
+
+function closeDrawer() {
+    document.getElementById('student-drawer').classList.add('hidden');
+    _activeStudent = null;
+}
+
+function switchTab(tab) {
+    _activeTab = tab;
+    document.querySelectorAll('.drawer-tab').forEach(btn => {
+        btn.classList.toggle('active-tab', btn.dataset.tab === tab);
+        btn.classList.toggle('text-white',  btn.dataset.tab === tab);
+        btn.classList.toggle('text-gray-400', btn.dataset.tab !== tab);
+        btn.style.borderBottom = btn.dataset.tab === tab ? '2px solid #7c3aed' : '';
+    });
+    document.querySelectorAll('.drawer-tab-content').forEach(el => el.classList.add('hidden'));
+    document.getElementById(`tab-${tab}`).classList.remove('hidden');
+}
+
+// ── Attendance ──────────────────────────────────────────────
+function renderDrawerAttendance() {
+    const el  = document.getElementById('att-records');
+    const att = (_activeStudent.attendance || []).slice().reverse();
+    if (!att.length) { el.innerHTML = '<p class="text-gray-500">No records yet.</p>'; return; }
+    el.innerHTML = att.map(a => `
+        <div class="flex justify-between items-center py-1.5 border-b border-gray-800">
+            <span>${a.date}</span>
+            <span class="font-semibold ${a.status==='present'?'text-green-400':a.status==='absent'?'text-red-400':'text-gray-500'}">
+                ${a.status}
+            </span>
+        </div>`).join('');
+}
+
+async function markAttendance() {
+    if (!_activeStudent) return;
+    const date   = document.getElementById('att-date').value;
+    const status = document.getElementById('att-status').value;
+    if (!date) { alert('Please select a date.'); return; }
+    try {
+        const res  = await authFetch(`${API}/admin/students/${_activeStudent.id}/attendance`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ date, status })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        _activeStudent.attendance = data.attendance;
+        renderDrawerAttendance();
+        showAdminToast('Attendance marked ✓');
+    } catch(e) { showAdminToast('Error: ' + e.message, true); }
+}
+
+// ── Payments ────────────────────────────────────────────────
+function renderDrawerPayments() {
+    const el   = document.getElementById('pay-records');
+    const pays = _activeStudent.payments || [];
+    if (!pays.length) { el.innerHTML = '<p class="text-gray-500">No records yet.</p>'; return; }
+    el.innerHTML = `
+        <table class="w-full text-xs">
+            <thead><tr class="text-gray-500 border-b border-gray-700">
+                <th class="text-left py-1.5">Month</th><th class="text-left py-1.5">Type</th>
+                <th class="text-left py-1.5">Amount</th><th class="text-left py-1.5">Date</th>
+                <th class="text-left py-1.5">Receipt</th>
+            </tr></thead>
+            <tbody>
+                ${pays.map(p => `
+                <tr class="border-b border-gray-800 hover:bg-gray-800/50">
+                    <td class="py-1.5">${adminEsc(p.month)}</td>
+                    <td class="py-1.5 text-gray-400">${adminEsc(p.type||'Monthly')}</td>
+                    <td class="py-1.5 font-bold text-green-400">₹${Number(p.amount).toLocaleString()}</td>
+                    <td class="py-1.5 text-gray-400">${adminEsc(p.datePaid||'')}</td>
+                    <td class="py-1.5 text-gray-400">${adminEsc(p.receiptNo||'')}</td>
+                </tr>`).join('')}
+            </tbody>
+        </table>`;
+}
+
+async function recordPayment() {
+    if (!_activeStudent) return;
+    const month   = document.getElementById('pay-month').value.trim();
+    const amount  = document.getElementById('pay-amount').value;
+    const datePaid= document.getElementById('pay-date').value;
+    const receiptNo=document.getElementById('pay-receipt').value.trim();
+    const type    = document.getElementById('pay-type').value;
+    if (!month || !amount) { alert('Month and amount are required.'); return; }
+    try {
+        const res  = await authFetch(`${API}/admin/students/${_activeStudent.id}/payments`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ month, amount, datePaid, receiptNo, type })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        _activeStudent.payments = _activeStudent.payments || [];
+        _activeStudent.payments.unshift(data.payment);
+        renderDrawerPayments();
+        document.getElementById('pay-month').value  = '';
+        document.getElementById('pay-amount').value = '';
+        document.getElementById('pay-receipt').value= '';
+        showAdminToast('Payment recorded ✓');
+    } catch(e) { showAdminToast('Error: ' + e.message, true); }
+}
+
+// ── Grading ─────────────────────────────────────────────────
+function renderDrawerGrading() {
+    const el   = document.getElementById('grad-records');
+    const recs = _activeStudent.gradingHistory || [];
+    if (!recs.length) { el.innerHTML = '<p class="text-gray-500">No records yet.</p>'; return; }
+    el.innerHTML = recs.map(g => `
+        <div class="flex justify-between items-center py-2 border-b border-gray-800">
+            <div>
+                <p class="text-white text-xs">${adminEsc(g.date)}</p>
+                <p class="text-gray-500 text-xs">${adminEsc(g.notes||'')}</p>
+            </div>
+            <div class="text-right">
+                <span class="text-xs font-bold ${g.result==='Pass'?'text-green-400':g.result==='Fail'?'text-red-400':'text-amber-400'}">${adminEsc(g.result)}</span>
+                ${g.beltAwarded ? `<p class="text-xs text-amber-300">${adminEsc(g.beltAwarded)}</p>` : ''}
+            </div>
+        </div>`).join('');
+}
+
+async function recordGrading() {
+    if (!_activeStudent) return;
+    const date        = document.getElementById('grad-date').value;
+    const result      = document.getElementById('grad-result').value;
+    const beltAwarded = document.getElementById('grad-belt').value;
+    const notes       = document.getElementById('grad-notes').value.trim();
+    if (!date) { alert('Date is required.'); return; }
+    try {
+        const res  = await authFetch(`${API}/admin/students/${_activeStudent.id}/grading`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ date, result, beltAwarded, notes })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        _activeStudent.gradingHistory = _activeStudent.gradingHistory || [];
+        _activeStudent.gradingHistory.unshift(data.entry);
+        if (beltAwarded) _activeStudent.beltLevel = beltAwarded;
+        renderDrawerGrading();
+        renderStudentList(_students);
+        showAdminToast('Grading recorded ✓');
+    } catch(e) { showAdminToast('Error: ' + e.message, true); }
+}
+
+// ── Edit student ────────────────────────────────────────────
+async function saveStudentEdit() {
+    if (!_activeStudent) return;
+    const body = {
+        name:        document.getElementById('edit-name').value.trim(),
+        email:       document.getElementById('edit-email-field').value.trim(),
+        phone:       document.getElementById('edit-phone-field').value.trim(),
+        batchId:     document.getElementById('edit-batch').value.trim(),
+        locationId:  document.getElementById('edit-location').value.trim(),
+        beltLevel:   document.getElementById('edit-belt-level').value,
+        status:      document.getElementById('edit-status').value,
+        enrolledDate:document.getElementById('edit-enrolled').value,
+        tempPassword:document.getElementById('edit-temp-pw').value || undefined
+    };
+    const msgEl = document.getElementById('edit-status-msg');
+    try {
+        const res  = await authFetch(`${API}/admin/students/${_activeStudent.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        Object.assign(_activeStudent, data.student);
+        document.getElementById('drawer-name').textContent = _activeStudent.name;
+        renderStudentList(_students);
+        msgEl.textContent = 'Saved ✓';
+        msgEl.className   = 'text-sm mt-3 text-green-400';
+        msgEl.classList.remove('hidden');
+        setTimeout(() => msgEl.classList.add('hidden'), 3000);
+    } catch(e) {
+        msgEl.textContent = 'Error: ' + e.message;
+        msgEl.className   = 'text-sm mt-3 text-red-400';
+        msgEl.classList.remove('hidden');
+    }
+}
+
+async function deleteStudent() {
+    if (!_activeStudent) return;
+    if (!confirm(`Delete ${_activeStudent.name}? This cannot be undone.`)) return;
+    try {
+        const res = await authFetch(`${API}/admin/students/${_activeStudent.id}`, { method:'DELETE' });
+        if (!res.ok) { const d=await res.json(); throw new Error(d.error); }
+        _students = _students.filter(s => s.id !== _activeStudent.id);
+        closeDrawer();
+        renderStudentList(_students);
+        showAdminToast('Student deleted.');
+    } catch(e) { showAdminToast('Error: ' + e.message, true); }
+}
+
+// ── Add student modal ───────────────────────────────────────
+function openAddStudent() {
+    ['new-name','new-email','new-phone','new-batch','new-location','new-tempPw']
+        .forEach(id => document.getElementById(id).value = '');
+    document.getElementById('add-student-error').classList.add('hidden');
+    document.getElementById('add-student-modal').classList.remove('hidden');
+}
+function closeAddStudent() { document.getElementById('add-student-modal').classList.add('hidden'); }
+
+async function submitAddStudent() {
+    const errEl = document.getElementById('add-student-error');
+    errEl.classList.add('hidden');
+    const body = {
+        name:        document.getElementById('new-name').value.trim(),
+        email:       document.getElementById('new-email').value.trim(),
+        phone:       document.getElementById('new-phone').value.trim(),
+        batchId:     document.getElementById('new-batch').value.trim(),
+        locationId:  document.getElementById('new-location').value.trim(),
+        beltLevel:   document.getElementById('new-belt').value,
+        tempPassword:document.getElementById('new-tempPw').value
+    };
+    if (!body.name || !body.email || !body.tempPassword) {
+        errEl.textContent = 'Name, email, and temporary password are required.';
+        errEl.classList.remove('hidden');
+        return;
+    }
+    try {
+        const res  = await authFetch(`${API}/admin/students`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        _students.unshift(data.student);
+        renderStudentList(_students);
+        closeAddStudent();
+        showAdminToast(`${data.student.name} added ✓`);
+    } catch(e) {
+        errEl.textContent = e.message;
+        errEl.classList.remove('hidden');
+    }
+}
+
+// ── Helpers ─────────────────────────────────────────────────
+function adminEsc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+let _adminToastTimer;
+function showAdminToast(msg, isError) {
+    // Reuse existing admin toast if it exists, otherwise create one
+    let t = document.getElementById('admin-toast-ph3');
+    if (!t) {
+        t = document.createElement('div');
+        t.id = 'admin-toast-ph3';
+        t.style.cssText = 'position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);padding:.7rem 1.5rem;border-radius:.75rem;font-size:.85rem;font-weight:600;box-shadow:0 8px 30px #0005;z-index:9999;transition:opacity .3s;';
+        document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.style.background = isError ? '#7f1d1d' : '#1e3a1e';
+    t.style.color      = isError ? '#fca5a5' : '#86efac';
+    t.style.border     = isError ? '1px solid #991b1b' : '1px solid #166534';
+    t.style.opacity    = '1';
+    clearTimeout(_adminToastTimer);
+    _adminToastTimer = setTimeout(() => { t.style.opacity = '0'; }, 3000);
+}
+
+// ── Wire up: call loadStudents() when admin logs in ──────────
+// Add   loadStudents();   to your existing initDashboard() function.
+// For example, find the line:    loadGallery();
+// and add after it:             loadStudents();
+
+
+// ═══════════════════════════════════════════════════════════
+//  PHASE 4 — PUSH NOTIFICATION HELPERS
+// ═══════════════════════════════════════════════════════════
+
+// Load subscriber stats — badge now lives inside Broadcast Center (#5)
+async function loadPushStats() {
+    try {
+        const res  = await authFetch(`${API}/push/stats`);
+        const data = await res.json();
+        const badge = document.getElementById('push-stats-badge');
+        if (badge) {
+            badge.textContent = `📱 ${data.total} subscriber${data.total !== 1 ? 's' : ''} (${data.loggedIn} logged-in students)`;
+        }
+    } catch (e) {
+        const badge = document.getElementById('push-stats-badge');
+        if (badge) badge.textContent = '📱 Stats unavailable';
+    }
+}
+
+// Redirect old showPushSection to scroll to unified Broadcast Center
+function showPushSection() {
+    const el = document.getElementById('announce-section');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    loadPushStats();
+}
+
+// Legacy aliases — old element IDs no longer exist but keep functions safe
+function updatePushPreview() { updateBroadcastPreview(); }
+function applyPushTemplate(key) { applyBroadcastTemplate(key); }
+function clearPushForm()    { clearBroadcastForm(); }
+function sendPushNotification() { sendBroadcast(); }
+
+// Auto-load push stats when admin logs in
+const _origInitDashboard = window.initDashboard;
+if (typeof _origInitDashboard === 'function') {
+    window.initDashboard = function(...args) {
+        _origInitDashboard.apply(this, args);
+        loadPushStats();
+    };
+} else {
+    document.addEventListener('DOMContentLoaded', () => {
+        const dashEl = document.getElementById('dashboard');
+        if (dashEl) {
+            const obs = new MutationObserver(() => {
+                if (!dashEl.classList.contains('hidden')) {
+                    loadPushStats();
+                    obs.disconnect();
+                }
+            });
+            obs.observe(dashEl, { attributes: true, attributeFilter: ['class'] });
+        }
+    });
+}
+// loadGoogleReviewsAdmin is defined above (single-branch panel version)
+</script>

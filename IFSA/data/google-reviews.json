@@ -1,0 +1,38 @@
+{
+  "branches": {
+    "main": {
+      "label": "Main Branch",
+      "placeId": "ChIJ3QEmpW7D5zsRr9w2rkblT9M",
+      "rating": 4.6,
+      "totalRatings": 20,
+      "reviews": [
+        {
+          "author": "123",
+          "text": "wco en eo2v",
+          "rating": 3,
+          "time": "2026-05-16",
+          "color": "cyan"
+        }
+      ],
+      "lastFetched": null,
+      "manualOverride": true
+    },
+    "dombivali": {
+      "label": "Dombivali",
+      "placeId": "ChIJIf2C716_5zsRe7Urs8gnyO0",
+      "rating": 4.9,
+      "totalRatings": 20,
+      "reviews": [
+        {
+          "author": "cqs w qwc",
+          "text": "c kow cqwc",
+          "rating": 4,
+          "time": "2026-05-16",
+          "color": "green"
+        }
+      ],
+      "lastFetched": null,
+      "manualOverride": true
+    }
+  }
+}

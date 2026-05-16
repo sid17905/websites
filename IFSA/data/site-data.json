@@ -1,6 +1,5 @@
 {
   "heroVideos": {
-    "desktop": "/uploads/hero-video/hero-desktop.mp4",
-    "mobile": "/uploads/hero-video/hero-mobile.mp4"
+    "desktop": "/uploads/hero-video/hero-desktop.mp4"
   }
 }

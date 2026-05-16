@@ -1,10 +1,17 @@
 [
   {
-    "id": "1778753374991",
+    "id": "1778859277090",
     "day": "Monday",
-    "slot": "Evening (5–7 PM)",
+    "slot": "Evening(6:30 pm -8:30 pm)",
     "batch": "1223",
-    "time": "7-9pm ",
-    "instructor": ""
+    "time": "6:30",
+    "instructor": "",
+    "locationId": "",
+    "locationName": "— All Locations",
+    "activities": [
+      "c qscoq c"
+    ],
+    "focus": "ndv coqjv",
+    "description": " lqvkwndp"
   }
 ]

@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="theme.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belt Grading Syllabus | IFSA Karate Mumbai</title>
+    <meta name="description" content="IFSA belt grading syllabus — view the complete WKF Shito-Ryu grading pathway from White to Black Belt. Book your grading assessment today.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://ifsaacademy.in/grading.html">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: 'rgb(var(--bg-primary-rgb))',
+                            light: 'rgb(var(--bg-secondary-rgb))',
+                            accent: 'var(--accent-color)',
+                            'accent-hover': 'var(--accent-hover)',
+                            text: 'var(--text-main)',
+                            muted: 'var(--text-muted)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="STYLE.css">
+
+    <style>
+        /* ── Belt colour bar ─────────────────────────────────── */
+        .belt-bar-segment {
+            flex: 1;
+            height: 10px;
+            border-radius: 5px;
+            transition: transform 0.25s var(--ease-spring), box-shadow 0.25s ease;
+            cursor: default;
+        }
+        .belt-bar-segment:hover {
+            transform: scaleY(1.9);
+            box-shadow: 0 0 14px currentColor;
+        }
+
+        /* ── Grade rows ──────────────────────────────────────── */
+        .grade-row {
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+        .grade-row:hover {
+            background: rgba(251,191,36,0.06) !important;
+            border-color: rgba(251,191,36,0.3) !important;
+        }
+
+        /* ── PDF viewer wrapper ──────────────────────────────── */
+        #pdf-viewer-wrap {
+            position: relative;
+            width: 100%;
+            min-height: 620px;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: #0a0f1e;
+        }
+        #pdf-viewer-wrap iframe {
+            display: block;
+            width: 100%;
+            height: 680px;
+            border: none;
+        }
+        #pdf-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 360px;
+            gap: 1.25rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Scroll-in reveals ───────────────────────────────── */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.6s var(--ease-main), transform 0.6s var(--ease-main);
+        }
+        .fade-in-up.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── Dan/Kyu badge ───────────────────────────────────── */
+        .kyu-badge {
+            display: inline-block;
+            padding: 0.1rem 0.55rem;
+            border-radius: 9999px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        /* ── Sticky section headers ──────────────────────────── */
+        .section-sticky-label {
+            position: sticky;
+            top: 72px;
+            z-index: 10;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* ── Nav active ──────────────────────────────────────── */
+        .nav-icon-link { position: relative; }
+
+        /* Whatsapp FAB */
+        .whatsapp-fab {
+            position: fixed;
+            bottom: 28px;
+            right: 24px;
+            z-index: 9990;
+            width: 56px;
+            height: 56px;
+            background: #25d366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+            transition: transform 0.3s var(--ease-spring);
+        }
+        .whatsapp-fab:hover { transform: scale(1.1); }
+    </style>
+</head>
+<body class="bg-brand-dark text-brand-text">
+
+<div id="scroll-progress" role="progressbar" aria-hidden="true"></div>
+<div class="custom-cursor" id="cursor"></div>
+
+<!-- ══════════════════════════════════════════ NAVBAR ══════ -->
+<header id="site-header" class="sticky top-0 z-50 backdrop-blur-xl transition-all duration-300"
+        style="background:rgba(15,23,42,0.85);border-bottom:1px solid transparent;box-shadow:0 1px 0 0 rgba(251,191,36,0.25),0 4px 24px rgba(0,0,0,0.6);">
+    <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+        <a href="index.html" class="flex items-center space-x-2 group">
+            <div class="h-10 w-10 rounded-full border border-brand-accent overflow-hidden flex items-center justify-center bg-black transition-all duration-300 group-hover:scale-105 group-hover:shadow-[0_0_16px_rgba(251,191,36,0.5)]">
+                <img src="public/image 1.png" alt="IFSA Logo" class="w-full h-full object-cover scale-125">
+            </div>
+            <span class="text-2xl font-bold text-white">IFSA</span>
+        </a>
+
+        <div class="hidden md:flex items-center space-x-5">
+            <a href="index.html" class="nav-icon-link flex flex-col items-center text-brand-text hover:text-brand-accent transition group">
+                <svg class="w-4 h-4 mb-0.5 opacity-50 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                <span class="text-sm font-medium">Home</span>
+            </a>
+            <a href="about.html" class="nav-icon-link flex flex-col items-center text-brand-text hover:text-brand-accent transition group">
+                <svg class="w-4 h-4 mb-0.5 opacity-50 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                <span class="text-sm font-medium">About</span>
+            </a>
+            <a href="index.html#programs" class="nav-icon-link flex flex-col items-center text-brand-text hover:text-brand-accent transition group">
+                <svg class="w-4 h-4 mb-0.5 opacity-50 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                <span class="text-sm font-medium">Programs</span>
+            </a>
+            <a href="gallery.html" class="nav-icon-link flex flex-col items-center text-brand-text hover:text-brand-accent transition group">
+                <svg class="w-4 h-4 mb-0.5 opacity-50 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <span class="text-sm font-medium">Gallery</span>
+            </a>
+            <a href="calender.html" class="nav-icon-link flex flex-col items-center text-brand-text hover:text-brand-accent transition group">
+                <svg class="w-4 h-4 mb-0.5 opacity-50 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                <span class="text-sm font-medium">Schedule</span>
+            </a>
+            <a href="grading.html" class="nav-icon-link flex flex-col items-center text-brand-accent transition group nav-active">
+                <svg class="w-4 h-4 mb-0.5 opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                <span class="text-sm font-medium">Grading</span>
+            </a>
+            <a href="documents.html" class="nav-icon-link flex flex-col items-center text-brand-text hover:text-brand-accent transition group">
+                <svg class="w-4 h-4 mb-0.5 opacity-50 group-hover:opacity-100 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <span class="text-sm font-medium">Docs</span>
+            </a>
+            <a href="admin.html" class="text-brand-accent border border-brand-accent px-3 py-1.5 rounded hover:bg-brand-accent hover:text-black transition text-sm font-bold">Admin</a>
+            <a href="pricing.html" class="btn-shimmer magnetic-btn bg-brand-accent text-black px-5 py-2 rounded-lg font-bold hover:bg-amber-400 transition shadow-[0_0_16px_rgba(251,191,36,0.3)] hover:shadow-[0_0_24px_rgba(251,191,36,0.55)]">Join Now</a>
+            <button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
+                <svg class="sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" stroke-width="2"/><path stroke-width="2" stroke-linecap="round" d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                <svg class="moon-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+            </button>
+        </div>
+
+        <div class="md:hidden">
+            <button onclick="toggleMobileMenu()" class="text-white focus:outline-none p-2 border border-gray-700 rounded bg-gray-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+
+    <div class="h-px w-full" style="background:linear-gradient(90deg,transparent,rgba(251,191,36,0.5) 30%,rgba(251,191,36,0.8) 50%,rgba(251,191,36,0.5) 70%,transparent);"></div>
+
+    <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-brand-dark border-b border-gray-700 shadow-2xl flex-col z-50">
+        <a href="index.html" onclick="toggleMobileMenu()" class="block py-4 px-6 text-white hover:bg-gray-800 border-t border-gray-800">Home</a>
+        <a href="about.html" onclick="toggleMobileMenu()" class="block py-4 px-6 text-white hover:bg-gray-800 border-t border-gray-800">About</a>
+        <a href="index.html#programs" onclick="toggleMobileMenu()" class="block py-4 px-6 text-white hover:bg-gray-800 border-t border-gray-800">Programs</a>
+        <a href="gallery.html" onclick="toggleMobileMenu()" class="block py-4 px-6 text-white hover:bg-gray-800 border-t border-gray-800">Gallery</a>
+        <a href="calender.html" onclick="toggleMobileMenu()" class="block py-4 px-6 text-white hover:bg-gray-800 border-t border-gray-800">Schedule</a>
+        <a href="grading.html" onclick="toggleMobileMenu()" class="block py-4 px-6 text-brand-accent font-bold hover:bg-gray-800 border-t border-gray-800">Grading</a>
+        <a href="documents.html" onclick="toggleMobileMenu()" class="block py-4 px-6 text-white hover:bg-gray-800 border-t border-gray-800">Documents</a>
+        <div class="p-4 bg-gray-900 border-t border-gray-800 flex gap-3">
+            <a href="admin.html" onclick="toggleMobileMenu()" class="flex-1 text-center py-3 border border-brand-accent text-brand-accent font-bold rounded">Admin</a>
+            <a href="pricing.html" onclick="toggleMobileMenu()" class="flex-1 text-center py-3 bg-brand-accent text-black font-bold rounded">Join Now</a>
+        </div>
+    </div>
+</header>
+
+<main>
+
+<!-- ══════════════════════════════════ HERO BANNER ══════════ -->
+<section class="relative py-20 md:py-28 overflow-hidden bg-black">
+    <!-- Subtle amber radial glow -->
+    <div class="absolute inset-0 z-0" style="background:radial-gradient(ellipse 70% 60% at 50% 40%, rgba(251,191,36,0.1) 0%, transparent 70%);"></div>
+    <!-- Grain noise overlay -->
+    <div class="absolute inset-0 z-0 diagonal-lines opacity-40"></div>
+    <!-- Faint watermark -->
+    <div class="absolute inset-0 flex items-center justify-end pointer-events-none select-none overflow-hidden" aria-hidden="true">
+        <span class="font-black text-white leading-none" style="font-size:18rem;opacity:0.03;transform:translateX(8%);">段</span>
+    </div>
+
+    <div class="container mx-auto px-6 relative z-10 text-center">
+        <p class="text-xs text-brand-accent uppercase tracking-[0.35em] mb-3 font-bold reveal-up revealed">| SHITO-RYU KARATE-DO</p>
+        <h1 class="text-4xl md:text-6xl font-black text-white mb-4 leading-tight reveal-up revealed" style="transition-delay:0.05s;">
+            Belt Grading<br><span class="text-brand-accent">Syllabus</span>
+        </h1>
+        <p class="text-brand-muted text-lg max-w-2xl mx-auto mb-8 reveal-up revealed" style="transition-delay:0.1s;">
+            The complete pathway from White Belt to Black Belt — techniques, kata, and requirements at every level.
+        </p>
+
+        <!-- Belt colour bar -->
+        <div class="flex items-center gap-1.5 max-w-lg mx-auto mb-8 reveal-up revealed" style="transition-delay:0.15s;" id="belt-color-bar" title="Belt Colour Progression">
+            <div class="belt-bar-segment" style="background:#e2e8f0;" title="White"></div>
+            <div class="belt-bar-segment" style="background:#fde047;" title="Yellow"></div>
+            <div class="belt-bar-segment" style="background:#fb923c;" title="Orange"></div>
+            <div class="belt-bar-segment" style="background:#4ade80;" title="Green"></div>
+            <div class="belt-bar-segment" style="background:#60a5fa;" title="Blue"></div>
+            <div class="belt-bar-segment" style="background:#a78bfa;" title="Purple"></div>
+            <div class="belt-bar-segment" style="background:#f97316;" title="Brown 3rd"></div>
+            <div class="belt-bar-segment" style="background:#c2410c;" title="Brown 2nd"></div>
+            <div class="belt-bar-segment" style="background:#92400e;" title="Brown 1st"></div>
+            <div class="belt-bar-segment" style="background:#1a1a1a;border:2px solid rgba(251,191,36,0.6);" title="Shodan (1st Dan)"></div>
+            <div class="belt-bar-segment" style="background:#1a1a1a;border:2px solid rgba(251,191,36,0.8);" title="Nidan (2nd Dan)"></div>
+            <div class="belt-bar-segment" style="background:#1a1a1a;border:2px solid rgba(251,191,36,1);" title="Sandan (3rd Dan)"></div>
+            <div class="belt-bar-segment" style="background:linear-gradient(90deg,#1a1a1a 50%,#fbbf24 50%);" title="Yondan (4th Dan)"></div>
+        </div>
+
+        <div class="flex flex-wrap gap-3 justify-center reveal-up revealed" style="transition-delay:0.2s;">
+            <a href="#pdf-section" class="btn-shimmer bg-brand-accent text-black px-7 py-3 rounded-lg font-bold hover:bg-amber-400 transition shadow-[0_0_20px_rgba(251,191,36,0.3)]">
+                View Full Syllabus ↓
+            </a>
+            <a id="btn-wa-grading"
+               href="https://wa.me/919004383448?text=Hi%20IFSA!%20I%20would%20like%20to%20book%20a%20Grading%20Assessment."
+               target="_blank" rel="noopener"
+               class="btn-shimmer flex items-center gap-2 border border-green-500 text-green-400 px-7 py-3 rounded-lg font-bold hover:bg-green-500/10 transition">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.008-.57-.008-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                Book Grading Assessment
+            </a>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════ BELT PROGRESSION TABLE ═════════ -->
+<section class="py-16 md:py-20 bg-brand-light/30 relative overflow-hidden">
+    <!-- Karate silhouette decoration -->
+    <div class="absolute right-0 top-0 pointer-events-none select-none overflow-hidden" aria-hidden="true">
+        <svg class="karate-silhouette" width="260" height="320" viewBox="0 0 120 140">
+            <circle cx="60" cy="12" r="10"/>
+            <rect x="48" y="25" width="24" height="30" rx="5"/>
+            <line x1="48" y1="35" x2="28" y2="55" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/>
+            <line x1="72" y1="35" x2="92" y2="45" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/>
+            <line x1="54" y1="55" x2="48" y2="95" stroke="#fbbf24" stroke-width="6" stroke-linecap="round"/>
+            <line x1="66" y1="55" x2="72" y2="75" stroke="#fbbf24" stroke-width="6" stroke-linecap="round"/>
+            <line x1="72" y1="75" x2="95" y2="60" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+    </div>
+
+    <div class="container mx-auto px-6">
+        <div class="text-center max-w-2xl mx-auto mb-12 fade-in-up">
+            <p class="text-xs text-brand-accent uppercase tracking-[0.3em] mb-2 font-bold">| KYU GRADES</p>
+            <h2 class="text-3xl md:text-4xl font-black text-white mb-3">Coloured Belt Path</h2>
+            <p class="text-brand-muted">10th Kyu → 1st Kyu — the foundation of Shito-Ryu excellence.</p>
+        </div>
+
+        <!-- Kyu Grade Table -->
+        <div class="max-w-4xl mx-auto overflow-x-auto rounded-2xl border border-gray-700/60 shadow-2xl fade-in-up">
+            <table class="w-full text-sm min-w-[600px]">
+                <thead>
+                    <tr style="background:rgba(251,191,36,0.12);">
+                        <th class="text-left px-5 py-3 text-brand-accent font-bold text-xs uppercase tracking-widest w-20">Grade</th>
+                        <th class="text-left px-5 py-3 text-brand-accent font-bold text-xs uppercase tracking-widest">Belt</th>
+                        <th class="text-left px-5 py-3 text-brand-accent font-bold text-xs uppercase tracking-widest">Kata Required</th>
+                        <th class="text-left px-5 py-3 text-brand-accent font-bold text-xs uppercase tracking-widest">Duration</th>
+                        <th class="text-left px-5 py-3 text-brand-accent font-bold text-xs uppercase tracking-widest hidden md:table-cell">Notes</th>
+                    </tr>
+                </thead>
+                <tbody id="kyu-table-body">
+                    <!-- Injected by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════ DAN GRADES ═════════════════════ -->
+<section class="py-16 md:py-20 bg-brand-dark relative overflow-hidden">
+    <div class="absolute left-0 bottom-0 pointer-events-none select-none overflow-hidden" aria-hidden="true">
+        <svg class="karate-silhouette" width="200" height="240" viewBox="0 0 100 120">
+            <circle cx="30" cy="12" r="9"/>
+            <rect x="20" y="25" width="20" height="28" rx="4"/>
+            <line x1="20" y1="32" x2="5" y2="48" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+            <line x1="40" y1="32" x2="65" y2="28" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+            <line x1="25" y1="53" x2="18" y2="88" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/>
+            <line x1="35" y1="53" x2="60" y2="50" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/>
+            <line x1="60" y1="50" x2="85" y2="52" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+    </div>
+    <div class="container mx-auto px-6">
+        <div class="text-center max-w-2xl mx-auto mb-12 fade-in-up">
+            <p class="text-xs text-brand-accent uppercase tracking-[0.3em] mb-2 font-bold">| DAN GRADES</p>
+            <h2 class="text-3xl md:text-4xl font-black text-white mb-3">Black Belt Degrees</h2>
+            <p class="text-brand-muted">The path of mastery — Shodan through Yondan and beyond.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto" id="dan-cards">
+            <!-- Injected by JS -->
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════ PDF VIEWER ═════════════════════ -->
+<section id="pdf-section" class="py-16 md:py-20 bg-brand-light/20 relative">
+    <div class="container mx-auto px-6">
+        <div class="text-center max-w-2xl mx-auto mb-10 fade-in-up">
+            <p class="text-xs text-brand-accent uppercase tracking-[0.3em] mb-2 font-bold">| OFFICIAL DOCUMENT</p>
+            <h2 class="text-3xl md:text-4xl font-black text-white mb-3">Full Syllabus PDF</h2>
+            <p class="text-brand-muted">The complete grading document as uploaded by the IFSA admin.</p>
+        </div>
+
+        <div class="max-w-4xl mx-auto fade-in-up">
+            <!-- PDF viewer / placeholder -->
+            <div id="pdf-viewer-wrap" class="border border-gray-700/60 shadow-2xl">
+                <div id="pdf-placeholder">
+                    <!-- Shown while loading or if no PDF -->
+                    <svg class="w-16 h-16 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    <p class="text-lg font-semibold" id="pdf-status-msg">Loading syllabus...</p>
+                    <p class="text-sm text-gray-600" id="pdf-status-sub">Please wait</p>
+                </div>
+            </div>
+
+            <!-- Action buttons (shown when PDF exists) -->
+            <div id="pdf-actions" class="hidden mt-6 flex flex-wrap gap-4 justify-center">
+                <a id="pdf-download-btn" href="#" download
+                   class="btn-shimmer flex items-center gap-2 bg-brand-accent text-black px-7 py-3 rounded-lg font-bold hover:bg-amber-400 transition shadow-[0_0_16px_rgba(251,191,36,0.25)]">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                    Download PDF
+                </a>
+                <a href="https://wa.me/919004383448?text=Hi%20IFSA!%20I%20would%20like%20to%20book%20a%20Grading%20Assessment."
+                   target="_blank" rel="noopener"
+                   class="btn-shimmer flex items-center gap-2 border border-green-500 text-green-400 px-7 py-3 rounded-lg font-bold hover:bg-green-500/10 transition">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.008-.57-.008-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                    Book a Grading
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ════════════════════════ GRADING CTA ════════════════════ -->
+<section class="py-16 md:py-20 bg-brand-dark relative overflow-hidden">
+    <div class="container mx-auto px-6">
+        <div class="max-w-3xl mx-auto text-center bg-gradient-to-br from-gray-900 via-brand-light to-gray-900 rounded-2xl p-10 md:p-14 border border-gray-700/50 shadow-2xl relative overflow-hidden fade-in-up">
+            <!-- Glow circle behind -->
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
+                <div class="w-72 h-72 rounded-full" style="background:radial-gradient(circle, rgba(251,191,36,0.1) 0%, transparent 70%);"></div>
+            </div>
+            <span class="text-5xl mb-4 block">🥋</span>
+            <h2 class="text-3xl md:text-4xl font-black text-white mb-4 relative z-10">Ready to Grade?</h2>
+            <p class="text-brand-muted text-lg mb-8 relative z-10">
+                Speak to your Sensei or contact us directly to schedule your grading assessment. Gradings are conducted quarterly at all IFSA branches across Mumbai.
+            </p>
+            <div class="flex flex-wrap gap-4 justify-center relative z-10">
+                <a href="https://wa.me/919004383448?text=Hi%20IFSA!%20I%20would%20like%20to%20book%20a%20Grading%20Assessment."
+                   target="_blank" rel="noopener"
+                   class="btn-shimmer flex items-center gap-2 bg-green-500 text-white px-8 py-3 rounded-lg font-bold hover:bg-green-400 transition shadow-lg">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.008-.57-.008-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                    WhatsApp Us
+                </a>
+                <a href="pricing.html"
+                   class="btn-shimmer border border-brand-accent text-brand-accent px-8 py-3 rounded-lg font-bold hover:bg-brand-accent hover:text-black transition">
+                    View Pricing
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+</main>
+
+
+<!-- ════════════════════════════════════ FOOTER ═══════════════ -->
+<div class="flex justify-center">
+    <div class="h-px w-48" style="background:linear-gradient(90deg,transparent,#fbbf24,transparent);"></div>
+</div>
+<footer id="contact" class="bg-brand-dark border-t border-gray-700/30 pt-16 pb-12 relative overflow-hidden">
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden" aria-hidden="true">
+        <span class="font-black text-white leading-none tracking-tighter" style="font-size:12rem;opacity:0.04;">IFSA</span>
+    </div>
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h4 class="text-2xl font-bold text-white mb-4">IFSA<span class="text-brand-accent">.</span></h4>
+                <p class="text-brand-muted text-sm leading-relaxed">Building strength, discipline, and community through martial arts excellence.</p>
+            </div>
+            <div>
+                <h5 class="text-lg font-semibold text-white mb-4">Quick Links</h5>
+                <ul class="space-y-2 text-sm">
+                    <li><span class="text-brand-accent mr-1">·</span><a href="about.html" class="text-brand-muted hover:text-brand-accent transition">About Us</a></li>
+                    <li><span class="text-brand-accent mr-1">·</span><a href="gallery.html" class="text-brand-muted hover:text-brand-accent transition">Gallery</a></li>
+                    <li><span class="text-brand-accent mr-1">·</span><a href="calender.html" class="text-brand-muted hover:text-brand-accent transition">Schedule</a></li>
+                    <li><span class="text-brand-accent mr-1">·</span><a href="grading.html" class="text-brand-muted hover:text-brand-accent transition">Grading</a></li>
+                    <li><span class="text-brand-accent mr-1">·</span><a href="pricing.html" class="text-brand-muted hover:text-brand-accent transition">Join Now</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-lg font-semibold text-white mb-4">Contact Us</h5>
+                <ul class="space-y-3 text-sm text-brand-muted">
+                    <li class="flex items-start gap-3">
+                        <svg class="w-5 h-5 text-brand-accent mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        <span>Mumbai, Maharashtra, India</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <svg class="w-5 h-5 text-brand-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                        <a href="tel:+919004383448" class="hover:text-brand-accent transition">+91 90043 83448</a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-lg font-semibold text-white mb-4">Follow Us</h5>
+                <div class="flex space-x-3">
+                    <a href="https://www.facebook.com/ifsaacademy" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-[#1877F2] hover:text-white transition duration-300">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    </a>
+                    <a href="https://www.instagram.com/ifsaacademy" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-pink-600 hover:text-white transition duration-300">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.148 3.227-1.669 4.771-4.919 4.919-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-3.252-.148-4.771-1.691-4.919-4.919-.058-1.265-.07-1.646-.07-4.85s.012-3.584.07-4.85c.148-3.227 1.669-4.771 4.919-4.919 1.266-.057 1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948s.014 3.667.072 4.947c.2 4.358 2.618 6.78 6.98 6.98 1.281.059 1.689.073 4.948.073s3.667-.014 4.947-.072c4.358-.2 6.78-2.618 6.98-6.98.059-1.281.073-1.689.073-4.948s-.014-3.667-.072-4.947c-.2-4.358-2.618-6.78-6.98-6.98-1.281-.059-1.689-.073-4.948-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44 1.441-.645 1.441-1.44-.645-1.44-1.441-1.44z"/></svg>
+                    </a>
+                    <a href="https://www.youtube.com/@ifsaacademy" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-red-600 hover:text-white transition duration-300">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center text-gray-500 mt-12 border-t border-gray-700/50 pt-8">
+            &copy; <span id="current-year"></span> IFSA. All Rights Reserved. <span class="mx-2 opacity-40">·</span> <a href="sitemap.html" class="hover:text-brand-accent transition">Sitemap</a> <span class="mx-2 opacity-40">·</span> <a href="privacy.html" class="hover:text-brand-accent transition">Privacy Policy</a>
+        </div>
+    </div>
+</footer>
+
+<!-- WhatsApp FAB -->
+<a href="https://wa.me/919004383448?text=Hi%20IFSA!%20I%27d%20like%20to%20enquire%20about%20grading."
+   target="_blank" rel="noopener" class="whatsapp-fab animate-pulse-ring" aria-label="Chat on WhatsApp">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" fill="white" width="28" height="28">
+        <path d="M16 0C7.164 0 0 7.163 0 16c0 2.822.737 5.469 2.027 7.773L0 32l8.489-2.002A15.93 15.93 0 0016 32c8.837 0 16-7.163 16-16S24.837 0 16 0zm0 29.333a13.27 13.27 0 01-6.77-1.848l-.484-.287-5.037 1.188 1.237-4.896-.316-.502A13.266 13.266 0 012.667 16C2.667 8.636 8.637 2.667 16 2.667S29.333 8.636 29.333 16 23.363 29.333 16 29.333zm7.27-9.927c-.398-.199-2.354-1.162-2.72-1.294-.365-.133-.631-.199-.897.199-.265.398-1.029 1.294-1.261 1.56-.232.265-.465.298-.863.1-.398-.199-1.681-.619-3.202-1.977-1.183-1.056-1.982-2.36-2.214-2.758-.232-.398-.025-.613.175-.811.179-.178.398-.465.597-.697.199-.232.265-.398.398-.664.133-.265.066-.497-.033-.696-.1-.199-.897-2.162-1.229-2.96-.324-.776-.653-.671-.897-.683l-.764-.013c-.265 0-.696.1-1.061.497-.365.398-1.394 1.362-1.394 3.322s1.427 3.854 1.626 4.12c.199.265 2.808 4.286 6.802 5.814.951.366 1.693.585 2.272.749.954.271 1.822.233 2.509.141.765-.113 2.354-.962 2.686-1.891.332-.929.332-1.726.232-1.891-.099-.166-.365-.265-.763-.464z"/>
+    </svg>
+</a>
+
+<!-- Back to top -->
+<button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top"
+    style="display:none;position:fixed;bottom:90px;right:24px;z-index:9990;width:44px;height:44px;border-radius:50%;background:rgba(15,23,42,0.9);border:1.5px solid #fbbf24;color:#fbbf24;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.4);transition:opacity 0.3s,transform 0.3s;">
+    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/></svg>
+</button>
+
+
+<!-- ══════════════════════════════════════ SCRIPTS ═══════════ -->
+<script>
+const SERVER_URL = '';
+
+// ── Theme ─────────────────────────────────────────────────────
+function toggleTheme() {
+    document.documentElement.classList.toggle('light');
+    localStorage.setItem('ifsa-theme', document.documentElement.classList.contains('light') ? 'light' : 'dark');
+}
+
+// ── Mobile menu ───────────────────────────────────────────────
+function toggleMobileMenu() {
+    const m = document.getElementById('mobile-menu');
+    if (m) { m.classList.toggle('hidden'); m.classList.toggle('flex'); }
+}
+document.addEventListener('click', function(e) {
+    const m = document.getElementById('mobile-menu');
+    const h = document.getElementById('site-header');
+    if (m && !m.classList.contains('hidden') && h && !h.contains(e.target)) {
+        m.classList.add('hidden'); m.classList.remove('flex');
+    }
+});
+
+// ── Footer year ───────────────────────────────────────────────
+const yrEl = document.getElementById('current-year');
+if (yrEl) yrEl.textContent = new Date().getFullYear();
+
+// ── Scroll progress ───────────────────────────────────────────
+(function () {
+    const bar = document.getElementById('scroll-progress');
+    const btt = document.getElementById('back-to-top');
+    if (!bar) return;
+    function upd() {
+        const st = window.scrollY;
+        const dh = document.documentElement.scrollHeight - window.innerHeight;
+        bar.style.width = (dh > 0 ? Math.min((st / dh) * 100, 100) : 0) + '%';
+        if (btt) btt.style.display = st > 400 ? 'flex' : 'none';
+    }
+    window.addEventListener('scroll', upd, { passive: true });
+    upd();
+})();
+
+// ── Custom cursor ─────────────────────────────────────────────
+(function () {
+    const cur = document.getElementById('cursor');
+    if (!cur || window.matchMedia('(pointer:coarse)').matches) {
+        if (cur) cur.style.display = 'none';
+        document.body.style.cursor = '';
+        return;
+    }
+    document.addEventListener('mousemove', e => {
+        cur.style.left = e.clientX + 'px';
+        cur.style.top  = e.clientY + 'px';
+    });
+    document.addEventListener('mouseenter', () => cur.classList.remove('hidden'));
+    document.addEventListener('mouseleave', () => cur.classList.add('hidden'));
+})();
+
+// ── Scroll-reveal observer ─────────────────────────────────────
+(function () {
+    if (typeof IntersectionObserver === 'undefined') {
+        document.querySelectorAll('.fade-in-up').forEach(el => el.classList.add('visible'));
+        return;
+    }
+    const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-in-up').forEach(el => obs.observe(el));
+})();
+
+// ── View Transition ───────────────────────────────────────────
+if (document.startViewTransition) {
+    document.addEventListener('click', function(e) {
+        let el = e.target;
+        while (el && el.tagName !== 'A') el = el.parentElement;
+        if (!el) return;
+        const href = el.getAttribute('href');
+        if (!href || el.target === '_blank' || el.hasAttribute('download')) return;
+        if (href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('https://wa.me')) return;
+        let url;
+        try { url = new URL(href, location.href); } catch (_) { return; }
+        if (url.origin !== location.origin) return;
+        e.preventDefault();
+        document.startViewTransition(() => { location.href = url.href; });
+    }, true);
+}
+
+// ── Magnetic buttons ──────────────────────────────────────────
+if (!window.matchMedia('(pointer:coarse)').matches) {
+    document.querySelectorAll('.magnetic-btn').forEach(btn => {
+        btn.addEventListener('mousemove', e => {
+            const r = btn.getBoundingClientRect();
+            btn.style.transform = `translate(${(e.clientX - r.left - r.width/2)*0.22}px, ${(e.clientY - r.top - r.height/2)*0.22}px)`;
+        });
+        btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+    });
+}
+
+// ── Ripple effect ─────────────────────────────────────────────
+document.addEventListener('click', e => {
+    const btn = e.target.closest('.btn-shimmer');
+    if (!btn) return;
+    const r = btn.getBoundingClientRect();
+    const rpl = document.createElement('span');
+    rpl.className = 'btn-ripple-el';
+    rpl.style.left = (e.clientX - r.left) + 'px';
+    rpl.style.top  = (e.clientY - r.top)  + 'px';
+    btn.appendChild(rpl);
+    rpl.addEventListener('animationend', () => rpl.remove());
+});
+
+
+// ══════════════════════════════════════════════════════════════
+//  GRADING DATA
+// ══════════════════════════════════════════════════════════════
+const KYU_GRADES = [
+    { kyu:'10th Kyu', belt:'White',    color:'#e2e8f0', textDark:true,  kata:'Kihon combinations', duration:'6 months', notes:'Entry level — focus on basics' },
+    { kyu:'9th Kyu',  belt:'Yellow',   color:'#fde047', textDark:true,  kata:'Pinan Shodan',       duration:'6 months', notes:'Standing & moving kihon' },
+    { kyu:'8th Kyu',  belt:'Orange',   color:'#fb923c', textDark:true,  kata:'Pinan Nidan',        duration:'6 months', notes:'Basic kumite combinations' },
+    { kyu:'7th Kyu',  belt:'Green',    color:'#4ade80', textDark:true,  kata:'Pinan Sandan',       duration:'6 months', notes:'Ippon kumite' },
+    { kyu:'6th Kyu',  belt:'Blue',     color:'#60a5fa', textDark:false, kata:'Pinan Yondan',       duration:'6 months', notes:'Sanbon kumite' },
+    { kyu:'5th Kyu',  belt:'Purple',   color:'#a78bfa', textDark:false, kata:'Pinan Godan',        duration:'6 months', notes:'Jiyu ippon kumite' },
+    { kyu:'3rd Kyu',  belt:'Brown',    color:'#f97316', textDark:true,  kata:'Bassai Dai',         duration:'6 months', notes:'Pre-Dan requirements begin' },
+    { kyu:'2nd Kyu',  belt:'Brown',    color:'#c2410c', textDark:false, kata:'Bassai Dai + 1 advanced', duration:'6 months', notes:'Jiyu kumite' },
+    { kyu:'1st Kyu',  belt:'Brown',    color:'#92400e', textDark:false, kata:'Bassai Dai + 2 advanced', duration:'6 months', notes:'Full syllabus exam required' },
+];
+
+const DAN_GRADES = [
+    { dan:'1st Dan', japanese:'Shodan', belt:'Black', color:'#1a1a1a', accent:'#fbbf24', kata:'Bassai Dai, Seienchin', requirement:'Min. 16 years, 1st Kyu for 6 months, full WKF exam', icon:'🥋' },
+    { dan:'2nd Dan', japanese:'Nidan',  belt:'Black', color:'#1a1a1a', accent:'#fbbf24', kata:'Bassai Sho, Rohai',     requirement:'Min. 2 years after Shodan, advanced kata & kumite', icon:'⚔️' },
+    { dan:'3rd Dan', japanese:'Sandan', belt:'Black', color:'#1a1a1a', accent:'#fbbf24', kata:'Kosokun Dai, Nijushiho', requirement:'Min. 3 years after Nidan, application teaching ability', icon:'🏅' },
+    { dan:'4th Dan', japanese:'Yondan', belt:'Black/Gold', color:'linear-gradient(135deg,#1a1a1a 50%,#92400e 50%)', accent:'#fbbf24', kata:'Free choice advanced + bunkai', requirement:'Min. 4 years after Sandan, teaching credentials required', icon:'🌟' },
+];
+
+// ── Render Kyu table ──────────────────────────────────────────
+(function buildKyuTable() {
+    const tbody = document.getElementById('kyu-table-body');
+    if (!tbody) return;
+    KYU_GRADES.forEach((g, i) => {
+        const row = document.createElement('tr');
+        row.className = 'grade-row border-t border-gray-800/60';
+        row.style.transitionDelay = (i * 0.04) + 's';
+        row.innerHTML = `
+            <td class="px-5 py-3.5">
+                <span class="kyu-badge" style="background:${g.color};color:${g.textDark?'#111':'#fff'};">${g.kyu}</span>
+            </td>
+            <td class="px-5 py-3.5">
+                <div class="flex items-center gap-2">
+                    <span class="inline-block w-4 h-4 rounded-full border-2 border-white/20 flex-shrink-0" style="background:${g.color};"></span>
+                    <span class="font-semibold text-white">${g.belt}</span>
+                </div>
+            </td>
+            <td class="px-5 py-3.5 text-brand-muted text-xs md:text-sm">${g.kata}</td>
+            <td class="px-5 py-3.5 text-brand-accent text-xs font-bold whitespace-nowrap">${g.duration}</td>
+            <td class="px-5 py-3.5 text-gray-500 text-xs hidden md:table-cell">${g.notes}</td>
+        `;
+        tbody.appendChild(row);
+    });
+})();
+
+// ── Render Dan cards ──────────────────────────────────────────
+(function buildDanCards() {
+    const container = document.getElementById('dan-cards');
+    if (!container) return;
+    DAN_GRADES.forEach((d, i) => {
+        const card = document.createElement('div');
+        card.className = 'fade-in-up relative rounded-2xl border border-gray-700/60 p-7 overflow-hidden';
+        card.style.background = 'rgba(30,41,59,0.6)';
+        card.style.transitionDelay = (i * 0.1) + 's';
+        card.innerHTML = `
+            <div class="absolute top-0 right-0 w-32 h-32 rounded-full opacity-5 pointer-events-none"
+                 style="background:radial-gradient(circle, ${d.accent}, transparent 70%);transform:translate(30%,-30%);"></div>
+            <div class="flex items-start gap-4 mb-4">
+                <span class="text-3xl">${d.icon}</span>
+                <div>
+                    <h3 class="text-xl font-black text-white">${d.dan} — <span style="color:${d.accent};">${d.japanese}</span></h3>
+                    <p class="text-xs text-gray-500 uppercase tracking-widest font-bold">${d.belt} Belt</p>
+                </div>
+            </div>
+            <div class="space-y-2 text-sm">
+                <div>
+                    <span class="text-brand-accent font-bold text-xs uppercase tracking-wider">Kata Required</span>
+                    <p class="text-brand-muted mt-0.5">${d.kata}</p>
+                </div>
+                <div>
+                    <span class="text-brand-accent font-bold text-xs uppercase tracking-wider">Requirements</span>
+                    <p class="text-brand-muted mt-0.5">${d.requirement}</p>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+
+    // Re-observe new fade-in-up elements
+    if (typeof IntersectionObserver !== 'undefined') {
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+        }, { threshold: 0.12 });
+        container.querySelectorAll('.fade-in-up').forEach(el => obs.observe(el));
+    } else {
+        container.querySelectorAll('.fade-in-up').forEach(el => el.classList.add('visible'));
+    }
+})();
+
+
+// ══════════════════════════════════════════════════════════════
+//  PDF SYLLABUS  — fetch from /api/syllabus
+// ══════════════════════════════════════════════════════════════
+(async function loadSyllabus() {
+    const wrap      = document.getElementById('pdf-viewer-wrap');
+    const placeholder = document.getElementById('pdf-placeholder');
+    const statusMsg = document.getElementById('pdf-status-msg');
+    const statusSub = document.getElementById('pdf-status-sub');
+    const actions   = document.getElementById('pdf-actions');
+    const dlBtn     = document.getElementById('pdf-download-btn');
+
+    try {
+        const res  = await fetch(SERVER_URL + '/api/syllabus');
+        const data = await res.json();
+
+        if (data && data.pdfPath) {
+            // Show iframe
+            if (placeholder) placeholder.style.display = 'none';
+            const iframe = document.createElement('iframe');
+            iframe.src   = data.pdfPath;
+            iframe.title = data.filename || 'IFSA Grading Syllabus';
+            wrap.appendChild(iframe);
+
+            if (dlBtn) { dlBtn.href = data.pdfPath; }
+            if (actions) actions.classList.remove('hidden');
+        } else {
+            if (statusMsg) statusMsg.textContent = 'Syllabus PDF not yet uploaded';
+            if (statusSub) statusSub.textContent = 'Contact your Sensei or check back soon.';
+        }
+    } catch (e) {
+        if (statusMsg) statusMsg.textContent = 'Could not load syllabus';
+        if (statusSub) statusSub.textContent = 'Please refresh or contact IFSA directly.';
+        console.error('[grading] syllabus fetch error:', e);
+    }
+})();
+</script>
+
+<script src="search-index.js"></script>
+<script src="search-ui.js"></script>
+<script src="cookie-consent.js"></script>
+</body>
+</html>
