@@ -1285,9 +1285,11 @@
 //  Token sent as Authorization: Bearer <token> on every request
 // ════════════════════════════════════════════════════════════
 
-// Use relative URLs so the admin works on any host (localhost, LAN IP, or production domain)
-const API        = '/api';
-const SERVER_URL = '';
+// Points at the Railway backend explicitly — this file is served from the
+// Vercel frontend domain, so relative '/api' URLs would resolve to Vercel
+// (which has no backend) instead of Railway.
+const SERVER_URL = 'https://websites-production-ce2d.up.railway.app';
+const API        = SERVER_URL + '/api';
 
 // ── DOMPurify config ─────────────────────────────────────────
 // Used before every innerHTML assignment with server data
