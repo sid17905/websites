@@ -40,10 +40,11 @@ app.use((req, res, next) => {
 
 // MIGRATION: restrict CORS to the deployed frontend origin instead of
 // allowing all origins now that frontend/backend are on separate hosts.
-// Allows the production domain AND any Vercel preview deployment URL
+// Allows both known production domains AND any Vercel preview deployment URL
 // (e.g. https://ifsa-h04uck0a1-sid17905s-projects.vercel.app).
 const allowedOrigins = [
     process.env.FRONTEND_URL || 'https://ifsa-tau.vercel.app',
+    'https://ifsa-karate.vercel.app',
     /^https:\/\/ifsa-[a-z0-9]+-sid17905s-projects\.vercel\.app$/
 ];
 
