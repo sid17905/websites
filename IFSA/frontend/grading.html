@@ -482,7 +482,15 @@
 
 <!-- ══════════════════════════════════════ SCRIPTS ═══════════ -->
 <script>
-const SERVER_URL = '';
+const SERVER_URL = 'https://websites-production-ce2d.up.railway.app';
+
+// Resolves relative backend paths (e.g. "/uploads/...") returned by API
+// responses into absolute Railway URLs for use in img/video src, href, etc.
+function resolveUrl(path) {
+    if (!path) return '';
+    if (path.indexOf('http') === 0) return path;
+    return SERVER_URL + (path.charAt(0) === '/' ? '' : '/') + path;
+}
 
 // ── Theme ─────────────────────────────────────────────────────
 function toggleTheme() {
@@ -704,11 +712,11 @@ const DAN_GRADES = [
             // Show iframe
             if (placeholder) placeholder.style.display = 'none';
             const iframe = document.createElement('iframe');
-            iframe.src   = data.pdfPath;
+            iframe.src   = resolveUrl(data.pdfPath);
             iframe.title = data.filename || 'IFSA Grading Syllabus';
             wrap.appendChild(iframe);
 
-            if (dlBtn) { dlBtn.href = data.pdfPath; }
+            if (dlBtn) { dlBtn.href = resolveUrl(data.pdfPath); }
             if (actions) actions.classList.remove('hidden');
         } else {
             if (statusMsg) statusMsg.textContent = 'Syllabus PDF not yet uploaded';

@@ -122,7 +122,16 @@
     </footer>
 
 <script>
-const SERVER_URL = '';
+const SERVER_URL = 'https://websites-production-ce2d.up.railway.app';
+
+// Resolves relative backend paths (e.g. "/uploads/...") returned by API
+// responses into absolute Railway URLs for use in img/video src, href, etc.
+function resolveUrl(path) {
+    if (!path) return '';
+    if (path.indexOf('http') === 0) return path;
+    return SERVER_URL + (path.charAt(0) === '/' ? '' : '/') + path;
+}
+
 const galleryGrid = document.getElementById('full-gallery-grid');
 
 // Custom cursor
@@ -172,7 +181,7 @@ async function loadFullGallery() {
             let mediaHTML = '';
 
             if (isVideo) {
-                mediaHTML = `<div class="w-full bg-black flex items-center justify-center"><video src="${item.url}" controls class="w-full h-auto"></video></div>`;
+                mediaHTML = `<div class="w-full bg-black flex items-center justify-center"><video src="${resolveUrl(item.url)}" controls class="w-full h-auto"></video></div>`;
             } else {
                 // Feature 8 — blur placeholder: show blurDataUrl while full image loads
                 const placeholder = item.blurDataUrl || '';
@@ -181,7 +190,7 @@ async function loadFullGallery() {
                         <img
                             class="blur-img w-full h-auto block transition duration-500 group-hover:scale-105"
                             src="${placeholder}"
-                            data-src="${item.url}"
+                            data-src="${resolveUrl(item.url)}"
                             alt="${item.alt || 'IFSA Karate Gallery'}"
                             style="${placeholder ? 'filter:blur(8px);transition:filter 0.4s ease;' : ''}">
                         <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center pointer-events-none">
@@ -194,13 +203,13 @@ async function loadFullGallery() {
                 ${mediaHTML}
                 <div class="p-4 flex justify-between items-center bg-gray-900 border-t border-white/5 mt-auto">
                     <span class="text-brand-accent font-bold text-sm uppercase tracking-wider">${item.month} ${item.year}</span>
-                    ${!isVideo ? `<button onclick="window.open('${item.url}', '_blank')" class="text-xs text-gray-400 hover:text-white border border-gray-600 px-3 py-1 rounded-full transition">Expand</button>` : ''}
+                    ${!isVideo ? `<button onclick="window.open('${resolveUrl(item.url)}', '_blank')" class="text-xs text-gray-400 hover:text-white border border-gray-600 px-3 py-1 rounded-full transition">Expand</button>` : ''}
                 </div>
             `;
 
             if(!isVideo) {
                 div.onclick = (e) => {
-                    if(e.target.tagName !== 'BUTTON' && e.target.tagName !== 'VIDEO') window.open(item.url, '_blank');
+                    if(e.target.tagName !== 'BUTTON' && e.target.tagName !== 'VIDEO') window.open(resolveUrl(item.url), '_blank');
                 };
             }
             galleryGrid.appendChild(div);

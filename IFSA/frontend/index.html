@@ -2,6 +2,18 @@
 <html lang="en">
 <head>
     <script src="/theme.js"></script>
+    <script>
+        // ── URL HELPER (global, must load before any other inline script) ──
+        // Resolves relative backend paths (e.g. "/uploads/...") returned by
+        // API responses into absolute Railway URLs, so images/videos/docs
+        // don't 404 on Vercel (Vercel only rewrites /api/*, not /uploads/*).
+        function resolveUrl(path) {
+            var RAILWAY_URL = 'https://websites-production-ce2d.up.railway.app';
+            if (!path) return '';
+            if (path.indexOf('http') === 0) return path;
+            return RAILWAY_URL + (path.charAt(0) === '/' ? '' : '/') + path;
+        }
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IFSA - Karate Classes in Mumbai | Indian Fit Sports Academy</title>
@@ -490,7 +502,7 @@
                 grid.innerHTML = '';
 
                 PROGRAMS.forEach(function (p, i) {
-                    var imgSrc = images[p.id] || '';
+                    var imgSrc = resolveUrl(images[p.id] || '');
                     var card = document.createElement('div');
                     card.className = 'reveal-up stagger-' + (i+1) + ' relative group bg-brand-light rounded-xl overflow-hidden shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(251,191,36,0.25)] hover:border-l-4 hover:border-brand-accent diagonal-lines flex flex-col';
 
@@ -959,7 +971,7 @@
 </button>
 
 <script>
-const SERVER_URL = '';
+const SERVER_URL = 'https://websites-production-ce2d.up.railway.app';
 
 // ── 1. PRELOADER & MOBILE MENU ──────────────────────────
 window.addEventListener('load', () => {
@@ -1055,14 +1067,14 @@ async function loadGallery() {
                 
                 // Row 1
                 const img1 = document.createElement('img');
-                img1.src = imgSrc;
+                img1.src = resolveUrl(imgSrc);
                 img1.className = "w-72 h-52 object-cover rounded-xl flex-shrink-0 border border-white/10 bg-gray-800 hover:border-brand-accent transition-all duration-300 cursor-pointer";
                 img1.style.transform = `rotate(${rot}deg)`;
                 track.appendChild(img1);
 
                 // Row 2 (reversed order)
                 const img2 = document.createElement('img');
-                img2.src = seamless[seamless.length - 1 - idx];
+                img2.src = resolveUrl(seamless[seamless.length - 1 - idx]);
                 img2.className = "w-72 h-52 object-cover rounded-xl flex-shrink-0 border border-white/10 bg-gray-800 hover:border-brand-accent transition-all duration-300 cursor-pointer";
                 img2.style.transform = `rotate(${-rot}deg)`;
                 track2.appendChild(img2);
@@ -1100,7 +1112,7 @@ async function loadAllData() {
                                 </div>
                                 <!-- Instructor image overflows top by 20px -->
                                 <div class="w-36 h-36 rounded-full overflow-hidden border-4 border-brand-accent shadow-lg" style="margin-top:-20px;flex-shrink:0;">
-                                    <img src="${SERVER_URL}${inst.frontImage}" class="w-full h-full object-cover" alt="${inst.name}">
+                                    <img src="${resolveUrl(inst.frontImage)}" class="w-full h-full object-cover" alt="${inst.name}">
                                 </div>
                                 <div class="flex-grow flex flex-col justify-center w-full mt-4">
                                     <h3 class="text-2xl font-bold text-white mb-1">${inst.name}</h3>
@@ -1114,7 +1126,7 @@ async function loadAllData() {
                                 </div>
                             </div>
                             <div class="flip-card-back rounded-lg shadow-lg overflow-hidden bg-black">
-                                <img src="${SERVER_URL}${inst.backImage}" class="absolute inset-0 w-full h-full object-contain opacity-60">
+                                <img src="${resolveUrl(inst.backImage)}" class="absolute inset-0 w-full h-full object-contain opacity-60">
                                 <div class="relative z-10 h-full flex flex-col justify-end items-center p-6 text-center pb-10 bg-gradient-to-t from-black via-black/50 to-transparent">
                                     <h3 class="text-xl font-bold text-white mb-2 border-b-2 border-brand-accent pb-1 inline-block">${inst.name}</h3>
                                     <p class="text-gray-200 text-sm leading-relaxed font-medium drop-shadow-md">"${inst.description}"</p>
@@ -1220,7 +1232,7 @@ async function loadHomeUpdates() {
             el.innerHTML = '<p class="text-gray-500 italic text-sm">No documents uploaded.</p>';
         } else {
             el.innerHTML = recent.map(d => `
-                <a href="${d.url}" target="_blank" class="flex items-center justify-between bg-gray-700/30 hover:bg-gray-700/60 p-2 rounded transition group">
+                <a href="${resolveUrl(d.url)}" target="_blank" class="flex items-center justify-between bg-gray-700/30 hover:bg-gray-700/60 p-2 rounded transition group">
                     <div class="flex items-center gap-2 overflow-hidden">
                         <svg class="w-4 h-4 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
                         <span class="text-sm text-gray-300 truncate group-hover:text-white">${d.title}</span>
@@ -1578,7 +1590,7 @@ loadTestimonials();
         const cc    = catColors[a.category] || catColors.tournament;
         const hasBg = !!a.image;
         return `<div class="ach-card-inner ach-img-bg rounded-2xl overflow-hidden shadow-2xl"
-                     style="${hasBg ? `background-image:url('${a.image}');` : 'background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);'}">
+                     style="${hasBg ? `background-image:url('${resolveUrl(a.image)}');` : 'background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);'}">
             ${hasBg ? '<div class="ach-card-overlay"></div>' : ''}
             ${!hasBg ? `<div class="ach-card-emoji" aria-hidden="true">${a.icon||'🏅'}</div>` : ''}
             <div class="ach-badge-year">${a.year}</div>
@@ -2070,6 +2082,7 @@ async function submitIndexBooking() {
         var src = isMobile
             ? (heroData.mobile  || heroData.desktop || '')
             : (heroData.desktop || heroData.mobile  || '');
+        src = resolveUrl(src);
         if (!src) { vid.style.display = 'none'; if (overlay) overlay.style.display = 'none'; return; }
         if (vid.dataset.activeSrc !== src) {
             vid.innerHTML = '<source src="' + src + '" type="' + (src.endsWith('.webm') ? 'video/webm' : 'video/mp4') + '">';

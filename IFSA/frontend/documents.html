@@ -112,6 +112,16 @@
 </footer>
 
 <script>
+const SERVER_URL = 'https://websites-production-ce2d.up.railway.app';
+
+// Resolves relative backend paths (e.g. "/uploads/...") returned by API
+// responses into absolute Railway URLs for use in img/video src, href, etc.
+function resolveUrl(path) {
+    if (!path) return '';
+    if (path.indexOf('http') === 0) return path;
+    return SERVER_URL + (path.charAt(0) === '/' ? '' : '/') + path;
+}
+
 // Custom cursor
 (function() {
     const cursor = document.getElementById('cursor');
@@ -156,7 +166,7 @@ async function loadUserDocs() {
                 </div>
                 <h3 class="text-xl font-bold text-white mb-2 group-hover:text-brand-accent transition">${doc.title}</h3>
                 <p class="text-sm text-gray-400 mb-6">Click to read online.</p>
-                <a href="${doc.url}#toolbar=0&navpanes=0&scrollbar=0" target="_blank" class="btn-shimmer block w-full bg-gray-700 hover:bg-brand-accent hover:text-black text-white text-center py-3 rounded-lg font-bold transition">Read Document</a>
+                <a href="${resolveUrl(doc.url)}#toolbar=0&navpanes=0&scrollbar=0" target="_blank" class="btn-shimmer block w-full bg-gray-700 hover:bg-brand-accent hover:text-black text-white text-center py-3 rounded-lg font-bold transition">Read Document</a>
             </div>
         `).join('');
 
