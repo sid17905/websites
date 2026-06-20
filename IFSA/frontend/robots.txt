@@ -3,7 +3,7 @@
 
 User-agent: *
 Allow: /
-Disallow: /admin.html
+Disallow: /admin
 Disallow: /uploads/
 
 # Sitemap location — submit this URL to Google Search Console

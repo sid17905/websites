@@ -38,7 +38,10 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(cors());
+// MIGRATION: restrict CORS to the deployed frontend origin instead of
+// allowing all origins now that frontend/backend are on separate hosts.
+// Set FRONTEND_URL=https://ifsaacademy.in in .env (see Section 5 of migration plan).
+app.use(cors({ origin: process.env.FRONTEND_URL || '*' }));
 app.use(express.json());
 
 
@@ -191,11 +194,13 @@ const PAYMENTS_UPLOAD_PATH  = path.join(ROOT_UPLOAD_PATH, 'payments');       // 
 const DATA_PATH             = path.join(__dirname, 'data');
 
 // Data files — existing
-const BOOKING_FILE          = path.join(__dirname, 'bookings.xlsx');
-const GALLERY_DB            = path.join(__dirname, 'gallery-data.json');
-const DOC_DB                = path.join(__dirname, 'document-data.json');
-const SCHEDULE_DB           = path.join(__dirname, 'schedule-data.json');
-const ANNOUNCE_DB           = path.join(__dirname, 'announcement-data.json');
+// MIGRATION: these were root-relative (__dirname); moved to DATA_PATH
+// so they resolve to backend/data/ after the frontend/backend split.
+const BOOKING_FILE          = path.join(DATA_PATH, 'bookings.xlsx');
+const GALLERY_DB            = path.join(DATA_PATH, 'gallery-data.json');
+const DOC_DB                = path.join(DATA_PATH, 'document-data.json');
+const SCHEDULE_DB           = path.join(DATA_PATH, 'schedule-data.json');
+const ANNOUNCE_DB           = path.join(DATA_PATH, 'announcement-data.json');
 const LOCATIONS_FILE        = path.join(DATA_PATH, 'locations.json');
 const INSTRUCTORS_FILE      = path.join(DATA_PATH, 'instructors.json');
 const TESTIMONIALS_FILE     = path.join(DATA_PATH, 'testimonials.json');
@@ -203,7 +208,7 @@ const TIMETABLE_FILE        = path.join(DATA_PATH, 'timetable.json');
 const HERO_VIDEO_FILE       = path.join(DATA_PATH, 'hero-video.json');
 const SITE_DATA_FILE        = path.join(DATA_PATH, 'site-data.json');
 const SLIDESHOW_ORDER_FILE  = path.join(DATA_PATH, 'slideshow-order.json');
-const ACTIVITY_LOG_FILE     = path.join(__dirname, 'admin-log.json');
+const ACTIVITY_LOG_FILE     = path.join(DATA_PATH, 'admin-log.json');
 
 // Data files — new (Phase A)
 const ACHIEVEMENTS_FILE     = path.join(DATA_PATH, 'achievements.json');       // Feature 2
@@ -2244,8 +2249,14 @@ app.get('/api/push/stats', verifyToken, (req, res) => {
 });
 
 
-// ── Serve static files ────────────────────────────────────────
-app.use(express.static(path.join(__dirname), {
+// ── Serve static frontend files ───────────────────────────────
+// MIGRATION: was express.static(path.join(__dirname)) which served this
+// entire backend folder (admin.html, data/, etc.) as public static files.
+// Now points at the sibling frontend/ folder; admin.html is served
+// separately below via its own /admin route (see note there on auth),
+// and is NOT part of this static root.
+const FRONTEND_PATH = path.join(__dirname, '..', 'frontend');
+app.use(express.static(FRONTEND_PATH, {
     index: 'index.html',
     maxAge: '1d',
     setHeaders: (res, filePath) => {
@@ -2253,17 +2264,34 @@ app.use(express.static(path.join(__dirname), {
     }
 }));
 
+// ── Admin panel — served by Express ────────────────────────────
+// MIGRATION: admin.html now lives in backend/ (not frontend/), so it is
+// never reachable as a static file. This explicit route is the only way
+// to reach it.
+// NOTE ON AUTH: admin.html is self-gating — it ships its own login form
+// and the page's JS calls POST /api/admin/login, stores the resulting
+// JWT in sessionStorage, then attaches it as an Authorization: Bearer
+// header on every subsequent /api/admin/* call (verifyToken protects
+// those). Do NOT put verifyToken on this route itself: a plain browser
+// navigation to /admin has no Authorization header to send, so the
+// login page would 401 before it could even render. The "auth" the
+// migration plan refers to for this route is "logged-in admins only
+// get past the in-page login form," not a server-side route guard.
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
 // ── Service Worker ────────────────────────────────────────────
 app.get('/sw.js', (req, res) => {
     res.setHeader('Content-Type', 'application/javascript');
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.sendFile(path.join(__dirname, 'sw.js'));
+    res.sendFile(path.join(FRONTEND_PATH, 'sw.js'));
 });
 
 // ── 404 fallback ──────────────────────────────────────────────
 app.use((req, res) => {
     if (req.path.startsWith('/api/')) return res.status(404).json({ error: 'Endpoint not found.' });
-    res.status(404).sendFile(path.join(__dirname, '404.html'));
+    res.status(404).sendFile(path.join(FRONTEND_PATH, '404.html'));
 });
 
 // ── Global error handler ──────────────────────────────────────

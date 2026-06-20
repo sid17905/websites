@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IFSA Admin</title>
-    <script src="theme.js"></script>
+    <!-- MIGRATION: was relative "theme.js" — admin.html is served from backend/
+         while theme.js lives in frontend/. Same origin (nginx routes /admin to
+         this Node process, everything else to the frontend static root), so an
+         absolute root path still resolves correctly to frontend/theme.js. -->
+    <script src="/theme.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- DOMPurify: sanitizes all server data before inserting into DOM (Task 1.4) -->
     <!-- SortableJS: drag-and-drop slideshow reordering (Task 6.1) -->
@@ -39,7 +43,7 @@
             <!-- Rate limit warning -->
             <p id="login-warning" class="text-amber-400 text-center mt-4 text-sm hidden"></p>
 
-            <a href="index.html" class="block text-center text-gray-500 text-sm mt-6 hover:text-white transition">&larr; Back to Home Page</a>
+            <a href="/index.html" class="block text-center text-gray-500 text-sm mt-6 hover:text-white transition">&larr; Back to Home Page</a>
         </div>
     </div>
 
@@ -60,7 +64,7 @@
                 <span id="session-timer" class="hidden sm:inline-flex text-xs text-gray-500 border border-gray-700 px-2 py-1.5 rounded">Session: <span id="timer-val" class="ml-1">8:00:00</span></span>
                 <!-- Logged-in admin name -->
                 <span id="admin-name-badge" class="hidden text-xs text-violet-300 border border-violet-800/50 bg-violet-900/20 px-2 py-1.5 rounded">👤 <span id="admin-name-val"></span></span>
-                <a href="index.html" target="_blank"
+                <a href="/index.html" target="_blank"
                     class="flex items-center gap-1.5 bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded text-white transition font-medium border border-gray-600 text-sm">
                     <span>View Website</span>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
@@ -611,9 +615,9 @@
                     <h2 class="text-xl font-bold text-yellow-400 flex items-center gap-2">
                         <span class="bg-yellow-400/20 p-2 rounded-lg">🥋</span> Grading Syllabus PDF
                     </h2>
-                    <p class="text-xs text-gray-500 mt-1">Upload or replace the belt grading syllabus PDF displayed on <a href="grading.html" target="_blank" class="text-yellow-400 hover:underline">grading.html</a>.</p>
+                    <p class="text-xs text-gray-500 mt-1">Upload or replace the belt grading syllabus PDF displayed on <a href="/grading.html" target="_blank" class="text-yellow-400 hover:underline">grading.html</a>.</p>
                 </div>
-                <a href="grading.html" target="_blank" class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-2 rounded border border-gray-600 transition flex items-center gap-1">
+                <a href="/grading.html" target="_blank" class="text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-2 rounded border border-gray-600 transition flex items-center gap-1">
                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                     View Page
                 </a>

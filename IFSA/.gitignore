@@ -1,9 +1,51 @@
-node_modules
-uploads
-gallery-data.json
-document-data.json
-schedule-data.json
-announcement-data.json
-bookings.xlsx
-.agent
+# ============================================================
+#  IFSA KARATE WEBSITE — .gitignore
+# ============================================================
+
+# ── Node / Backend ───────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ── Environment & Secrets ────────────────────────────────────
 .env
+.env.local
+.env.production
+.env.*.local
+
+# ── Runtime / Generated Data ────────────────────────────────
+backend/data/admin-log.json
+backend/data/payments.json
+backend/data/subscriptions.json
+backend/data/bookings.xlsx
+
+# ── User Uploads (runtime, not source) ──────────────────────
+backend/uploads/
+
+# ── OS / Editor ──────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.idea/
+.vscode/
+*.code-workspace
+
+# ── Logs ─────────────────────────────────────────────────────
+logs/
+*.log
+
+# ── Build artifacts (if you ever add a build step) ──────────
+dist/
+build/
+.cache/
+
+# ── AI Agent ─────────────────────────────────────────────────
+.agent/
+
+# ── Misc ─────────────────────────────────────────────────────
+*.bak
+*.tmpbackend/data/wa-config.json
+backend/data/wa-contacts.json

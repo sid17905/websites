@@ -1,0 +1,380 @@
+================================================================================
+IFSA KARATE WEBSITE — FRONTEND/BACKEND SPLIT MIGRATION PLAN
+================================================================================
+Project: ifsaacademy.in (Node.js/Express website)
+Purpose: Separate static frontend from backend so they can be deployed
+         independently. Frontend → static host (Netlify/Vercel/Nginx).
+         Backend → VPS/Railway/Render running Node.js.
+================================================================================
+
+
+--------------------------------------------------------------------------------
+SECTION 1 — TARGET FOLDER STRUCTURE
+--------------------------------------------------------------------------------
+
+ifsa-root/
+├── frontend/                        (deploy: static host, no Node needed)
+│   ├── index.html
+│   ├── about.html
+│   ├── login.html
+│   ├── pricing.html
+│   ├── payment.html
+│   ├── portal.html
+│   ├── grading.html
+│   ├── calender.html
+│   ├── gallery.html
+│   ├── documents.html
+│   ├── privacy.html
+│   ├── 404.html
+│   ├── offline.html
+│   ├── sitemap.html
+│   ├── STYLE.css
+│   ├── search-index.js
+│   ├── search-ui.js
+│   ├── cookie-consent.js
+│   ├── theme.js
+│   ├── sw.js                        (service worker — frontend only)
+│   ├── manifest.json
+│   ├── robots.txt
+│   ├── sitemap.xml
+│   └── public/                      (images, icons, static assets)
+│
+├── backend/                         (deploy: Node.js process)
+│   ├── server.js                    (main Express entry point)
+│   ├── auth-middleware.js
+│   ├── change-password.js
+│   ├── admin.html                   (served by Express behind JWT — NOT public)
+│   ├── uploads/                     (user-uploaded files)
+│   └── data/                        (all JSON data — NOT publicly accessible)
+│       │   (files originally at repo ROOT — moved here)
+│       ├── bookings-data.json
+│       ├── announcement-data.json
+│       ├── gallery-data.json
+│       ├── schedule-data.json
+│       ├── document-data.json
+│       ├── students.json            (duplicate also in data/ folder — see note)
+│       ├── admin-log.json
+│       ├── bookings.xlsx
+│       │   (files originally inside data/ folder — already here, stays)
+│       ├── achievements.json
+│       ├── google-reviews.json
+│       ├── hero-video.json
+│       ├── instructors.json
+│       ├── locations.json
+│       ├── payments.json
+│       ├── payment-settings.json
+│       ├── site-data.json
+│       ├── slideshow-order.json
+│       ├── stats.json
+│       ├── students.json            (NOTE: check for duplicate with root students.json)
+│       ├── subscriptions.json
+│       ├── syllabus.json
+│       ├── testimonials.json
+│       ├── timetable.json
+│       ├── timetable-slots.json
+│       ├── wa-config.json
+│       └── wa-contacts.json
+│
+└── (repo root — stays here)
+    ├── .env                         (secrets — never commit)
+    ├── env.example
+    ├── package.json
+    ├── package-lock.json
+    ├── nginx-ifsa.conf
+    ├── .gitignore
+    ├── .claudeignore
+    ├── generate-vapid.sh
+    ├── Modelfile
+    └── CLAUDE.md
+
+
+--------------------------------------------------------------------------------
+SECTION 2 — FILE-BY-FILE CHANGES NEEDED
+--------------------------------------------------------------------------------
+
+[ server.js ]
+  - Change static file serving root:
+      BEFORE: app.use(express.static('public'))
+      AFTER:  app.use(express.static(path.join(__dirname, '../frontend')))
+  - Update all JSON require/readFile paths from root-relative to data/:
+      BEFORE: './bookings-data.json'
+      AFTER:  './data/bookings-data.json'
+      (apply to ALL *-data.json and admin-log.json references)
+  - Add explicit route to serve admin.html behind auth:
+      app.get('/admin', authMiddleware, (req, res) =>
+        res.sendFile(path.join(__dirname, 'admin.html')))
+  - Confirm API base path is /api/... for all routes so frontend
+    fetch() calls use absolute URLs (e.g. /api/bookings)
+
+[ auth-middleware.js ]
+  - No path changes needed
+  - Confirm it exports correctly for server.js import
+
+[ change-password.js ]
+  - No path changes needed
+  - Confirm it is imported/used inside server.js, not standalone
+
+[ admin.html ]
+  - Update any relative CSS/JS references to use absolute paths
+    (they will be served from /admin by Express, same origin):
+      BEFORE: href="STYLE.css"  or  href="../STYLE.css"
+      AFTER:  href="/STYLE.css"   (Express serves frontend as static root,
+                                    so / resolves correctly)
+  - Remove any hardcoded localhost URLs; use relative /api/... paths
+
+[ search-index.js ]
+  - If it reads JSON files directly (fs.readFileSync), that logic must
+    move to a backend API endpoint — frontend JS cannot read server files
+  - If it fetches via HTTP, update URL to absolute API path:
+      BEFORE: fetch('./gallery-data.json')
+      AFTER:  fetch('/api/gallery')
+
+[ search-ui.js ]
+  - Update any fetch() calls that point to .json files directly
+    to use backend API endpoints instead:
+      BEFORE: fetch('/students.json')
+      AFTER:  fetch('/api/students')
+
+[ sw.js (service worker) ]
+  - Remove any backend routes from the CACHE_URLS / precache list
+    (e.g. /admin, /api/*, /uploads/)
+  - Only cache frontend assets:
+      const CACHE_URLS = ['/', '/index.html', '/STYLE.css',
+        '/search-ui.js', '/cookie-consent.js', '/theme.js',
+        '/manifest.json', '/offline.html']
+
+[ cookie-consent.js ]
+  - No path changes expected; verify no hardcoded domain references
+
+[ theme.js ]
+  - No path changes expected
+
+[ manifest.json ]
+  - Verify start_url is "/" (frontend root)
+  - Verify scope is "/"
+  - No other changes expected
+
+[ nginx-ifsa.conf ]
+  - Update document root to frontend folder:
+      BEFORE: root /var/www/ifsa;
+      AFTER:  root /var/www/ifsa/frontend;
+  - Ensure /api/ proxy block exists and points to Node process:
+      location /api/ {
+          proxy_pass http://localhost:3000;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+      }
+  - Ensure /admin is proxied to Node (not served as static):
+      location /admin {
+          proxy_pass http://localhost:3000;
+      }
+  - Ensure /uploads/ is proxied to Node:
+      location /uploads/ {
+          proxy_pass http://localhost:3000;
+      }
+
+[ All *.html frontend pages ]
+  - Any fetch('/some-data.json') calls → change to fetch('/api/endpoint')
+  - Any hardcoded http://localhost:3000 URLs → change to relative /api/...
+  - CSS/JS src and href paths should be root-relative (/STYLE.css etc.)
+    so they work from any subdirectory
+  - payment.html: verify Razorpay callback URL is not localhost
+  - login.html: verify auth POST endpoint is /api/login or similar
+
+[ data/ folder JSON files — ALL of these stay in backend/data/ ]
+  Files: achievements, google-reviews, hero-video, instructors, locations,
+         payments, payment-settings, site-data, slideshow-order, stats,
+         subscriptions, syllabus, testimonials, timetable, timetable-slots,
+         wa-config, wa-contacts
+  - These were already inside data/ so their relative paths in server.js
+    should already be './data/filename.json' — VERIFY this is the case
+  - If server.js reads them as './achievements.json' (wrong), fix to
+    './data/achievements.json'
+  - wa-config.json and wa-contacts.json contain WhatsApp/Wati credentials
+    and contact lists — these routes MUST be admin-auth protected
+  - payments.json and subscriptions.json are financial data — admin only
+  - google-reviews.json, stats.json, testimonials.json, instructors.json,
+    achievements.json, hero-video.json, slideshow-order.json, site-data.json
+    are safe to expose via public GET /api/... routes (read-only content)
+
+[ .env ]
+  - No changes to content
+  - Must NOT be committed to git (already in .gitignore presumably)
+  - Add FRONTEND_URL=https://ifsaacademy.in for CORS config in server.js
+
+[ package.json ]
+  - Update "main" field if it points to server.js:
+      "main": "backend/server.js"
+  - Update "start" script:
+      BEFORE: "start": "node server.js"
+      AFTER:  "start": "node backend/server.js"
+
+
+--------------------------------------------------------------------------------
+SECTION 3 — BACKEND API ENDPOINTS TO VERIFY EXIST IN server.js
+--------------------------------------------------------------------------------
+
+The following data files are consumed by frontend pages.
+Each needs a corresponding GET /api/... route in server.js:
+
+  --- originally at repo root ---
+  /api/bookings          ← bookings-data.json
+  /api/announcements     ← announcement-data.json
+  /api/gallery           ← gallery-data.json
+  /api/schedule          ← schedule-data.json
+  /api/documents         ← document-data.json
+  /api/students          ← students.json
+
+  --- originally inside data/ folder ---
+  /api/achievements      ← achievements.json
+  /api/google-reviews    ← google-reviews.json
+  /api/hero-video        ← hero-video.json
+  /api/instructors       ← instructors.json
+  /api/locations         ← locations.json
+  /api/payments          ← payments.json
+  /api/payment-settings  ← payment-settings.json
+  /api/site-data         ← site-data.json
+  /api/slideshow-order   ← slideshow-order.json
+  /api/stats             ← stats.json
+  /api/subscriptions     ← subscriptions.json
+  /api/syllabus          ← syllabus.json
+  /api/testimonials      ← testimonials.json
+  /api/timetable         ← timetable.json
+  /api/timetable-slots   ← timetable-slots.json
+  /api/wa-config         ← wa-config.json        (WhatsApp config — admin only?)
+  /api/wa-contacts       ← wa-contacts.json      (WhatsApp contacts — admin only?)
+
+  NOTE: students.json appears both at root AND in data/ folder.
+  Consolidate to one file at backend/data/students.json and delete the duplicate.
+
+Admin-only routes (require auth middleware):
+  POST /api/login
+  GET  /api/admin/log       ← admin-log.json
+  PUT  /api/admin/bookings
+  POST /api/admin/announce
+  POST /api/upload          ← uploads/
+  GET  /api/admin/wa-config      ← wa-config.json (sensitive — restrict access)
+  GET  /api/admin/wa-contacts    ← wa-contacts.json (sensitive — restrict access)
+  GET  /api/admin/subscriptions  ← subscriptions.json (sensitive)
+  GET  /api/admin/payments       ← payments.json (sensitive)
+
+
+--------------------------------------------------------------------------------
+SECTION 4 — GITHUB / GIT MIGRATION STEPS
+--------------------------------------------------------------------------------
+
+DO THIS IN ORDER to avoid losing file history:
+
+  1. Create a new branch before doing anything:
+       git checkout -b feat/frontend-backend-split
+
+  2. Use git mv (not manual cut/paste) to preserve file history:
+       git mv server.js backend/server.js
+       git mv auth-middleware.js backend/auth-middleware.js
+       git mv change-password.js backend/change-password.js
+       git mv admin.html backend/admin.html
+       git mv uploads/ backend/uploads/
+       git mkdir backend/data
+       git mv bookings-data.json backend/data/bookings-data.json
+       git mv announcement-data.json backend/data/announcement-data.json
+       git mv gallery-data.json backend/data/gallery-data.json
+       git mv schedule-data.json backend/data/schedule-data.json
+       git mv document-data.json backend/data/document-data.json
+       git mv students.json backend/data/students.json
+       git mv admin-log.json backend/data/admin-log.json
+       git mv bookings.xlsx backend/data/bookings.xlsx
+       (files already in data/ — move the whole folder into backend/)
+       git mv data/ backend/data/
+       NOTE: this moves the entire data/ folder. Verify no duplicate
+       students.json conflict — keep the newer one, delete the other.
+       git mkdir frontend
+       git mv index.html frontend/index.html
+       git mv about.html frontend/about.html
+       ... (repeat for all frontend HTML files)
+       git mv STYLE.css frontend/STYLE.css
+       git mv search-index.js frontend/search-index.js
+       git mv search-ui.js frontend/search-ui.js
+       git mv cookie-consent.js frontend/cookie-consent.js
+       git mv theme.js frontend/theme.js
+       git mv sw.js frontend/sw.js
+       git mv manifest.json frontend/manifest.json
+       git mv robots.txt frontend/robots.txt
+       git mv public/ frontend/public/
+
+  3. Edit all files as described in Section 2 above
+
+  4. Commit:
+       git add -A
+       git commit -m "refactor: split into frontend/ and backend/ for deployment"
+
+  5. Push branch and open PR:
+       git push origin feat/frontend-backend-split
+
+  6. Warn teammates to stash local changes before pulling this branch
+
+  IMPORTANT: No merge conflicts will occur from this restructure IF no one
+  else has uncommitted edits to the same files on another branch. Conflicts
+  only happen when two people edit the same lines of the same file.
+
+
+--------------------------------------------------------------------------------
+SECTION 5 — DEPLOYMENT CONFIGURATION
+--------------------------------------------------------------------------------
+
+FRONTEND (static host):
+  - Deploy root: /frontend
+  - Build command: none (pure static)
+  - Recommended: Netlify, Vercel, or Nginx serving /var/www/ifsa/frontend
+  - Set custom domain: ifsaacademy.in
+  - Environment variables needed: none (no build step)
+
+BACKEND (Node.js host):
+  - Deploy root: / (repo root, since package.json is here)
+  - Start command: node backend/server.js
+  - Recommended: Railway, Render, or VPS with PM2
+  - Environment variables needed (from .env):
+      PORT, JWT_SECRET, RAZORPAY_KEY_ID, RAZORPAY_SECRET,
+      WATI_API_KEY, VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY,
+      FRONTEND_URL (set to https://ifsaacademy.in for CORS)
+
+CORS — add to server.js after the split:
+  const cors = require('cors')
+  app.use(cors({ origin: process.env.FRONTEND_URL }))
+
+
+--------------------------------------------------------------------------------
+SECTION 6 — AGENT INSTRUCTIONS (for another AI agent picking this up)
+--------------------------------------------------------------------------------
+
+If you are an AI agent continuing this migration, here is exactly what to do:
+
+  CONTEXT:
+  - This is a Node.js/Express website for IFSA Karate Mumbai (ifsaacademy.in)
+  - The repo was originally a flat structure (all files at root level)
+  - We are splitting into frontend/ (static HTML/CSS/JS) and backend/ (Express)
+  - The user will provide files in batches; process each batch and return
+    updated file contents with corrected paths
+
+  YOUR JOB PER FILE:
+  1. Read the file content the user provides
+  2. Apply the specific changes listed in Section 2 for that file
+  3. Return the complete updated file content (not a diff, the full file)
+  4. Flag any fetch('/something.json') patterns you find — these need
+     an API endpoint added to server.js
+
+  RULES:
+  - Never hardcode localhost URLs in any file
+  - All frontend fetch() calls must use /api/... paths
+  - All backend file reads must use ./data/filename.json paths
+  - admin.html stays in backend/ and is served by Express behind JWT
+  - sw.js must only cache frontend assets, never /api/ routes
+  - Do NOT modify .env content, only note if a new variable is needed
+
+  BATCH ORDER expected from user:
+  - Batch 1: (user sending now)
+  - Keep going until all files from the directory screenshots are processed
+  - After all batches: generate the final updated server.js and nginx config
+
+================================================================================
+END OF PLAN
+================================================================================

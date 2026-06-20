@@ -60,7 +60,7 @@ EOF
 echo "✅ Keys saved to $ENV_FILE"
 echo ""
 echo "Next steps:"
-echo "  1. Restart your server:  node server.js"
+echo "  1. Restart your server:  npm start   (or: node backend/server.js)"
 echo "  2. Visit the site twice — the push prompt appears on the 2nd visit"
 echo "  3. In admin, click 🔔 Notifications to send your first notification"
 echo ""
