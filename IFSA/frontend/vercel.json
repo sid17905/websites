@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "websites-production-ce2d.up.railway.app"
+    }
+  ]
+}
