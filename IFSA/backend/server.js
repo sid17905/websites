@@ -29,6 +29,15 @@ const { verifyStudentToken, STUDENT_JWT_SECRET } = require('./auth-middleware');
 
 const app = express();
 
+// ── PERSISTENT STORAGE ROOT (PERSISTENCE FIX) ─────────────────
+// Hoisted above everything else because loadAdminAccounts() below needs
+// DATA_PATH before the rest of "PATH SETUP" runs further down the file.
+// RAILWAY_VOLUME_MOUNT_PATH is auto-injected by Railway when a volume is
+// attached (here: /app/uploads). Falls back to __dirname/uploads so local
+// dev without a volume still works exactly as before.
+const PERSIST_ROOT = process.env.RAILWAY_VOLUME_MOUNT_PATH || path.join(__dirname, 'uploads');
+const DATA_PATH     = path.join(PERSIST_ROOT, 'data');
+
 // ── Security headers ──────────────────────────────────────────
 app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -77,7 +86,7 @@ const DEFAULT_ADMIN_HASH =
 // admin-config.json format: { "admins": [{ "passwordHash": "...", "name": "...", "role": "..." }] }
 function loadAdminAccounts() {
     try {
-        const cfgPath = path.join(__dirname, 'data', 'admin-config.json');
+        const cfgPath = path.join(DATA_PATH, 'admin-config.json'); // PERSISTENCE FIX: was __dirname/data
         if (fs.existsSync(cfgPath)) {
             const config = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
             if (Array.isArray(config.admins) && config.admins.length > 0) {
@@ -199,14 +208,21 @@ const fileFilter = (req, file, cb) => {
 
 
 // ── PATH SETUP ───────────────────────────────────────────────
-const ROOT_UPLOAD_PATH      = path.join(__dirname, 'uploads');
+// PERSISTENCE FIX: Railway's volume for this service is mounted at
+// /app/uploads (RAILWAY_VOLUME_MOUNT_PATH, read above as PERSIST_ROOT).
+// Previously DATA_PATH lived at __dirname/data — OUTSIDE the volume — so
+// every JSON "database" file (locations, instructors, stats, students,
+// etc.) reset to its hardcoded default on every redeploy, while only
+// uploaded files (under ROOT_UPLOAD_PATH) survived. DATA_PATH now nests
+// inside PERSIST_ROOT (defined near the top of this file, before
+// loadAdminAccounts() needed it) so both live on the volume.
+const ROOT_UPLOAD_PATH      = PERSIST_ROOT;
 const SLIDESHOW_PATH        = path.join(ROOT_UPLOAD_PATH, 'slideshow');
 const GALLERY_PATH          = path.join(ROOT_UPLOAD_PATH, 'gallery');
 const DOCUMENT_PATH         = path.join(ROOT_UPLOAD_PATH, 'document');
 const HERO_VIDEO_PATH       = path.join(ROOT_UPLOAD_PATH, 'hero-video');
 const SYLLABUS_PATH         = path.join(ROOT_UPLOAD_PATH, 'syllabus');       // Feature 3
 const PAYMENTS_UPLOAD_PATH  = path.join(ROOT_UPLOAD_PATH, 'payments');       // Feature 5
-const DATA_PATH             = path.join(__dirname, 'data');
 
 // Data files — existing
 // MIGRATION: these were root-relative (__dirname); moved to DATA_PATH
@@ -240,7 +256,7 @@ const ACHIEVEMENTS_UPLOAD_PATH = path.join(ROOT_UPLOAD_PATH, 'achievements'); //
 
 // Plan 2 — Phase A additions
 const TIMETABLE_SLOTS_FILE  = path.join(DATA_PATH, 'timetable-slots.json');   // Fix 1
-const ADMIN_CONFIG_FILE     = path.join(__dirname, 'data', 'admin-config.json'); // Fix 2
+const ADMIN_CONFIG_FILE     = path.join(DATA_PATH, 'admin-config.json'); // Fix 2 — PERSISTENCE FIX: was __dirname/data
 
 // Ensure all upload folders exist
 [
@@ -494,7 +510,7 @@ app.post('/api/admin/verify', verifyToken, (req, res) => {
 
 // GET /api/admin/config — return named admin list (hashes omitted for security)
 app.get('/api/admin/config', verifyToken, (req, res) => {
-    const cfgPath = path.join(__dirname, 'data', 'admin-config.json');
+    const cfgPath = path.join(DATA_PATH, 'admin-config.json'); // PERSISTENCE FIX: was __dirname/data
     try {
         if (fs.existsSync(cfgPath)) {
             const config = JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
@@ -816,7 +832,7 @@ app.delete('/api/announcement/:id', verifyToken, (req, res) => {
 
 
 // ── 8. TRIAL BOOKINGS ────────────────────────────────────────
-const BOOKING_DB = path.join(__dirname, 'bookings-data.json');
+const BOOKING_DB = path.join(DATA_PATH, 'bookings-data.json'); // PERSISTENCE FIX: was __dirname (app root, ephemeral)
 if (!fs.existsSync(BOOKING_DB)) fs.writeFileSync(BOOKING_DB, JSON.stringify([]));
 
 app.get('/api/bookings/list', verifyToken, (req, res) => {
