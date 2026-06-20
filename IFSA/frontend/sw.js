@@ -30,11 +30,13 @@ self.addEventListener('activate', event => {
 // ── Fetch: network-first, fallback to cache / offline ─────
 self.addEventListener('fetch', event => {
     if (event.request.method !== 'GET') return;
+
+    const url = new URL(event.request.url);
+    if (url.origin !== self.location.origin) return;   // ← add this line: let Railway requests pass through untouched
+
     event.respondWith(
         fetch(event.request)
             .then(resp => {
-                // Only cache complete, successful responses — skip 206 Partial Content
-                // (range requests for video/audio), redirects, and errors
                 if (resp.status === 200 && resp.type !== 'opaque') {
                     const clone = resp.clone();
                     caches.open(CACHE_NAME).then(c => c.put(event.request, clone));
