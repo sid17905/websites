@@ -3,6 +3,7 @@
     {
       "source": "/api/(.*)",
       "destination": "https://websites-production-ce2d.up.railway.app/api/$1"
+      "source": "/admin", "destination": "/admin.html"
     }
   ]
 }
